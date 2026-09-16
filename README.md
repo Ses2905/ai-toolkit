@@ -2,11 +2,35 @@
 
 A personal Cursor plugin for **every** project: plan first, debug from evidence, review the real diff, ship a clean commit, and save repeated workflows as skills.
 
+Public GitHub home: **[github.com/Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skills)**.
+
 Install it once at **user** scope. Do not copy these files into each repo.
 
-## Install (desktop)
+## Install from GitHub (desktop skill library)
 
-From this directory:
+```bash
+git clone https://github.com/Ses2905/cursor-skills.git
+cd cursor-skills
+chmod +x scripts/*.sh
+./scripts/install-local.sh
+./scripts/sync-user-skills.sh
+```
+
+That copies the plugin to `~/.cursor/plugins/local/work-kit` and every `skills/*/SKILL.md` folder into `~/.cursor/skills/` (Cursor's skill library). Then:
+
+1. Command Palette → **Developer: Reload Window**
+2. Open **Customize**, filter **User**, confirm **Work Kit**
+3. **Settings → Agents → Context and Tools → Sync Skills for Cloud Agents**
+
+Or copy only the skill folders with the skills CLI:
+
+```bash
+npx skills add https://github.com/Ses2905/cursor-skills
+```
+
+## Install from this directory
+
+If you already have the repo checked out:
 
 ```bash
 chmod +x scripts/*.sh
@@ -23,6 +47,14 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
 After you edit this repo, run `./scripts/install-local.sh` again and reload.
+
+## Publish to GitHub
+
+```bash
+./scripts/publish-to-github.sh
+```
+
+Pushes `main` to [Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skills). Needs write access: Cursor **Dashboard → Integrations → Connect GitHub** (grant `Ses2905/cursor-skills`), or a `GH_TOKEN` / `GITHUB_TOKEN` with `repo` scope.
 
 ## GitHub skill catalogs
 

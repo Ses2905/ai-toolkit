@@ -5,9 +5,28 @@ description: Install this personal Cursor plugin at user scope, copy skills for 
 
 # Install work-kit
 
+Public GitHub home: [github.com/Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skills).
+
+## From GitHub (desktop skill library)
+
+```bash
+git clone https://github.com/Ses2905/cursor-skills.git
+cd cursor-skills
+./scripts/install-local.sh
+./scripts/sync-user-skills.sh
+```
+
+Then **Developer: Reload Window**, confirm **Work Kit** under **Customize → User**, and enable **Settings → Agents → Context and Tools → Sync Skills for Cloud Agents**.
+
+Skill folders only:
+
+```bash
+npx skills add https://github.com/Ses2905/cursor-skills
+```
+
 ## Local plugin (every desktop project)
 
-From the work-kit repo:
+From a checkout of this repo:
 
 ```bash
 ./scripts/install-local.sh
