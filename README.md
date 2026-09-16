@@ -58,6 +58,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Rule | `taste-skill` | Agent-decides — marketing/frontend taste, not dashboards |
 | Skill | `frontend-design` | Distinctive UI, type, and visual direction (not templates) |
 | Rule | `frontend-design` | Agent-decides — new or reshaped product UI |
+| Skill | `canvas-design` | Posters, PNG/PDF art from a design philosophy |
+| Rule | `canvas-design` | Agent-decides — static visual art, not product UI |
 | Skill | `plan-the-work` | Before non-trivial implementation |
 | Skill | `debug-from-evidence` | Something is broken |
 | Skill | `review-the-diff` | After a sizable change, or before merge |
