@@ -52,6 +52,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | --- | --- | --- |
 | Rule | `verify-before-done` | Always — prove it works before claiming done |
 | Rule | `tight-diffs` | Always — change only what the task needs |
+| Rule | `apple-design` | UI/motion files only — Apple-style fluid interfaces |
+| Skill | `apple-design` | Gesture UI, springs, sheets, materials, type |
 | Skill | `plan-the-work` | Before non-trivial implementation |
 | Skill | `debug-from-evidence` | Something is broken |
 | Skill | `review-the-diff` | After a sizable change, or before merge |

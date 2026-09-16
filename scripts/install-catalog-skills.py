@@ -41,6 +41,8 @@ def sync_repo(cache: Path, source_id: str, spec: dict) -> Path:
             run(["git", "clone", "--depth", "1", "--branch", ref, url, str(dest)])
         except subprocess.CalledProcessError:
             run(["git", "clone", "--depth", "1", url, str(dest)])
+            run(["git", "-C", str(dest), "fetch", "--depth", "1", "origin", ref])
+            run(["git", "-C", str(dest), "checkout", "-q", "FETCH_HEAD"])
     return dest
 
 

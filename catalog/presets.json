@@ -25,6 +25,12 @@
       "ref": "main",
       "root": "skills",
       "license": "MIT"
+    },
+    "emilkowalski-skills": {
+      "git": "https://github.com/emilkowalski/skills.git",
+      "ref": "d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7",
+      "root": "skills",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -56,7 +62,8 @@
         { "source": "vercel-agent-skills", "path": "writing-guidelines" },
         { "source": "mattpocock-skills", "path": "productivity/grilling", "name": "grilling" },
         { "source": "mattpocock-skills", "path": "productivity/grill-me", "name": "grill-me" },
-        { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" }
+        { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" },
+        { "source": "emilkowalski-skills", "path": "apple-design" }
       ]
     },
     "all-awesome": {
