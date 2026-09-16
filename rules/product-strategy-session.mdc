@@ -1,0 +1,6 @@
+---
+description: Run an end-to-end product strategy session across positioning, discovery, and roadmap planning. Use when a team needs validated direction before committing to execution.
+alwaysApply: false
+---
+
+product-strategy-session: Follow `skills/product-strategy-session/SKILL.md`. Facilitation in `skills/workshop-facilitation/SKILL.md`. Use invocation text as answers already given. Distinct from `plan-the-work`. CC BY-NC-SA 4.0. Skip engineering implementation and UI work.

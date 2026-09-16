@@ -29,7 +29,7 @@ That preset installs:
 | Motion | `react-view-transitions` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines` |
 | Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system`, `frontend-slides-editable` |
-| Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets` |
+| Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets`, `product-strategy-session` |
 
 Sources and the full mapping live in [catalog/presets.json](../../catalog/presets.json).
 
@@ -53,6 +53,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Editable single-file HTML decks (skills.sh frontend-slides-editable)
 ./scripts/install-catalog-skills.sh --preset frontend-slides-editable
+
+# Product strategy session + orchestrated Dean Peters siblings (CC BY-NC-SA 4.0)
+./scripts/install-catalog-skills.sh --preset product-strategy-session
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.

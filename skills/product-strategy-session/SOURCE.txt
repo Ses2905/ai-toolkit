@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session
+Repo: https://github.com/deanpeters/product-manager-skills
+Upstream folder: skills/product-strategy-session
+Install name: product-strategy-session
+Official CLI: npx skills add https://github.com/deanpeters/product-manager-skills --skill product-strategy-session
+Pinned: 1b5a524ebb95e9497fa3f25002d8b8ec528d4444
+License: CC BY-NC-SA 4.0
+Depends on: workshop-facilitation plus orchestrated sibling skills in skills/

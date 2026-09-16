@@ -55,44 +55,223 @@
       "ref": "e5663e6a0bdc2c2a673198bab3fb61036a7f20ee",
       "root": "",
       "license": "MIT"
+    },
+    "deanpeters-product-manager-skills": {
+      "git": "https://github.com/deanpeters/product-manager-skills.git",
+      "ref": "1b5a524ebb95e9497fa3f25002d8b8ec528d4444",
+      "root": "skills",
+      "license": "CC-BY-NC-SA-4.0"
     }
   },
   "presets": {
     "design-product": {
       "description": "Design systems, visual QA, motion, presentations, copy, and product shaping.",
       "skills": [
-        { "source": "awesome-cursor-skills", "path": "using-ui-stack" },
-        { "source": "awesome-cursor-skills", "path": "visual-qa-testing" },
-        { "source": "awesome-cursor-skills", "path": "verifying-in-browser" },
-        { "source": "awesome-cursor-skills", "path": "responsive-testing" },
-        { "source": "awesome-cursor-skills", "path": "dark-mode-testing" },
-        { "source": "awesome-cursor-skills", "path": "accessibility-auditing" },
-        { "source": "awesome-cursor-skills", "path": "writing-copy" },
-        { "source": "awesome-cursor-skills", "path": "verifying-markdown-formatting" },
-        { "source": "awesome-cursor-skills", "path": "generating-images" },
-        { "source": "awesome-cursor-skills", "path": "exporting-to-png" },
-        { "source": "awesome-cursor-skills", "path": "screenshotting-changelog" },
-        { "source": "awesome-cursor-skills", "path": "comparing-branches-visually" },
-        { "source": "awesome-cursor-skills", "path": "converting-css-to-tailwind" },
-        { "source": "anthropic-skills", "path": "frontend-design" },
-        { "source": "anthropic-skills", "path": "canvas-design" },
-        { "source": "anthropic-skills", "path": "theme-factory" },
-        { "source": "anthropic-skills", "path": "brand-guidelines" },
-        { "source": "anthropic-skills", "path": "pptx" },
-        { "source": "anthropic-skills", "path": "pdf" },
-        { "source": "anthropic-skills", "path": "docx" },
-        { "source": "vercel-agent-skills", "path": "web-design-guidelines" },
-        { "source": "vercel-agent-skills", "path": "react-view-transitions" },
-        { "source": "vercel-agent-skills", "path": "writing-guidelines" },
-        { "source": "mattpocock-skills", "path": "productivity/grilling", "name": "grilling" },
-        { "source": "mattpocock-skills", "path": "productivity/grill-me", "name": "grill-me" },
-        { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" },
-        { "source": "emilkowalski-skills", "path": "apple-design" },
-        { "source": "leonxlnx-taste-skill", "path": "taste-skill" },
-        { "source": "leonxlnx-taste-skill", "path": "soft-skill", "name": "high-end-visual-design" },
-        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
-        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" },
-        { "source": "archlizheng-frontend-slides-editable", "path": ".", "name": "frontend-slides-editable" }
+        {
+          "source": "awesome-cursor-skills",
+          "path": "using-ui-stack"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "visual-qa-testing"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "verifying-in-browser"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "responsive-testing"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "dark-mode-testing"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "accessibility-auditing"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "writing-copy"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "verifying-markdown-formatting"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "generating-images"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "exporting-to-png"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "screenshotting-changelog"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "comparing-branches-visually"
+        },
+        {
+          "source": "awesome-cursor-skills",
+          "path": "converting-css-to-tailwind"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "frontend-design"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "canvas-design"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "theme-factory"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "brand-guidelines"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "pptx"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "pdf"
+        },
+        {
+          "source": "anthropic-skills",
+          "path": "docx"
+        },
+        {
+          "source": "vercel-agent-skills",
+          "path": "web-design-guidelines"
+        },
+        {
+          "source": "vercel-agent-skills",
+          "path": "react-view-transitions"
+        },
+        {
+          "source": "vercel-agent-skills",
+          "path": "writing-guidelines"
+        },
+        {
+          "source": "mattpocock-skills",
+          "path": "productivity/grilling",
+          "name": "grilling"
+        },
+        {
+          "source": "mattpocock-skills",
+          "path": "productivity/grill-me",
+          "name": "grill-me"
+        },
+        {
+          "source": "mattpocock-skills",
+          "path": "engineering/to-tickets",
+          "name": "to-tickets"
+        },
+        {
+          "source": "emilkowalski-skills",
+          "path": "apple-design"
+        },
+        {
+          "source": "leonxlnx-taste-skill",
+          "path": "taste-skill"
+        },
+        {
+          "source": "leonxlnx-taste-skill",
+          "path": "soft-skill",
+          "name": "high-end-visual-design"
+        },
+        {
+          "source": "nextlevelbuilder-ui-ux-pro-max",
+          "path": "design-system"
+        },
+        {
+          "source": "nextlevelbuilder-ui-ux-pro-max",
+          "path": "slides"
+        },
+        {
+          "source": "archlizheng-frontend-slides-editable",
+          "path": ".",
+          "name": "frontend-slides-editable"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "product-strategy-session"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "workshop-facilitation"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "positioning-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "proto-persona"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "jobs-to-be-done"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "discovery-interview-prep"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "problem-framing-canvas"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "problem-statement"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "customer-journey-mapping-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "opportunity-solution-tree"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "lean-ux-canvas"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "epic-hypothesis"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "user-story-mapping-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "prioritization-advisor"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "tam-sam-som-calculator"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "press-release"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "epic-breakdown-advisor"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "user-story"
+        }
       ]
     },
     "all-awesome": {
@@ -102,21 +281,114 @@
     "lark": {
       "description": "Lark/Feishu slides via lark-cli (requires @larksuite/cli and user login).",
       "skills": [
-        { "source": "larksuite-cli", "path": "lark-shared" },
-        { "source": "larksuite-cli", "path": "lark-slides" }
+        {
+          "source": "larksuite-cli",
+          "path": "lark-shared"
+        },
+        {
+          "source": "larksuite-cli",
+          "path": "lark-slides"
+        }
       ]
     },
     "slides": {
       "description": "HTML Chart.js presentations (skills.sh ckmslides). Includes sibling design-system search CSVs.",
       "skills": [
-        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
-        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" }
+        {
+          "source": "nextlevelbuilder-ui-ux-pro-max",
+          "path": "design-system"
+        },
+        {
+          "source": "nextlevelbuilder-ui-ux-pro-max",
+          "path": "slides"
+        }
       ]
     },
     "frontend-slides-editable": {
       "description": "Single-file editable HTML decks (archlizheng/frontend-slides-editable).",
       "skills": [
-        { "source": "archlizheng-frontend-slides-editable", "path": ".", "name": "frontend-slides-editable" }
+        {
+          "source": "archlizheng-frontend-slides-editable",
+          "path": ".",
+          "name": "frontend-slides-editable"
+        }
+      ]
+    },
+    "product-strategy-session": {
+      "description": "Dean Peters product strategy session plus orchestrated sibling skills (CC BY-NC-SA 4.0).",
+      "skills": [
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "product-strategy-session"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "workshop-facilitation"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "positioning-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "proto-persona"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "jobs-to-be-done"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "discovery-interview-prep"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "problem-framing-canvas"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "problem-statement"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "customer-journey-mapping-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "opportunity-solution-tree"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "lean-ux-canvas"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "epic-hypothesis"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "user-story-mapping-workshop"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "prioritization-advisor"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "tam-sam-som-calculator"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "press-release"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "epic-breakdown-advisor"
+        },
+        {
+          "source": "deanpeters-product-manager-skills",
+          "path": "user-story"
+        }
       ]
     }
   }

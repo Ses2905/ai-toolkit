@@ -42,6 +42,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Frontend Slides Editable](https://www.skills.sh/archlizheng/frontend-slides-editable/frontend-slides-editable) is a zero-dependency HTML deck with a built-in editor (drag objects, Pages sidebar, Ctrl+S). Invoke `/frontend-slides-editable`. Distinct from `/slides`. Details: `skills/frontend-slides-editable/SKILL.md`.
 
+[Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
