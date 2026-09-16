@@ -1,0 +1,6 @@
+---
+description: Guidance for distinctive, intentional UI design, typography, visual direction, and non-template-like product interfaces.
+alwaysApply: false
+---
+
+frontend-design: Follow `skills/frontend-design/SKILL.md` when building or reshaping UI. Plan tokens first, then code. Do not apply to backend-only, CLI, or infra work.

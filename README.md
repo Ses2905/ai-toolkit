@@ -56,6 +56,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Skill | `apple-design` | Gesture UI, springs, sheets, materials, type |
 | Skill | `taste-skill` | Anti-slop landing pages, portfolios, demos, redesigns |
 | Rule | `taste-skill` | Agent-decides — marketing/frontend taste, not dashboards |
+| Skill | `frontend-design` | Distinctive UI, type, and visual direction (not templates) |
+| Rule | `frontend-design` | Agent-decides — new or reshaped product UI |
 | Skill | `plan-the-work` | Before non-trivial implementation |
 | Skill | `debug-from-evidence` | Something is broken |
 | Skill | `review-the-diff` | After a sizable change, or before merge |
