@@ -5,7 +5,7 @@
 **Owner:** Sarah Scherer
 **GTM type:** Internal, owned-channel only. Not a paid, PR, or Product Hunt motion.
 **Window:** 17 Sep 2026 through 12 Nov 2026 for phase 1 comms. Phase 2 cloud 14 Nov. Grade 31 Dec.
-**Related:** [Messaging](../messaging/work-kit.md), [Comms](q4-2026-first-delivery-comms.md), [Checklist](q4-2026-first-delivery-checklist.md), [OKRs](../okrs/q4-2026-work-kit.md)
+**Related:** [Messaging](../messaging/work-kit.md), [Comms](q4-2026-first-delivery-comms.md), [Checklist](q4-2026-first-delivery-checklist.md), [OKRs](../okrs/q4-2026-work-kit.md), [Diligence Q&A](q4-2026-diligence-qa.md)
 **Source prompt:** [Go-to-market strategy](https://aiuxplayground.com/prompts/go-to-market-strategy) (AI UX Playground)
 
 Launch skill ORB: everything leads back to owned channels. Owned here is the GitHub README and the install script. Paid is $0. Earned is none. Community is none until the session log shows the loop.
