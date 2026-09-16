@@ -3,4 +3,4 @@ description: Survey a codebase's animation and motion code as a senior motion ad
 alwaysApply: false
 ---
 
-improve-animations: Follow `skills/improve-animations/SKILL.md`. Load `AUDIT.md` when auditing and `PLAN-TEMPLATE.md` when writing plans. If invoked with no question, reply only with the Initial Response quote. Never modify source; write plans under `plans/` only. Distinct from `review-animations` (diff review) and `apple-design` (authoring).
+improve-animations: Follow `skills/improve-animations/SKILL.md`. Load `AUDIT.md` when auditing and `PLAN-TEMPLATE.md` when writing plans. If invoked with no question, reply only with the Initial Response quote. Never modify source; write plans under `plans/` only. Distinct from `find-animation-opportunities` (missing motion), `review-animations` (diff review), and `apple-design` (authoring).

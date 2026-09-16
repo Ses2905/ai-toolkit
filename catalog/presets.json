@@ -199,6 +199,10 @@
           "path": "improve-animations"
         },
         {
+          "source": "emilkowalski-skills",
+          "path": "find-animation-opportunities"
+        },
+        {
           "source": "leonxlnx-taste-skill",
           "path": "taste-skill"
         },
@@ -472,6 +476,15 @@
         {
           "source": "emilkowalski-skills",
           "path": "review-animations"
+        }
+      ]
+    },
+    "find-animation-opportunities": {
+      "description": "Emil Kowalski opportunity finder for missing motion (read-only; MIT).",
+      "skills": [
+        {
+          "source": "emilkowalski-skills",
+          "path": "find-animation-opportunities"
         }
       ]
     }

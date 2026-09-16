@@ -3,4 +3,4 @@ description: Reviews animation and motion code against a high craft bar derived 
 alwaysApply: false
 ---
 
-review-animations: Follow `skills/review-animations/SKILL.md` and `skills/review-animations/STANDARDS.md`. Review motion only. Decline general code review (`review-the-diff`). Distinct from `improve-animations` (audit/plans), `apple-design` (authoring), and `hyperframes-animation` (HyperFrames GSAP).
+review-animations: Follow `skills/review-animations/SKILL.md` and `skills/review-animations/STANDARDS.md`. Review motion only. Decline general code review (`review-the-diff`). Distinct from `find-animation-opportunities` (missing motion), `improve-animations` (audit/plans), `apple-design` (authoring), and `hyperframes-animation` (HyperFrames GSAP).

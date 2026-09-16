@@ -52,6 +52,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Improve Animations](https://www.skills.sh/emilkowalski/skills/improve-animations) audits a codebase's motion, then writes self-contained plans. Invoke `/improve-animations`. Read-only on source. Distinct from `/review-animations`. Details: `skills/improve-animations/SKILL.md`.
 
+[Find Animation Opportunities](https://www.skills.sh/emilkowalski/skills/find-animation-opportunities) finds places that should animate and rejects the rest. Invoke `/find-animation-opportunities`. Read-only. Distinct from `/improve-animations`. Details: `skills/find-animation-opportunities/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |

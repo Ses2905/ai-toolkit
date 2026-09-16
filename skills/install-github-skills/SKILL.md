@@ -26,7 +26,7 @@ That preset installs:
 | --- | --- |
 | Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind`, `taste-skill`, `high-end-visual-design` |
 | Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
-| Motion | `react-view-transitions`, `hyperframes-animation`, `review-animations`, `improve-animations` |
+| Motion | `react-view-transitions`, `hyperframes-animation`, `review-animations`, `improve-animations`, `find-animation-opportunities` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines`, `html-diagram` |
 | Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system`, `frontend-slides-editable` |
 | Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets`, `product-strategy-session` |
@@ -68,6 +68,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Emil Kowalski animation audit-then-plan (includes review-animations sibling)
 ./scripts/install-catalog-skills.sh --preset improve-animations
+
+# Emil Kowalski missing-motion finder
+./scripts/install-catalog-skills.sh --preset find-animation-opportunities
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.

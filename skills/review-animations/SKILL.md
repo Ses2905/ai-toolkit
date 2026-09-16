@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Pinned from [emilkowalski/skills `review-animations`](https://github.com/emilkowalski/skills/tree/85e8e2363b713506e1d5b6e07a0eb2da66be1bc3/skills/review-animations) at `85e8e2363b713506e1d5b6e07a0eb2da66be1bc3` (MIT). Listing: [skills.sh](https://www.skills.sh/emilkowalski/skills/review-animations). Official CLI: `npx skills add https://github.com/emilkowalski/skills --skill review-animations`. Rule catalog: [STANDARDS.md](STANDARDS.md). Provenance: `SOURCE.txt`.
 
-**In this repo:** `skills/review-animations/SKILL.md`. Scoped rule: `rules/review-animations.mdc` (`alwaysApply: false`). User install: `~/.cursor/skills/review-animations/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/review-animations`. Distinct from `/improve-animations` (codebase audit + plans), `/review-the-diff` (general code), and `/apple-design` (building Apple-style motion). Review only — do not write features or fix unrelated bugs.
+**In this repo:** `skills/review-animations/SKILL.md`. Scoped rule: `rules/review-animations.mdc` (`alwaysApply: false`). User install: `~/.cursor/skills/review-animations/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/review-animations`. Distinct from `/find-animation-opportunities` (missing motion), `/improve-animations` (codebase audit + plans), `/review-the-diff` (general code), and `/apple-design` (building Apple-style motion). Review only — do not write features or fix unrelated bugs.
 
 ## Initial Response
 

@@ -1,0 +1,6 @@
+---
+description: Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks "what could be animated here?" or wants to "make this feel more alive". For fixing existing animations, use improve-animations or review-animations instead.
+alwaysApply: false
+---
+
+find-animation-opportunities: Follow `skills/find-animation-opportunities/SKILL.md`. If invoked with no question, reply only with the Initial Response quote. Report only; never modify source. Cap at 5–7 suggestions and include rejected candidates. Distinct from `improve-animations` (audit/plans) and `review-animations` (diff review).

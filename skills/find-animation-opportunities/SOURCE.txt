@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/emilkowalski/skills/find-animation-opportunities
+Repo: https://github.com/emilkowalski/skills
+Upstream folder: skills/find-animation-opportunities
+Install name: find-animation-opportunities
+Official CLI: npx skills add https://github.com/emilkowalski/skills --skill find-animation-opportunities
+Pinned: 85e8e2363b713506e1d5b6e07a0eb2da66be1bc3
+License: MIT (Emil Kowalski)
+Related: skills/improve-animations (plan a surviving suggestion), skills/review-animations (diff review)
