@@ -1,0 +1,7 @@
+---
+description: Maps briefs to React Bits animated components and installs them via the official shadcn registry.
+alwaysApply: false
+globs: "**/*.{tsx,jsx}"
+---
+
+react-bits: Follow `skills/react-bits/SKILL.md` when adding animated React UI from reactbits.dev. Prefer `npx shadcn@latest add @react-bits/<Name>-TS-TW` in the app repo. Do not clone the library into work-kit. Skip backend-only work.

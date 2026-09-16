@@ -32,6 +32,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/install-open-design/SKILL.md`.
 
+[React Bits](https://github.com/DavidHDev/react-bits) is a shadcn registry of animated React components. Add `@react-bits` to the app's `components.json`, then `npx shadcn@latest add @react-bits/<Name>-TS-TW`. Details: `skills/react-bits/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |

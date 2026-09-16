@@ -1,0 +1,7 @@
+Source: https://github.com/DavidHDev/react-bits
+Pinned: c49d6978d2496660f0f0c5a3b3ca77a059566a93
+Docs: https://reactbits.dev
+Registry: https://reactbits.dev/r/{name}.json
+Example: npx shadcn@latest add @react-bits/BlurText-TS-TW
+License: MIT + Commons Clause (LICENSE.md)
+Catalog snapshot: src/constants/Categories.js at the pinned SHA
