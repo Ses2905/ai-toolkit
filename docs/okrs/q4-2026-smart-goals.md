@@ -5,7 +5,7 @@
 **Rough intent:** Stop treating a Customize card as success. The next product-repo sitting should start with a plan (or a marked tiny skip) and end in a clean ship.
 **Constraints:** One person. $0 paid. Cursor chrome is not ours. G3 copy currently fails. Cloud VMs do not mount local plugins. MIT. No Mixpanel.
 **How success is measured:** Session log, git, and a binary copy check. Not NPS. Not ARR.
-**Related:** [OKRs](q4-2026-work-kit.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Priority](q4-2026-feature-priority.md), [Metrics](../launches/q4-2026-first-delivery-metrics.md)
+**Related:** [OKRs](q4-2026-work-kit.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Priority](q4-2026-feature-priority.md), [Metrics](../launches/q4-2026-first-delivery-metrics.md), [Roadmap](q4-2026-roadmap.md)
 **Source prompt:** [SMART goal creator](https://aiuxplayground.com/prompts/smart-goal-creator) (AI UX Playground)
 
 These three goals are the OKRs written as SMART. They do not add a fourth objective. O4 (capture) stays in the OKR file and is not a 15 Oct goal.
