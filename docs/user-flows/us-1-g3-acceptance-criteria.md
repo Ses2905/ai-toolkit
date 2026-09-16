@@ -5,7 +5,7 @@
 **User goal:** Know the next action without a researcher and without reading a slash catalog.
 **Technical context:** Copy only. `scripts/install-local.sh` echo block plus README install sections. Dest path and rsync/tar behavior stay. No new UI. No Cursor runtime change.
 **QA owner:** Sarah (same as eng). There is no separate QA team.
-**Related:** [Stories](work-kit-first-delivery-stories.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Runbook G3](../launches/q4-2026-first-delivery-runbook.md)
+**Related:** [Stories](work-kit-first-delivery-stories.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Runbook G3](../launches/q4-2026-first-delivery-runbook.md), [WK-1 ticket](../tickets/wk-1-g3-install-copy.md)
 **Source prompt:** [Acceptance criteria generator](https://aiuxplayground.com/prompts/acceptance-criteria-generator) (AI UX Playground)
 
 **Fail on 16 Sep (must turn green).** Script line 30: `Optional for Cloud Agents: ./scripts/sync-user-skills.sh`. README clone numbered item 3: Cloud Agents sync toggle. README checkout items 3-4: catalog of skill names. Clone bash block runs `sync-user-skills.sh` immediately after install, which reads as required desktop finish.
