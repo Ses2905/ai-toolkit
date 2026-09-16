@@ -132,7 +132,7 @@ Keep these three. Do not add a fourth pillar about slides, motion, or Remotion. 
 | Continual Learning | Durable facts in `AGENTS.md` | Plan-gate and ship staging |
 | Copying kit files into each repo | Never. Conflicts with this product. | n/a |
 
-Help them decide. If they want a list, send them to the list. If they want first delivery, send them to E1 and the one-liner.
+Help them decide. If they want a list, send them to the list. If they want first delivery, send them to E1 and the one-liner. Longer desk analysis: [Competitive UX](work-kit-competitive-ux.md).
 
 ---
 
