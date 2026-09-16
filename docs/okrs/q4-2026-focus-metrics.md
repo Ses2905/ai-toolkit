@@ -5,7 +5,7 @@
 **Strategy this quarter.** Make Plan to Ship the default path: install step 3 is `/plan`, then log sittings until 80% plan-or-tiny and 8 named-file ships.
 **Current metrics (16 Sep).** G3 fail. Session log rows 0. Plan-or-tiny rate undefined. Named-file ships 0. Cloud checker absent. Interviews 0. ARR $0 (not a metric).
 **Team size.** 1.
-**Related:** [OKRs](q4-2026-work-kit.md) (full O1-O4), [SMART](q4-2026-smart-goals.md), [Metrics dashboard](../launches/q4-2026-first-delivery-metrics.md), [Retention](../launches/q4-2026-retention-churn.md)
+**Related:** [OKRs](q4-2026-work-kit.md) (full O1-O4), [SMART](q4-2026-smart-goals.md), [Metrics dashboard](../launches/q4-2026-first-delivery-metrics.md), [Retention](../launches/q4-2026-retention-churn.md), [Tenets](../messaging/work-kit-tenets.md)
 **Source prompt:** [North star OKR setup](https://aiuxplayground.com/prompts/north-star-okr-setup) (AI UX Playground)
 
 This file is the weekly scoreboard. Full OKRs stay in `q4-2026-work-kit.md`. O4 (capture) is parked off the weekly board until the log has a denominator. Kill anything that does not change a sitting this week.

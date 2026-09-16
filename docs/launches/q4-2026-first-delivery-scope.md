@@ -5,7 +5,7 @@
 **Target users:** Avery (solo IC, desktop Cursor) is in scope. Casey (Cloud Agents) is phase 2. Riley (Teams/Enterprise) is recovery copy only.
 **Timeline:** Phase 1 go-live 15 Oct 2026. Cloud 14 Nov. Grade 31 Dec. G3 copy due 8 Oct.
 **Resources:** One owner, Sarah Scherer. $0 paid GTM. MIT. No separate eng/design/research team.
-**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [Priority](../okrs/q4-2026-feature-priority.md), [Checklist](q4-2026-first-delivery-checklist.md), [User flow](../user-flows/work-kit-first-delivery.md), [OKRs](../okrs/q4-2026-work-kit.md)
+**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [Priority](../okrs/q4-2026-feature-priority.md), [Checklist](q4-2026-first-delivery-checklist.md), [User flow](../user-flows/work-kit-first-delivery.md), [OKRs](../okrs/q4-2026-work-kit.md), [Tenets](../messaging/work-kit-tenets.md)
 **Source prompt:** [Scope definition](https://aiuxplayground.com/prompts/scope-definition-template) (AI UX Playground)
 
 This is the freeze for phase 1. If a request is not in section 2, it is out until Sarah files a change (section 8). Playground templates are not scope. F1 (G3 copy) is.
