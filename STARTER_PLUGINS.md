@@ -34,6 +34,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [React Bits](https://github.com/DavidHDev/react-bits) is a shadcn registry of animated React components. Add `@react-bits` to the app's `components.json`, then `npx shadcn@latest add @react-bits/<Name>-TS-TW`. Details: `skills/react-bits/SKILL.md`.
 
+[High-End Visual Design](https://www.skills.sh/leonxlnx/taste-skill/high-end-visual-design) is a Leonxlnx taste-skill variant (`soft-skill` folder). Invoke `/high-end-visual-design`. Distinct from `/taste-skill`. Details: `skills/high-end-visual-design/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |

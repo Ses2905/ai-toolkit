@@ -1,0 +1,6 @@
+---
+description: Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive.
+alwaysApply: false
+---
+
+high-end-visual-design: Follow `skills/high-end-visual-design/SKILL.md` for premium agency-tier marketing UI (Double-Bezel, variance engine, custom motion). Do not apply to dashboards, data tables, admin UI, or backend/infra work. Distinct from `taste-skill`.

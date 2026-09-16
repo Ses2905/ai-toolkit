@@ -17,8 +17,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -56,6 +56,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Skill | `apple-design` | Gesture UI, springs, sheets, materials, type |
 | Skill | `taste-skill` | Anti-slop landing pages, portfolios, demos, redesigns |
 | Rule | `taste-skill` | Agent-decides — marketing/frontend taste, not dashboards |
+| Skill | `high-end-visual-design` | Agency-tier Double-Bezel UI, premium type, custom motion |
+| Rule | `high-end-visual-design` | Agent-decides — expensive marketing UI, not dashboards |
 | Skill | `frontend-design` | Distinctive UI, type, and visual direction (not templates) |
 | Rule | `frontend-design` | Agent-decides — new or reshaped product UI |
 | Skill | `canvas-design` | Posters, PNG/PDF art from a design philosophy |

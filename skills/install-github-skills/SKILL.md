@@ -24,7 +24,7 @@ That preset installs:
 
 | Area | Skills |
 | --- | --- |
-| Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind` |
+| Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind`, `taste-skill`, `high-end-visual-design` |
 | Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
 | Motion | `react-view-transitions` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines` |

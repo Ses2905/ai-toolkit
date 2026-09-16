@@ -70,7 +70,8 @@
         { "source": "mattpocock-skills", "path": "productivity/grill-me", "name": "grill-me" },
         { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" },
         { "source": "emilkowalski-skills", "path": "apple-design" },
-        { "source": "leonxlnx-taste-skill", "path": "taste-skill" }
+        { "source": "leonxlnx-taste-skill", "path": "taste-skill" },
+        { "source": "leonxlnx-taste-skill", "path": "soft-skill", "name": "high-end-visual-design" }
       ]
     },
     "all-awesome": {
