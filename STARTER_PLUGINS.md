@@ -22,7 +22,13 @@ npx impeccable install --providers=cursor --scope=global
 
 Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/install-impeccable/SKILL.md`.
 
-GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are lists. Copy individual `SKILL.md` folders into `~/.cursor/skills/` — do not install the whole repo. Details: `skills/install-github-skills/SKILL.md`.
+GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are lists. From this repo:
+
+```bash
+./scripts/install-catalog-skills.sh --preset design-product
+```
+
+That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/install-github-skills/SKILL.md`.
 
 ## Install if you do this work
 

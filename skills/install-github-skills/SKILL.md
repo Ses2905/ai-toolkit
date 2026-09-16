@@ -1,39 +1,69 @@
 ---
 name: install-github-skills
-description: Install selected Agent Skills from a GitHub catalog such as spencerpauly/awesome-cursor-skills. Use when the user wants to pull skills from GitHub, an awesome-skills list, or copy SKILL.md folders into ~/.cursor/skills.
+description: Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.
+disable-model-invocation: true
 ---
 
 # Install skills from GitHub
 
-Catalogs like [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are **lists**, not a plugin. Do not copy the whole repo into `~/.cursor/skills/`. Pick the skills that match the user's work.
+Catalogs like [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are **lists**, not a Cursor marketplace plugin. Cursor does not auto-import them. This repo's installer clones the sources and copies each skill folder (the directory that contains `SKILL.md`) into `~/.cursor/skills/`.
 
-Cursor does not auto-import loose GitHub skills. Either copy a `SKILL.md` folder, or package them in a plugin.
+Do not copy the whole awesome-list repo into the skills directory. Do not write into `~/.cursor/skills-cursor/`.
 
-## Personal (every local project)
+## Default: design / visuals / product
+
+From this work-kit repo:
 
 ```bash
-# one skill from a catalog repo
+./scripts/install-catalog-skills.sh --preset design-product
+```
+
+Then **Developer: Reload Window**. Confirm in **Customize → Skills**.
+
+That preset installs:
+
+| Area | Skills |
+| --- | --- |
+| Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind` |
+| Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
+| Motion | `react-view-transitions` |
+| Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines` |
+| Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines` |
+| Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets` |
+
+Sources and the full mapping live in [catalog/presets.json](../../catalog/presets.json).
+
+## Other invocations
+
+```bash
+# list what a preset would install
+./scripts/install-catalog-skills.sh --preset design-product --list
+
+# one or more names from that preset
+./scripts/install-catalog-skills.sh --preset design-product --only writing-copy,frontend-design,pptx
+
+# every local skill under awesome-cursor-skills/resources (noisy)
+./scripts/install-catalog-skills.sh --preset all-awesome
+```
+
+Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.
+
+## After install
+
+- Desktop: Reload Window, then use `/using-ui-stack`, `/frontend-design`, `/writing-copy`, `/pptx`, `/grill-me`, and the rest.
+- Cloud Agents: **Settings → Agents → Sync Skills for Cloud Agents** (only `~/.cursor/skills/` syncs).
+- Polished Cursor UI kit: still run `/install-impeccable` (`npx impeccable install --providers=cursor --scope=global`). That is a different installer, not a folder copy from the awesome list.
+
+## Manual copy (no script)
+
+```bash
 git clone --depth 1 https://github.com/spencerpauly/awesome-cursor-skills.git /tmp/awesome-cursor-skills
 mkdir -p ~/.cursor/skills
 cp -R /tmp/awesome-cursor-skills/resources/<skill-name> ~/.cursor/skills/<skill-name>
 ```
 
-The folder name must contain `SKILL.md` and match the skill `name` frontmatter.
-
-Then **Developer: Reload Window**. Confirm in **Customize → Skills**.
-
-For Cloud Agents, skills must live in `~/.cursor/skills/` with **Settings → Agents → Sync Skills for Cloud Agents**.
+The destination folder name must match the `name` frontmatter in `SKILL.md`.
 
 ## Project-only
 
-Copy into that repo's `.cursor/skills/<skill-name>/` and commit it.
-
-## Do not do this
-
-- Dump every catalog skill into the user dir (context noise).
-- Put skills in `~/.cursor/skills-cursor/` (Cursor-managed).
-- Treat awesome-cursor-skills as a Cursor marketplace plugin.
-
-## Impeccable is different
-
-Frontend design skill: follow `skills/install-impeccable/SKILL.md` (`npx impeccable install`), not a copy from awesome-cursor-skills.
+Copy into that repo's `.cursor/skills/<skill-name>/` and commit it. Do not vendor catalog skills into work-kit unless the user asked to pin them here.

@@ -1,6 +1,12 @@
 ---
 name: install-github-skills
-description: Copy selected skills from a GitHub catalog into ~/.cursor/skills
+description: Pull the design-product skill preset from GitHub catalogs into ~/.cursor/skills
 ---
 
-Follow `skills/install-github-skills/SKILL.md`. Pick specific skills. Do not install an entire awesome-list.
+Follow `skills/install-github-skills/SKILL.md`. Default command:
+
+```bash
+./scripts/install-catalog-skills.sh --preset design-product
+```
+
+Do not copy the entire awesome-list repo into `~/.cursor/skills/`. Do not write to `~/.cursor/skills-cursor/`.

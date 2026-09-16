@@ -1,0 +1,67 @@
+{
+  "default_dest": "~/.cursor/skills",
+  "cache_dir": "~/.cache/work-kit/skill-catalogs",
+  "sources": {
+    "awesome-cursor-skills": {
+      "git": "https://github.com/spencerpauly/awesome-cursor-skills.git",
+      "ref": "main",
+      "root": "resources",
+      "license": "CC0-1.0"
+    },
+    "anthropic-skills": {
+      "git": "https://github.com/anthropics/skills.git",
+      "ref": "main",
+      "root": "skills",
+      "license": "Apache-2.0"
+    },
+    "vercel-agent-skills": {
+      "git": "https://github.com/vercel-labs/agent-skills.git",
+      "ref": "main",
+      "root": "skills",
+      "license": "MIT"
+    },
+    "mattpocock-skills": {
+      "git": "https://github.com/mattpocock/skills.git",
+      "ref": "main",
+      "root": "skills",
+      "license": "MIT"
+    }
+  },
+  "presets": {
+    "design-product": {
+      "description": "Design systems, visual QA, motion, presentations, copy, and product shaping.",
+      "skills": [
+        { "source": "awesome-cursor-skills", "path": "using-ui-stack" },
+        { "source": "awesome-cursor-skills", "path": "visual-qa-testing" },
+        { "source": "awesome-cursor-skills", "path": "verifying-in-browser" },
+        { "source": "awesome-cursor-skills", "path": "responsive-testing" },
+        { "source": "awesome-cursor-skills", "path": "dark-mode-testing" },
+        { "source": "awesome-cursor-skills", "path": "accessibility-auditing" },
+        { "source": "awesome-cursor-skills", "path": "writing-copy" },
+        { "source": "awesome-cursor-skills", "path": "verifying-markdown-formatting" },
+        { "source": "awesome-cursor-skills", "path": "generating-images" },
+        { "source": "awesome-cursor-skills", "path": "exporting-to-png" },
+        { "source": "awesome-cursor-skills", "path": "screenshotting-changelog" },
+        { "source": "awesome-cursor-skills", "path": "comparing-branches-visually" },
+        { "source": "awesome-cursor-skills", "path": "converting-css-to-tailwind" },
+        { "source": "anthropic-skills", "path": "frontend-design" },
+        { "source": "anthropic-skills", "path": "canvas-design" },
+        { "source": "anthropic-skills", "path": "theme-factory" },
+        { "source": "anthropic-skills", "path": "brand-guidelines" },
+        { "source": "anthropic-skills", "path": "pptx" },
+        { "source": "anthropic-skills", "path": "pdf" },
+        { "source": "anthropic-skills", "path": "docx" },
+        { "source": "vercel-agent-skills", "path": "web-design-guidelines" },
+        { "source": "vercel-agent-skills", "path": "react-view-transitions" },
+        { "source": "vercel-agent-skills", "path": "writing-guidelines" },
+        { "source": "mattpocock-skills", "path": "productivity/grilling", "name": "grilling" },
+        { "source": "mattpocock-skills", "path": "productivity/grill-me", "name": "grill-me" },
+        { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" }
+      ]
+    },
+    "all-awesome": {
+      "description": "Every local skill under awesome-cursor-skills/resources (noisy; prefer design-product).",
+      "expand": "awesome-cursor-skills"
+    }
+  }
+}

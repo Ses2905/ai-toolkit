@@ -33,6 +33,14 @@ Then **Settings → Agents → Context and Tools → Sync Skills for Cloud Agent
 
 Repo-specific knowledge still belongs in that repo (`AGENTS.md`, `.cursor/rules`, `.cursor/skills`).
 
+## GitHub catalogs
+
+```bash
+./scripts/install-catalog-skills.sh --preset design-product
+```
+
+See `skills/install-github-skills/SKILL.md`.
+
 ## Marketplace plugins
 
 Install these at **user** scope from **Customize → Install**, not project scope. See `STARTER_PLUGINS.md`.
