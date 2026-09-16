@@ -1,0 +1,6 @@
+---
+description: Do not claim work is done until you have fresh evidence it works.
+alwaysApply: true
+---
+
+verify-before-done: Run or inspect the thing you changed before saying it is finished. Cite the command, test, UI path, or log that proves it. If you cannot verify, say what is unverified and why.

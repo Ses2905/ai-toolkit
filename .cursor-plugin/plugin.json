@@ -1,0 +1,25 @@
+{
+  "name": "work-kit",
+  "displayName": "Work Kit",
+  "version": "1.0.0",
+  "description": "Personal engineering kit for every Cursor project: plan first, debug from evidence, review diffs, ship cleanly, and capture repeated workflows as skills.",
+  "author": {
+    "name": "Sarah Scherer"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "workflow",
+    "planning",
+    "debugging",
+    "code-review",
+    "shipping",
+    "skills"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "personal",
+    "quality",
+    "delivery"
+  ]
+}

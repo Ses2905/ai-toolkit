@@ -1,0 +1,6 @@
+---
+description: Keep changes scoped to the request and match the surrounding code.
+alwaysApply: true
+---
+
+tight-diffs: Change only what the task needs. Match existing naming, layout, and patterns. Do not drive-by refactor, add unused files, or rewrite comments/docs unless asked.
