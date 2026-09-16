@@ -3,7 +3,7 @@
 **Product:** Work Kit (`work-kit`), personal MIT Cursor plugin
 **Job:** After one user-scope install, the next sitting is `/plan` (or a marked tiny skip) through named-file `/ship`.
 **Not a GTM category play.** No TAM. No share. No sales team. No press desk. This file tells Avery (and anyone who clones the repo) which job to pick. It does not fund a launch campaign.
-**Related:** [Messaging](work-kit.md), [Competitive UX](work-kit-competitive-ux.md), [GTM](../launches/q4-2026-first-delivery-gtm.md), [STARTER_PLUGINS.md](../../STARTER_PLUGINS.md)
+**Related:** [Messaging](work-kit.md), [Competitive UX](work-kit-competitive-ux.md), [GTM](../launches/q4-2026-first-delivery-gtm.md), [STARTER_PLUGINS.md](../../STARTER_PLUGINS.md), [SWOT](work-kit-swot.md)
 **Source prompt:** [Competitive positioning](https://aiuxplayground.com/prompts/competitive-positioning) (AI UX Playground)
 **Desk date:** 16 Sep 2026. Interviews 0. Survey 0. Log rows 0. Do not paste this as SEO.
 
