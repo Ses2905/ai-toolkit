@@ -22,7 +22,7 @@
     },
     "mattpocock-skills": {
       "git": "https://github.com/mattpocock/skills.git",
-      "ref": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260",
+      "ref": "main",
       "root": "skills",
       "license": "MIT"
     },
@@ -201,7 +201,7 @@
         {
           "source": "mattpocock-skills",
           "path": "productivity/handoff",
-          "name": "handoff"
+          "name": "pm-handoff"
         },
         {
           "source": "emilkowalski-skills",
@@ -533,13 +533,13 @@
         }
       ]
     },
-    "handoff": {
-      "description": "PM Handoff: compact the current conversation into a portable handoff document (MIT).",
+    "pm-handoff": {
+      "description": "Matt Pocock conversation handoff for a fresh agent (MIT). Upstream skill name is handoff.",
       "skills": [
         {
           "source": "mattpocock-skills",
           "path": "productivity/handoff",
-          "name": "handoff"
+          "name": "pm-handoff"
         }
       ]
     }

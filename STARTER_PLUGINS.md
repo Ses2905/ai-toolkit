@@ -58,7 +58,7 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Find Animation Opportunities](https://www.skills.sh/emilkowalski/skills/find-animation-opportunities) finds places that should animate and rejects the rest. Invoke `/find-animation-opportunities`. Read-only. Distinct from `/improve-animations`. Details: `skills/find-animation-opportunities/SKILL.md`.
 
-[PM Handoff](https://aiuxplayground.com/skills/pm-handoff) (`handoff`) compacts the current conversation into a portable handoff document for another agent. Invoke `/handoff`. Distinct from `/capture-a-skill`. Details: `skills/handoff/SKILL.md`.
+[PM Handoff](https://aiuxplayground.com/skills/pm-handoff) compacts the current conversation into a handoff document for another agent. Upstream CLI name is `handoff`. Invoke `/pm-handoff`. Distinct from `/ship-the-change`. Details: `skills/pm-handoff/SKILL.md`.
 
 ## Install if you do this work
 
