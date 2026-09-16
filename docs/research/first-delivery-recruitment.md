@@ -4,7 +4,7 @@
 **Product:** Work Kit (`work-kit`)
 **Owner / researcher:** Sarah Scherer
 **Method:** Problem interviews (n=5 to 8) plus optional usability of install copy after G3 is fixed. Owner diary is separate (session log, n=1).
-**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [User flow](../user-flows/work-kit-first-delivery.md), [Session log](../okrs/session-log.md), [Beta survey](first-delivery-beta-survey.md)
+**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [User flow](../user-flows/work-kit-first-delivery.md), [Session log](../okrs/session-log.md), [Beta survey](first-delivery-beta-survey.md), [Insights](first-delivery-insights.md)
 **Source prompt:** [User research recruitment plan](https://aiuxplayground.com/prompts/user-research-recruitment-plan) (AI UX Playground)
 
 This is discovery plus a short usability pass after G3. Sample size is 5 to 8 interviews, not a 100-person survey. Do not demo Work Kit on the call.
