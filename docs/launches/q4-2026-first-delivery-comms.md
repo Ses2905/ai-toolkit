@@ -5,7 +5,7 @@
 **Phase 2:** 14 November 2026 (Cloud Agents / Casey)
 **Grade:** 31 December 2026
 **Owner:** Sarah Scherer
-**Related:** [Launch checklist](q4-2026-first-delivery-checklist.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Q4 OKRs](../okrs/q4-2026-work-kit.md)
+**Related:** [Launch checklist](q4-2026-first-delivery-checklist.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Q4 OKRs](../okrs/q4-2026-work-kit.md), [Stakeholder map](q4-2026-stakeholder-map.md)
 **Source prompt:** [Launch communication plan](https://aiuxplayground.com/prompts/launch-communication-plan) (AI UX Playground)
 
 No `.agents/product-marketing.md`. Audience size is one primary operator. Owned channel is the GitHub README. No email list, no in-product banner we control, no press desk.
