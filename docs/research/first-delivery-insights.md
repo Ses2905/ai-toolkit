@@ -5,7 +5,7 @@
 **Participants:** Zero of the planned 5 to 8 Avery-like ICs. Owner diary n=1 (Sarah Scherer). One Cloud Agent working session. No recorded usability.
 **Decision this informs:** 15 October 2026 go/no-go (G1 to G4), and whether the next session edits `install-local.sh` or writes another plan.
 **Team constraints:** One owner. $0 paid GTM. Cursor chrome is not ours to redesign. Avery is primary. Cloud phase is 14 Nov. Do not invent NPS or Mixpanel. Do not mix owner rows into a fake n=8.
-**Related:** [Recruitment](first-delivery-recruitment.md), [Beta survey](first-delivery-beta-survey.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Feature priority](../okrs/q4-2026-feature-priority.md), [Synthesis](first-delivery-synthesis.md)
+**Related:** [Recruitment](first-delivery-recruitment.md), [Beta survey](first-delivery-beta-survey.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Feature priority](../okrs/q4-2026-feature-priority.md), [Synthesis](first-delivery-synthesis.md), [Affinity](first-delivery-affinity.md)
 **Source prompt:** [Research insight statement writer](https://aiuxplayground.com/prompts/research-insight-statement-writer) (AI UX Playground)
 
 The Playground prompt asked for themes from a recent study. Those brackets were empty. These statements use what is in the repo and the 16 Sep session log. They are not quotes from external testers. Rewrite this file after 5 interview completes or after G3 usability, whichever comes first.

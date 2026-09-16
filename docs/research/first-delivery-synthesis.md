@@ -2,12 +2,12 @@
 
 **Stakeholder use.** Decision for 15 Oct go/no-go and the next coding session. Not a user-research readout to show a VP as "what testers said."
 **Date:** 16 September 2026
-**Related:** [Insights](first-delivery-insights.md), [Survey analysis](first-delivery-survey-analysis.md), [Recruitment](first-delivery-recruitment.md), [Session log](../okrs/session-log.md), [Priority](../okrs/q4-2026-feature-priority.md), [Planning session](../sessions/2026-09-16-first-delivery-planning.md)
+**Related:** [Insights](first-delivery-insights.md), [Survey analysis](first-delivery-survey-analysis.md), [Recruitment](first-delivery-recruitment.md), [Session log](../okrs/session-log.md), [Priority](../okrs/q4-2026-feature-priority.md), [Planning session](../sessions/2026-09-16-first-delivery-planning.md), [Affinity](first-delivery-affinity.md)
 **Source prompt:** [User research synthesis](https://aiuxplayground.com/prompts/user-research-synthesis) (AI UX Playground)
 
 ## Gate (why this is not the Playground's mixed study)
 
-The prompt says use this only when interviews, survey, and analytics are already summarized or coded. If you have one transcript, debrief that session. If you have raw notes, affinity-map first.
+The prompt says use this only when interviews, survey, and analytics are already summarized or coded. If you have one transcript, debrief that session. If you have raw notes, affinity-map first. Inspection notes are mapped in [affinity](first-delivery-affinity.md). That map is not eight testers.
 
 | Source the prompt wants | Status 16 Sep | Coded artifact |
 | --- | --- | --- |
