@@ -8,7 +8,7 @@
 **Cloud path go-live:** 14 November 2026
 **Grade date:** 31 December 2026
 **Owner:** Sarah Scherer
-**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [Q4 OKRs](../okrs/q4-2026-work-kit.md), [User flow](../user-flows/work-kit-first-delivery.md)
+**Related:** [Problem statement](../problem-statements/work-kit-first-delivery.md), [Q4 OKRs](../okrs/q4-2026-work-kit.md), [User flow](../user-flows/work-kit-first-delivery.md), [Scope](q4-2026-first-delivery-scope.md)
 **Source prompt:** [Product launch checklist](https://aiuxplayground.com/prompts/product-launch-checklist) (AI UX Playground)
 
 No `.agents/product-marketing.md` exists. Context is the README job plus those three docs.
