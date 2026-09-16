@@ -4,7 +4,7 @@
 **Persona:** Avery, solo IC on desktop Cursor. Ships with git weekly. Uses Agent or chat to change code.
 **Business goal:** O1. 15 Oct go-live is G1-G4. Q4 grade is 80% plan-or-tiny and 8 named-file ships. Not ARR. Not NPS.
 **Feature:** Install copy, slash loop, log. Not a new Work Kit screen.
-**Related:** [User flow](work-kit-first-delivery.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Priority](../okrs/q4-2026-feature-priority.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [US-1 AC](us-1-g3-acceptance-criteria.md)
+**Related:** [User flow](work-kit-first-delivery.md), [Scope](../launches/q4-2026-first-delivery-scope.md), [Priority](../okrs/q4-2026-feature-priority.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [US-1 AC](us-1-g3-acceptance-criteria.md), [US-5 AC](us-5-ship-acceptance-criteria.md)
 **Source prompt:** [User story writing](https://aiuxplayground.com/prompts/user-story-writing) (AI UX Playground)
 
 Phase 1 backlog is US-1 through US-6. US-7 is phase 2. Riley is not a story this quarter. Live G3 still fails: treat US-1 as open until `install-local.sh` and README match.
