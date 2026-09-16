@@ -3,4 +3,4 @@ description: Create zero-dependency editable HTML presentations with a built-in 
 alwaysApply: false
 ---
 
-frontend-slides-editable: Follow `skills/frontend-slides-editable/SKILL.md`. Finish Phase 1 before generating HTML. Distinct from `slides` (Chart.js) and `lark-slides` (Feishu). Do not install puppeteer or skip discovery unless the user opted out.
+frontend-slides-editable: Follow `skills/frontend-slides-editable/SKILL.md`. Finish Phase 1 before generating HTML. Distinct from `slides` (Chart.js), `html-ppt` (themed static templates), and `lark-slides` (Feishu). Do not install puppeteer or skip discovery unless the user opted out.

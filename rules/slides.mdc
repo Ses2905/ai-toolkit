@@ -3,4 +3,4 @@ description: Create strategic HTML presentations with Chart.js, design tokens, a
 alwaysApply: false
 ---
 
-slides: Follow `skills/slides/SKILL.md` (search CSVs via `skills/design-system/scripts/search-slides.py`) when creating HTML pitch decks or Chart.js presentations. Distinct from `lark-slides`. Do not scrape stock photos unless the user asked. Skip Feishu XML, generic PPTX, product UI, and backend work.
+slides: Follow `skills/slides/SKILL.md` (search CSVs via `skills/design-system/scripts/search-slides.py`) when creating HTML pitch decks or Chart.js presentations. Distinct from `lark-slides` and `html-ppt`. Do not scrape stock photos unless the user asked. Skip Feishu XML, generic PPTX, product UI, and backend work.

@@ -41,8 +41,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -114,6 +114,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Skill | `design-system` | Token CSVs and `search-slides.py` sibling for `/slides` |
 | Skill | `frontend-slides-editable` | Single-file HTML decks with a built-in browser editor |
 | Rule | `frontend-slides-editable` | Agent-decides — editable HTML decks, not Feishu or Chart.js slides |
+| Skill | `html-ppt` | Themed static HTML presentations (36 themes, keyboard runtime) |
+| Rule | `html-ppt` | Agent-decides — html-ppt templates, not Chart.js or Feishu |
 | Skill | `product-strategy-session` | End-to-end PM strategy: positioning → discovery → roadmap |
 | Rule | `product-strategy-session` | Agent-decides — product strategy sessions, not implementation |
 | Skill | `html-diagram` | Self-contained HTML diagrams (topology, sequence, state, hierarchy) |

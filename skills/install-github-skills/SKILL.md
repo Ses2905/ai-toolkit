@@ -28,7 +28,7 @@ That preset installs:
 | Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
 | Motion | `react-view-transitions`, `hyperframes-animation`, `review-animations`, `improve-animations`, `find-animation-opportunities` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines`, `html-diagram` |
-| Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system`, `frontend-slides-editable` |
+| Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system`, `frontend-slides-editable`, `html-ppt` |
 | Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets`, `product-strategy-session` |
 
 Sources and the full mapping live in [catalog/presets.json](../../catalog/presets.json).
@@ -53,6 +53,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Editable single-file HTML decks (skills.sh frontend-slides-editable)
 ./scripts/install-catalog-skills.sh --preset frontend-slides-editable
+
+# Themed static HTML PPT (skills.sh html-ppt)
+./scripts/install-catalog-skills.sh --preset html-ppt
 
 # Product strategy session + orchestrated Dean Peters siblings (CC BY-NC-SA 4.0)
 ./scripts/install-catalog-skills.sh --preset product-strategy-session

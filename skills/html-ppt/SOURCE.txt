@@ -1,0 +1,9 @@
+Source: https://www.skills.sh/lewislulu/html-ppt-skill/html-ppt
+Repo: https://github.com/lewislulu/html-ppt-skill
+Upstream: repository root (SKILL.md at repo root)
+Install name: html-ppt
+Official CLI: npx skills add https://github.com/lewislulu/html-ppt-skill --skill html-ppt
+Pinned: fd1629067909ff55b36b905476de4e5f26062a1f
+License: MIT (lewis <sudolewis@gmail.com>)
+Omitted: scripts/verify-output (PNG screenshots), docs/readme PNG/GIF marketing images
+Related: skills/slides (Chart.js), skills/frontend-slides-editable (editable single-file)

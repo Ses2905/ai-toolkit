@@ -42,6 +42,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Frontend Slides Editable](https://www.skills.sh/archlizheng/frontend-slides-editable/frontend-slides-editable) is a zero-dependency HTML deck with a built-in editor (drag objects, Pages sidebar, Ctrl+S). Invoke `/frontend-slides-editable`. Distinct from `/slides`. Details: `skills/frontend-slides-editable/SKILL.md`.
 
+[HTML PPT](https://www.skills.sh/lewislulu/html-ppt-skill/html-ppt) authors themed static HTML presentations (36 themes, layouts, presenter mode). Invoke `/html-ppt`. Distinct from `/slides` and `/frontend-slides-editable`. Details: `skills/html-ppt/SKILL.md`.
+
 [Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.
 
 [HTML Diagram](https://www.skills.sh/plannotator/effective-html/html-diagram) builds a self-contained HTML diagram (topology, sequence, state, hierarchy). Invoke `/html-diagram`. Visual register lives in `skills/design-artifact`. Details: `skills/html-diagram/SKILL.md`.

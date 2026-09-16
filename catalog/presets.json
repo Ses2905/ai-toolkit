@@ -56,6 +56,12 @@
       "root": "",
       "license": "MIT"
     },
+    "lewislulu-html-ppt-skill": {
+      "git": "https://github.com/lewislulu/html-ppt-skill.git",
+      "ref": "fd1629067909ff55b36b905476de4e5f26062a1f",
+      "root": "",
+      "license": "MIT"
+    },
     "deanpeters-product-manager-skills": {
       "git": "https://github.com/deanpeters/product-manager-skills.git",
       "ref": "1b5a524ebb95e9497fa3f25002d8b8ec528d4444",
@@ -225,6 +231,11 @@
           "name": "frontend-slides-editable"
         },
         {
+          "source": "lewislulu-html-ppt-skill",
+          "path": ".",
+          "name": "html-ppt"
+        },
+        {
           "source": "deanpeters-product-manager-skills",
           "path": "product-strategy-session"
         },
@@ -351,6 +362,16 @@
           "source": "archlizheng-frontend-slides-editable",
           "path": ".",
           "name": "frontend-slides-editable"
+        }
+      ]
+    },
+    "html-ppt": {
+      "description": "Themed static HTML presentations (lewislulu/html-ppt-skill).",
+      "skills": [
+        {
+          "source": "lewislulu-html-ppt-skill",
+          "path": ".",
+          "name": "html-ppt"
         }
       ]
     },
