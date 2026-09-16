@@ -1,0 +1,6 @@
+Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+Repo: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+Upstream folder: cli/assets/skills/design-system
+Pinned: 15de38fb70bc80ae9276fa7703b48ae861a672e6
+License: MIT (Next Level Builder)
+Required by: skills/slides (ckmslides)

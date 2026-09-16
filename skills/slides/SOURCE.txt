@@ -1,0 +1,10 @@
+Source: https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ckmslides
+Repo: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+Upstream folder: cli/assets/skills/slides
+Also present: .claude/skills/slides (duplicate)
+Install name: slides
+skills.sh listing: ckmslides
+Official CLI: npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill slides
+Pinned: 15de38fb70bc80ae9276fa7703b48ae861a672e6
+License: MIT (Next Level Builder)
+Depends on: skills/design-system (search-slides.py, CSVs, embed-tokens.cjs)

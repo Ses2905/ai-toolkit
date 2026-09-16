@@ -28,7 +28,7 @@ That preset installs:
 | Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
 | Motion | `react-view-transitions` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines` |
-| Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines` |
+| Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system` |
 | Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets` |
 
 Sources and the full mapping live in [catalog/presets.json](../../catalog/presets.json).
@@ -47,6 +47,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Lark/Feishu slides (needs @larksuite/cli + login)
 ./scripts/install-catalog-skills.sh --preset lark
+
+# HTML Chart.js decks (skills.sh ckmslides → --skill slides)
+./scripts/install-catalog-skills.sh --preset slides
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.

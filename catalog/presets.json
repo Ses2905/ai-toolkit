@@ -43,6 +43,12 @@
       "ref": "cb5a3d704379552dc61e37898e5f74798783190d",
       "root": "skills",
       "license": "MIT"
+    },
+    "nextlevelbuilder-ui-ux-pro-max": {
+      "git": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "ref": "15de38fb70bc80ae9276fa7703b48ae861a672e6",
+      "root": "cli/assets/skills",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -77,7 +83,9 @@
         { "source": "mattpocock-skills", "path": "engineering/to-tickets", "name": "to-tickets" },
         { "source": "emilkowalski-skills", "path": "apple-design" },
         { "source": "leonxlnx-taste-skill", "path": "taste-skill" },
-        { "source": "leonxlnx-taste-skill", "path": "soft-skill", "name": "high-end-visual-design" }
+        { "source": "leonxlnx-taste-skill", "path": "soft-skill", "name": "high-end-visual-design" },
+        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
+        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" }
       ]
     },
     "all-awesome": {
@@ -89,6 +97,13 @@
       "skills": [
         { "source": "larksuite-cli", "path": "lark-shared" },
         { "source": "larksuite-cli", "path": "lark-slides" }
+      ]
+    },
+    "slides": {
+      "description": "HTML Chart.js presentations (skills.sh ckmslides). Includes sibling design-system search CSVs.",
+      "skills": [
+        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
+        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" }
       ]
     }
   }

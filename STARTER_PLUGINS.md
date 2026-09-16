@@ -38,6 +38,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Lark Slides](https://www.skills.sh/larksuite/cli/lark-slides) needs the official CLI (`npm i -g @larksuite/cli`) and a Lark/Feishu login. Invoke `/lark-slides`. Auth rules live in `skills/lark-shared`. Details: `skills/lark-slides/SKILL.md`.
 
+[ckmslides / Slides](https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ckmslides) is the HTML Chart.js deck skill from ui-ux-pro-max (`--skill slides`). Invoke `/slides`. Needs sibling `skills/design-system`. Distinct from `/lark-slides`. Details: `skills/slides/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
