@@ -1,0 +1,6 @@
+---
+description: HyperFrames animation knowledge — GSAP rules, scene blueprints, transitions, and runtime adapters. Use for hyperframes-animation, seek-safe timelines, or motion graphics compositions.
+alwaysApply: false
+---
+
+hyperframes-animation: Follow `skills/hyperframes-animation/SKILL.md`. Read `skills/hyperframes-core/SKILL.md` first. Pick 2-4 rules from `rules-index.md` by default. Distinct from `react-bits` and `apple-design`. Do not run HyperFrames render/CLI unless the user asked.

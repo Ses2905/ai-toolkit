@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/heygen-com/hyperframes/hyperframes-animation
+Repo: https://github.com/heygen-com/hyperframes
+Upstream folder: skills/hyperframes-animation
+Install name: hyperframes-animation
+Official CLI: npx skills add https://github.com/heygen-com/hyperframes --skill hyperframes-animation
+Pinned: d6fe66707f74467bd7193839cb4b5cb3f1e8bb06 (v0.8.43)
+License: Apache-2.0
+Depends on: skills/hyperframes-core

@@ -67,6 +67,12 @@
       "ref": "2ac1dfecb0f2474e75260cb6d3c9b9d6d9b5062e",
       "root": "skills",
       "license": "MIT"
+    },
+    "heygen-hyperframes": {
+      "git": "https://github.com/heygen-com/hyperframes.git",
+      "ref": "d6fe66707f74467bd7193839cb4b5cb3f1e8bb06",
+      "root": "skills",
+      "license": "Apache-2.0"
     }
   },
   "presets": {
@@ -285,6 +291,14 @@
         {
           "source": "plannotator-effective-html",
           "path": "design-artifact"
+        },
+        {
+          "source": "heygen-hyperframes",
+          "path": "hyperframes-animation"
+        },
+        {
+          "source": "heygen-hyperframes",
+          "path": "hyperframes-core"
         }
       ]
     },
@@ -415,6 +429,19 @@
         {
           "source": "plannotator-effective-html",
           "path": "design-artifact"
+        }
+      ]
+    },
+    "hyperframes-animation": {
+      "description": "HeyGen HyperFrames animation plus hyperframes-core contract (Apache-2.0).",
+      "skills": [
+        {
+          "source": "heygen-hyperframes",
+          "path": "hyperframes-animation"
+        },
+        {
+          "source": "heygen-hyperframes",
+          "path": "hyperframes-core"
         }
       ]
     }

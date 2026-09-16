@@ -46,6 +46,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [HTML Diagram](https://www.skills.sh/plannotator/effective-html/html-diagram) builds a self-contained HTML diagram (topology, sequence, state, hierarchy). Invoke `/html-diagram`. Visual register lives in `skills/design-artifact`. Details: `skills/html-diagram/SKILL.md`.
 
+[HyperFrames Animation](https://www.skills.sh/heygen-com/hyperframes/hyperframes-animation) is HeyGen motion knowledge (GSAP rules, blueprints, adapters). Invoke `/hyperframes-animation`. Contract lives in `skills/hyperframes-core`. Apache-2.0. Details: `skills/hyperframes-animation/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
