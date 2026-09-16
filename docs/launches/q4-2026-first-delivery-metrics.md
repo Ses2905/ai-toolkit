@@ -5,7 +5,7 @@
 **Measure from:** 8 Oct 2026 (log starts) through 31 Dec 2026 (Q4 grade)
 **Launch day:** 15 Oct 2026
 **Instrument:** markdown plus git. Not Mixpanel, Amplitude, or GA4.
-**Related:** [OKRs](../okrs/q4-2026-work-kit.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Runbook](q4-2026-first-delivery-runbook.md), [Session log](../okrs/session-log.md), [Retention](q4-2026-retention-churn.md)
+**Related:** [OKRs](../okrs/q4-2026-work-kit.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Runbook](q4-2026-first-delivery-runbook.md), [Session log](../okrs/session-log.md), [Retention](q4-2026-retention-churn.md), [QBR](q4-2026-qbr.md)
 **Source prompt:** [Launch metrics dashboard](https://aiuxplayground.com/prompts/launch-metrics-dashboard) (AI UX Playground)
 
 A session is one coding sitting in a **product repo** (not only `cursor-skills` chores) where Work Kit should have applied. One operator means "users" in this spec are **sessions** and **runs**, not a multiplayer MAU chart.
