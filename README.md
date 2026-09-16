@@ -66,6 +66,36 @@ Pushes `main` to [Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skill
 
 That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/install-github-skills/SKILL.md`. List first with `--list`.
 
+## Skills database (find a skill)
+
+Every `skills/*/SKILL.md` is indexed into a searchable, categorized, and ranked
+database. Find the right skill from the terminal:
+
+```bash
+./scripts/skills-db.sh find animation      # ranked matches for a topic
+./scripts/skills-db.sh find "user story"   # multi-word query
+./scripts/skills-db.sh list                # categorized + ranked listing
+./scripts/skills-db.sh stats               # category counts + top skills
+```
+
+Or open **`skills-database.html`** for a self-contained UI with live search,
+category filters, and rank sorting (no server needed). In chat, `/find-a-skill`
+routes to the same finder.
+
+Skills fall into six categories — Product & Discovery, Design & Frontend,
+Motion & Animation, Presentations & Diagrams, Engineering Workflow, and Setup &
+Install. Each skill gets a 0–100 score that rewards invocability (a `/command`
+or auto-applying rule), bundled tooling (`scripts/`, tests, `examples/`,
+`docs/`), doc depth, metadata completeness, and catalog/README integration. See
+[SKILLS.md](SKILLS.md) for the full ranked catalog.
+
+Regenerate the committed artifacts (`SKILLS.md`, `skills-database.html`,
+`catalog/skills-index.json`) after adding or editing skills:
+
+```bash
+./scripts/skills-db.sh build
+```
+
 ## Cloud Agents
 
 Cloud VMs do not see `~/.cursor/plugins/local`. To reuse the skills there:
