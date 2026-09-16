@@ -28,7 +28,7 @@
     },
     "emilkowalski-skills": {
       "git": "https://github.com/emilkowalski/skills.git",
-      "ref": "d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7",
+      "ref": "85e8e2363b713506e1d5b6e07a0eb2da66be1bc3",
       "root": "skills",
       "license": "MIT"
     },
@@ -189,6 +189,14 @@
         {
           "source": "emilkowalski-skills",
           "path": "apple-design"
+        },
+        {
+          "source": "emilkowalski-skills",
+          "path": "review-animations"
+        },
+        {
+          "source": "emilkowalski-skills",
+          "path": "improve-animations"
         },
         {
           "source": "leonxlnx-taste-skill",
@@ -442,6 +450,28 @@
         {
           "source": "heygen-hyperframes",
           "path": "hyperframes-core"
+        }
+      ]
+    },
+    "review-animations": {
+      "description": "Emil Kowalski animation review bar (diff-scoped; MIT).",
+      "skills": [
+        {
+          "source": "emilkowalski-skills",
+          "path": "review-animations"
+        }
+      ]
+    },
+    "improve-animations": {
+      "description": "Emil Kowalski animation audit-then-plan (read-only on source; MIT).",
+      "skills": [
+        {
+          "source": "emilkowalski-skills",
+          "path": "improve-animations"
+        },
+        {
+          "source": "emilkowalski-skills",
+          "path": "review-animations"
         }
       ]
     }

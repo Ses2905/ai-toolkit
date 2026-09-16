@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/emilkowalski/skills/review-animations
+Repo: https://github.com/emilkowalski/skills
+Upstream folder: skills/review-animations
+Install name: review-animations
+Official CLI: npx skills add https://github.com/emilkowalski/skills --skill review-animations
+Pinned: 85e8e2363b713506e1d5b6e07a0eb2da66be1bc3
+License: MIT (Emil Kowalski)
+Related: skills/improve-animations (codebase audit + plans)

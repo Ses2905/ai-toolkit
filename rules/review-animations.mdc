@@ -1,0 +1,6 @@
+---
+description: Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.
+alwaysApply: false
+---
+
+review-animations: Follow `skills/review-animations/SKILL.md` and `skills/review-animations/STANDARDS.md`. Review motion only. Decline general code review (`review-the-diff`). Distinct from `improve-animations` (audit/plans), `apple-design` (authoring), and `hyperframes-animation` (HyperFrames GSAP).

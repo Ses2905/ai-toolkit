@@ -17,7 +17,7 @@ That copies this plugin to `~/.cursor/plugins/local/work-kit` as a real director
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Skills appear under **Agent Decides**; invoke with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`
+3. Skills appear under **Agent Decides**; invoke with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/review-animations`, `/improve-animations`
 
 On Teams/Enterprise, local plugins require **Allow Local Plugin Imports**.
 

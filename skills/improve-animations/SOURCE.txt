@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/emilkowalski/skills/improve-animations
+Repo: https://github.com/emilkowalski/skills
+Upstream folder: skills/improve-animations
+Install name: improve-animations
+Official CLI: npx skills add https://github.com/emilkowalski/skills --skill improve-animations
+Pinned: 85e8e2363b713506e1d5b6e07a0eb2da66be1bc3
+License: MIT (Emil Kowalski)
+Related: skills/review-animations (diff review bar)
