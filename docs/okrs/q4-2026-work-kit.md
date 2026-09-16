@@ -5,7 +5,7 @@
 **Owner:** Sarah Scherer
 **Primary user:** Avery (solo IC on desktop Cursor). Riley (Teams) and Casey (Cloud Agents) are recovery paths, not the happy path, until O2 is graded.
 **Source prompt:** [OKR and goal setting](https://aiuxplayground.com/prompts/okr-goal-setting) (AI UX Playground)
-**Related:** [First-delivery user flow](../user-flows/work-kit-first-delivery.md), [Feature priority](q4-2026-feature-priority.md)
+**Related:** [First-delivery user flow](../user-flows/work-kit-first-delivery.md), [Feature priority](q4-2026-feature-priority.md), [SMART goals](q4-2026-smart-goals.md)
 
 This is a one-person kit, not a billed product. Key results are about install, first delivery, and reuse. They are not ARR, NPS, or market share.
 
