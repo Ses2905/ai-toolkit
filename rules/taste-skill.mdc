@@ -1,0 +1,6 @@
+---
+description: Design and implementation guidance for distinctive landing pages, portfolios, product demos, and purposeful redesigns.
+alwaysApply: false
+---
+
+taste-skill: Follow `skills/taste-skill/SKILL.md` (details in `skills/taste-skill/reference.md`). Use for landing pages, portfolios, product demos, and redesigns. Do not apply to dashboards, data tables, admin UI, or backend/infra work.

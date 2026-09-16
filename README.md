@@ -54,6 +54,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Rule | `tight-diffs` | Always — change only what the task needs |
 | Rule | `apple-design` | UI/motion files only — Apple-style fluid interfaces |
 | Skill | `apple-design` | Gesture UI, springs, sheets, materials, type |
+| Skill | `taste-skill` | Anti-slop landing pages, portfolios, demos, redesigns |
+| Rule | `taste-skill` | Agent-decides — marketing/frontend taste, not dashboards |
 | Skill | `plan-the-work` | Before non-trivial implementation |
 | Skill | `debug-from-evidence` | Something is broken |
 | Skill | `review-the-diff` | After a sizable change, or before merge |
