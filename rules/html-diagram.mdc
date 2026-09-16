@@ -1,0 +1,6 @@
+---
+description: Direct-invocation specialist for self-contained HTML diagrams of relationships, sequence, topology, state, hierarchy, or quantitative structure. Use when the user invokes html-diagram.
+alwaysApply: false
+---
+
+html-diagram: Follow `skills/html-diagram/SKILL.md`. Read `skills/design-artifact/SKILL.md` for visual register. Deliver one self-contained HTML file. Distinct from `canvas-design` and `slides`. Do not install tot or activate from a general request.

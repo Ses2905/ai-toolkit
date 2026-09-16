@@ -61,6 +61,12 @@
       "ref": "1b5a524ebb95e9497fa3f25002d8b8ec528d4444",
       "root": "skills",
       "license": "CC-BY-NC-SA-4.0"
+    },
+    "plannotator-effective-html": {
+      "git": "https://github.com/plannotator/effective-html.git",
+      "ref": "2ac1dfecb0f2474e75260cb6d3c9b9d6d9b5062e",
+      "root": "skills",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -271,6 +277,14 @@
         {
           "source": "deanpeters-product-manager-skills",
           "path": "user-story"
+        },
+        {
+          "source": "plannotator-effective-html",
+          "path": "html-diagram"
+        },
+        {
+          "source": "plannotator-effective-html",
+          "path": "design-artifact"
         }
       ]
     },
@@ -388,6 +402,19 @@
         {
           "source": "deanpeters-product-manager-skills",
           "path": "user-story"
+        }
+      ]
+    },
+    "html-diagram": {
+      "description": "Self-contained HTML diagrams from plannotator/effective-html, with design-artifact sibling.",
+      "skills": [
+        {
+          "source": "plannotator-effective-html",
+          "path": "html-diagram"
+        },
+        {
+          "source": "plannotator-effective-html",
+          "path": "design-artifact"
         }
       ]
     }

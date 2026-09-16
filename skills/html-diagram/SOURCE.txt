@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/plannotator/effective-html/html-diagram
+Repo: https://github.com/plannotator/effective-html
+Upstream folder: skills/html-diagram
+Install name: html-diagram
+Official CLI: npx skills add https://github.com/plannotator/effective-html --skill html-diagram
+Pinned: 2ac1dfecb0f2474e75260cb6d3c9b9d6d9b5062e
+License: MIT (plannotator)
+Optional sibling: skills/design-artifact

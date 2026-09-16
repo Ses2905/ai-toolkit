@@ -1,0 +1,5 @@
+Source: https://github.com/plannotator/effective-html
+Upstream folder: skills/design-artifact
+Pinned: 2ac1dfecb0f2474e75260cb6d3c9b9d6d9b5062e
+License: MIT (plannotator)
+Required by: skills/html-diagram (visual register)

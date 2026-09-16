@@ -44,6 +44,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.
 
+[HTML Diagram](https://www.skills.sh/plannotator/effective-html/html-diagram) builds a self-contained HTML diagram (topology, sequence, state, hierarchy). Invoke `/html-diagram`. Visual register lives in `skills/design-artifact`. Details: `skills/html-diagram/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
