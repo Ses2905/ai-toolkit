@@ -30,6 +30,8 @@ GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/
 
 That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/install-github-skills/SKILL.md`.
 
+[Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/install-open-design/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
