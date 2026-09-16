@@ -40,6 +40,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [ckmslides / Slides](https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ckmslides) is the HTML Chart.js deck skill from ui-ux-pro-max (`--skill slides`). Invoke `/slides`. Needs sibling `skills/design-system`. Distinct from `/lark-slides`. Details: `skills/slides/SKILL.md`.
 
+[Frontend Slides Editable](https://www.skills.sh/archlizheng/frontend-slides-editable/frontend-slides-editable) is a zero-dependency HTML deck with a built-in editor (drag objects, Pages sidebar, Ctrl+S). Invoke `/frontend-slides-editable`. Distinct from `/slides`. Details: `skills/frontend-slides-editable/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |

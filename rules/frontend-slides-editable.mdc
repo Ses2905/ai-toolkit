@@ -1,0 +1,6 @@
+---
+description: Create zero-dependency editable HTML presentations with a built-in browser editor. Use for frontend-slides-editable, object-level slide editing, or PPT/PDF-to-web conversion with continued editing.
+alwaysApply: false
+---
+
+frontend-slides-editable: Follow `skills/frontend-slides-editable/SKILL.md`. Finish Phase 1 before generating HTML. Distinct from `slides` (Chart.js) and `lark-slides` (Feishu). Do not install puppeteer or skip discovery unless the user opted out.

@@ -49,6 +49,12 @@
       "ref": "15de38fb70bc80ae9276fa7703b48ae861a672e6",
       "root": "cli/assets/skills",
       "license": "MIT"
+    },
+    "archlizheng-frontend-slides-editable": {
+      "git": "https://github.com/archlizheng/frontend-slides-editable.git",
+      "ref": "e5663e6a0bdc2c2a673198bab3fb61036a7f20ee",
+      "root": "",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -85,7 +91,8 @@
         { "source": "leonxlnx-taste-skill", "path": "taste-skill" },
         { "source": "leonxlnx-taste-skill", "path": "soft-skill", "name": "high-end-visual-design" },
         { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
-        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" }
+        { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" },
+        { "source": "archlizheng-frontend-slides-editable", "path": ".", "name": "frontend-slides-editable" }
       ]
     },
     "all-awesome": {
@@ -104,6 +111,12 @@
       "skills": [
         { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "design-system" },
         { "source": "nextlevelbuilder-ui-ux-pro-max", "path": "slides" }
+      ]
+    },
+    "frontend-slides-editable": {
+      "description": "Single-file editable HTML decks (archlizheng/frontend-slides-editable).",
+      "skills": [
+        { "source": "archlizheng-frontend-slides-editable", "path": ".", "name": "frontend-slides-editable" }
       ]
     }
   }

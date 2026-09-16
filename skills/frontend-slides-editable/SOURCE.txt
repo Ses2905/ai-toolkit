@@ -1,0 +1,8 @@
+Source: https://www.skills.sh/archlizheng/frontend-slides-editable/frontend-slides-editable
+Repo: https://github.com/archlizheng/frontend-slides-editable
+Upstream: repository root (SKILL.md at repo root)
+Install name: frontend-slides-editable
+Official CLI: npx skills add https://github.com/archlizheng/frontend-slides-editable --skill frontend-slides-editable
+Pinned: e5663e6a0bdc2c2a673198bab3fb61036a7f20ee
+License: MIT (LI ZHENG)
+Omitted: docs/preset-previews (PNG gallery, not in SKILL.md supporting files)
