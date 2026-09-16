@@ -2,7 +2,7 @@
 
 **Product in beta:** Work Kit (`work-kit`) first delivery. Install once, then Plan to Ship in a product repo.
 **Owner / researcher:** Sarah Scherer
-**Related:** [Recruitment](first-delivery-recruitment.md), [Metrics](../launches/q4-2026-first-delivery-metrics.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [User flow](../user-flows/work-kit-first-delivery.md)
+**Related:** [Recruitment](first-delivery-recruitment.md), [Metrics](../launches/q4-2026-first-delivery-metrics.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [User flow](../user-flows/work-kit-first-delivery.md), [Survey analysis](first-delivery-survey-analysis.md)
 **Source prompt:** [Beta feedback survey](https://aiuxplayground.com/prompts/beta-feedback-survey) (AI UX Playground)
 
 This is not a public SaaS beta. There is no waitlist and no NPS dashboard. Send this only to people who tried install after G3, not as a stand-in for the 5 to 8 problem interviews.
