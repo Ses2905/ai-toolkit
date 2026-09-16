@@ -41,8 +41,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -132,6 +132,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Rule | `improve-animations` | Agent-decides — animation audit/plans; does not implement |
 | Skill | `find-animation-opportunities` | Find missing motion; reject what should stay still |
 | Rule | `find-animation-opportunities` | Agent-decides — opportunity search only; does not implement |
+| Skill | `pm-handoff` | Compact this conversation into a handoff for another agent |
+| Rule | `pm-handoff` | Agent-decides — session handoff only; does not auto-invoke |
 | Agent | `reviewer` / `debugger` | Dedicated review or debug pass |
 
 ## Marketplace plugins (user scope)
