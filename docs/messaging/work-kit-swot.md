@@ -8,7 +8,7 @@
 **Related:** [Positioning](work-kit-positioning.md), [Competitive UX](work-kit-competitive-ux.md), [Priority](../okrs/q4-2026-feature-priority.md), [WK-1](../tickets/wk-1-g3-install-copy.md)
 **Source prompt:** [SWOT analysis](https://aiuxplayground.com/prompts/swot-analysis-framework) (AI UX Playground)
 
-"How to use" replaces the prompt's "leverage." We are not squeezing a market. We are pointing numbered step 3 at `/plan`.
+The prompt asked how to "use" each strength. We are not squeezing a market. We are pointing numbered step 3 at `/plan`.
 
 ---
 
