@@ -1,0 +1,6 @@
+---
+description: Compact the current conversation into a portable handoff document for another agent. Use when the user asks for a PM handoff, /handoff, or to pass work to a fresh session. Do not auto-invoke.
+alwaysApply: false
+---
+
+handoff: Follow `skills/handoff/SKILL.md`. Write to the OS temp directory, not the workspace. Include suggested skills. Reference existing artifacts by path or URL. Redact secrets. Distinct from `capture-a-skill`. disable-model-invocation: do not run unless the user invoked it.

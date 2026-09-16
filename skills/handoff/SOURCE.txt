@@ -1,0 +1,11 @@
+Source: https://aiuxplayground.com/skills/pm-handoff
+Listing: https://www.skills.sh/mattpocock/skills/handoff
+Repo: https://github.com/mattpocock/skills
+Upstream folder: skills/productivity/handoff
+Install name: handoff
+Display name: PM Handoff
+Official CLI: npx skills add github.com/mattpocock/skills/tree/main/skills/productivity/handoff --skill handoff
+Note: --skill pm-handoff is not a package skill name; npx skills lists this as handoff
+Pinned: 959a8e9f1edc3adbe2f7e3054bb6fbefa6696260
+License: MIT (Matt Pocock)
+Related: distinct from capture-a-skill (durable workflow) and in-session /compact

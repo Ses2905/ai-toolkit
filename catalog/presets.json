@@ -22,7 +22,7 @@
     },
     "mattpocock-skills": {
       "git": "https://github.com/mattpocock/skills.git",
-      "ref": "main",
+      "ref": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260",
       "root": "skills",
       "license": "MIT"
     },
@@ -197,6 +197,11 @@
           "source": "mattpocock-skills",
           "path": "engineering/to-tickets",
           "name": "to-tickets"
+        },
+        {
+          "source": "mattpocock-skills",
+          "path": "productivity/handoff",
+          "name": "handoff"
         },
         {
           "source": "emilkowalski-skills",
@@ -525,6 +530,16 @@
         {
           "source": "emilkowalski-skills",
           "path": "find-animation-opportunities"
+        }
+      ]
+    },
+    "handoff": {
+      "description": "PM Handoff: compact the current conversation into a portable handoff document (MIT).",
+      "skills": [
+        {
+          "source": "mattpocock-skills",
+          "path": "productivity/handoff",
+          "name": "handoff"
         }
       ]
     }
