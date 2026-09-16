@@ -12,11 +12,23 @@ Official catalog: [cursor.com/marketplace](https://cursor.com/marketplace)
 | [Create Plugin](https://cursor.com/marketplace/cursor/create-plugin) | Scaffold and validate more plugins, including updates to this kit |
 | [GitHub](https://cursor.com/marketplace/github) | Repos, issues, PRs, and Actions from chat |
 
+## Design skill (not a marketplace plugin)
+
+[Impeccable](https://impeccable.style/#downloads) is a Cursor skill, not a Customize plugin. On the user's machine:
+
+```bash
+npx impeccable install --providers=cursor --scope=global
+```
+
+Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/install-impeccable/SKILL.md`.
+
+GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are lists. Copy individual `SKILL.md` folders into `~/.cursor/skills/` — do not install the whole repo. Details: `skills/install-github-skills/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |
 | --- | --- |
-| Ship web UI | [Playwright](https://cursor.com/marketplace/playwright) |
+| Ship web UI | [Playwright](https://cursor.com/marketplace/playwright) plus Impeccable (above) |
 | Track work in Linear | [Linear](https://cursor.com/marketplace/linear) |
 | Implement Figma | [Figma](https://cursor.com/marketplace/figma) |
 | Keep notes in Notion | [Notion](https://cursor.com/marketplace) (search Customize for Notion) |
