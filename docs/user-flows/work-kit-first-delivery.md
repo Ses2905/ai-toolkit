@@ -281,64 +281,61 @@ Notation: stadium = start/end, rectangle = process, diamond = decision, parallel
 flowchart TD
   Start([Start: want Work Kit on every project]) --> D1{D1: Install shape?}
 
-  D1 -->|Plugin E1/E2| Install[Run install-local.sh<br/>copy to ~/.cursor/plugins/local/work-kit]
-  D1 -->|Skills-only E3| SkillsCLI[npx skills add Ses2905/cursor-skills]
-  D1 -->|Cloud-first E7| SyncFirst[sync-user-skills.sh]
+  D1 -->|Plugin E1/E2| Install["Run install-local.sh<br/>copy to ~/.cursor/plugins/local/work-kit"]
+  D1 -->|Skills-only E3| SkillsCLI["npx skills add Ses2905/cursor-skills"]
+  D1 -->|Cloud-first E7| SyncFirst["sync-user-skills.sh"]
 
   Install --> V1{V1/V2: Copy OK and real dir?}
-  V1 -->|No| RecoverInstall[Fix permissions / no symlinks / re-run]
+  V1 -->|No| RecoverInstall["Fix permissions / no symlinks / re-run"]
   RecoverInstall --> Install
-  V1 -->|Yes| Reload[Developer: Reload Window]
+  V1 -->|Yes| Reload["Developer: Reload Window"]
 
   SkillsCLI --> Reload
-  SyncFirst --> CloudToggle[Enable Sync Skills for Cloud Agents]
+  SyncFirst --> CloudToggle["Enable Sync Skills for Cloud Agents"]
   CloudToggle --> Reload
 
-  Reload --> D2{D2: Work Kit visible in Customize → User?}
+  Reload --> D2{D2: Work Kit visible in Customize User?}
   D2 -->|No, Teams policy| S4([S4 Blocked on policy])
-  D2 -->|No, other| RecoverActivate[Check scope, reload, reinstall]
+  D2 -->|No, other| RecoverActivate["Check scope, reload, reinstall"]
   RecoverActivate --> D2
   D2 -->|Yes| D3{D3: Need Cloud Agents?}
 
-  D3 -->|Yes, not synced| Sync[sync-user-skills.sh + setting]
+  D3 -->|Yes, not synced| Sync["sync-user-skills.sh plus setting"]
   Sync --> Ready[Kit ready]
   D3 -->|No or already synced| Ready
 
-  Ready --> TaskIn[User states work in a product repo]
+  Ready --> TaskIn["User states work in a product repo"]
   TaskIn --> DFail{Is something already broken?}
-  DFail -->|Yes /debug| Debug[debug-from-evidence:
-restate → reproduce → one hypothesis → fix cause → re-run]
+  DFail -->|"Yes, /debug"| Debug["debug-from-evidence:<br/>restate, reproduce, one hypothesis, fix cause, re-run"]
   Debug --> Repro{Reproduced and fixed?}
   Repro -->|Cannot reproduce| StopDebug([Stop: no speculative edits])
   Repro -->|Yes| Review
 
   DFail -->|No| D4{D4: Tiny and obvious?}
   D4 -->|Yes| Implement[Implement first slice]
-  D4 -->|No| Plan[Write six-section plan.
-Do not edit yet.]
+  D4 -->|No| Plan["Write six-section plan.<br/>Do not edit yet."]
   Plan --> D5{D5: Blocking decision?}
-  D5 -->|Yes| Ask[Ask user. Wait.]
+  D5 -->|Yes| Ask["Ask user. Wait."]
   Ask --> Plan
   D5 -->|No| Accept{User accepts plan?}
-  Accept -->|Reject / revise| Plan
+  Accept -->|Reject or revise| Plan
   Accept -->|Accept| Implement
 
   Implement --> D6{D6: Verify path passes?}
   D6 -->|No| Debug
-  D6 -->|Yes| Review[review-the-diff on actual git diff]
+  D6 -->|Yes| Review["review-the-diff on actual git diff"]
 
   Review --> D7{D7: Verdict?}
   D7 -->|Fix blockers| Implement
   D7 -->|Needs verification| VerifyMore[Run missing check]
   VerifyMore --> Review
-  D7 -->|Ship| Ship[ship-the-change:
-status, verify, stage intended files, commit, push]
+  D7 -->|Ship| Ship["ship-the-change:<br/>status, verify, stage intended files, commit, push"]
 
-  Ship --> Hook{Hooks / push OK?}
-  Hook -->|Fail| FixHook[Fix cause. No --no-verify unless asked]
+  Ship --> Hook{Hooks or push OK?}
+  Hook -->|Fail| FixHook["Fix cause. Do not skip hooks unless asked"]
   FixHook --> Ship
   Hook -->|OK| D8{D8: Capture repeated workflow?}
-  D8 -->|Yes /new-skill| Capture[Write SKILL.md; reload; reinstall kit if edited]
+  D8 -->|"Yes, /new-skill"| Capture["Write SKILL.md, reload, reinstall kit if edited"]
   Capture --> S1([S1 Happy delivery])
   D8 -->|No| S1
 ```
