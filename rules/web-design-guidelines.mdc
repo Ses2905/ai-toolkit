@@ -1,0 +1,7 @@
+---
+description: Review UI code for web interface guidelines, UX quality, accessibility, and interaction design best practices.
+alwaysApply: false
+globs: "**/*.{css,scss,sass,less,tsx,jsx,vue,svelte,html}"
+---
+
+web-design-guidelines: Follow `skills/web-design-guidelines/SKILL.md` when reviewing UI for Web Interface Guidelines, accessibility, UX, or interaction design. Fetch the live guidelines first. Do not apply to backend-only, CLI, or infra work.

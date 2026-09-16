@@ -17,8 +17,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/web-design-guidelines`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/web-design-guidelines`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -60,6 +60,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Rule | `frontend-design` | Agent-decides — new or reshaped product UI |
 | Skill | `canvas-design` | Posters, PNG/PDF art from a design philosophy |
 | Rule | `canvas-design` | Agent-decides — static visual art, not product UI |
+| Skill | `web-design-guidelines` | Review UI for guidelines, UX, a11y, interaction |
+| Rule | `web-design-guidelines` | Agent-decides — UI review, not backend |
 | Skill | `plan-the-work` | Before non-trivial implementation |
 | Skill | `debug-from-evidence` | Something is broken |
 | Skill | `review-the-diff` | After a sizable change, or before merge |
