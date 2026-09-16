@@ -50,6 +50,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [HyperFrames Animation](https://www.skills.sh/heygen-com/hyperframes/hyperframes-animation) is HeyGen motion knowledge (GSAP rules, blueprints, adapters). Invoke `/hyperframes-animation`. Contract lives in `skills/hyperframes-core`. Apache-2.0. Details: `skills/hyperframes-animation/SKILL.md`.
 
+[Remotion Best Practices](https://www.skills.sh/remotion-dev/skills/remotion-best-practices) routes Remotion React-video work to nested topic files. Invoke `/remotion-best-practices`. Distinct from `/hyperframes-animation`. Details: `skills/remotion-best-practices/SKILL.md`.
+
 [Review Animations](https://www.skills.sh/emilkowalski/skills/review-animations) reviews motion code against Emil Kowalski's craft bar. Invoke `/review-animations`. Distinct from `/review-the-diff` and `/improve-animations`. Details: `skills/review-animations/SKILL.md`.
 
 [Improve Animations](https://www.skills.sh/emilkowalski/skills/improve-animations) audits a codebase's motion, then writes self-contained plans. Invoke `/improve-animations`. Read-only on source. Distinct from `/review-animations`. Details: `skills/improve-animations/SKILL.md`.

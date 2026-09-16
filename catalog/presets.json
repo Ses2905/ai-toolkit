@@ -79,6 +79,12 @@
       "ref": "d6fe66707f74467bd7193839cb4b5cb3f1e8bb06",
       "root": "skills",
       "license": "Apache-2.0"
+    },
+    "remotion-dev-skills": {
+      "git": "https://github.com/remotion-dev/skills.git",
+      "ref": "3b9e6561dababf40a485772a7cd641268bb7c365",
+      "root": "skills",
+      "license": "unspecified"
     }
   },
   "presets": {
@@ -322,6 +328,10 @@
         {
           "source": "heygen-hyperframes",
           "path": "hyperframes-core"
+        },
+        {
+          "source": "remotion-dev-skills",
+          "path": "remotion-best-practices"
         }
       ]
     },
@@ -475,6 +485,15 @@
         {
           "source": "heygen-hyperframes",
           "path": "hyperframes-core"
+        }
+      ]
+    },
+    "remotion-best-practices": {
+      "description": "Remotion video best-practices router (nested topic files; license unspecified).",
+      "skills": [
+        {
+          "source": "remotion-dev-skills",
+          "path": "remotion-best-practices"
         }
       ]
     },

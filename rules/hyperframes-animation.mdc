@@ -3,4 +3,4 @@ description: HyperFrames animation knowledge — GSAP rules, scene blueprints, t
 alwaysApply: false
 ---
 
-hyperframes-animation: Follow `skills/hyperframes-animation/SKILL.md`. Read `skills/hyperframes-core/SKILL.md` first. Pick 2-4 rules from `rules-index.md` by default. Distinct from `react-bits` and `apple-design`. Do not run HyperFrames render/CLI unless the user asked.
+hyperframes-animation: Follow `skills/hyperframes-animation/SKILL.md`. Read `skills/hyperframes-core/SKILL.md` first. Pick 2-4 rules from `rules-index.md` by default. Distinct from `react-bits`, `apple-design`, and `remotion-best-practices`. Do not run HyperFrames render/CLI unless the user asked.

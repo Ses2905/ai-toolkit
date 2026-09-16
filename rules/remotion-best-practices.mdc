@@ -1,0 +1,6 @@
+---
+description: Router for all Remotion skills. Use when working with Remotion, React video, compositions, Remotion Studio, remotion-best-practices, or programmatic video.
+alwaysApply: false
+---
+
+remotion-best-practices: Follow `skills/remotion-best-practices/SKILL.md`. Load nested `remotion-*/REFERENCE.md` as that router directs. Distinct from `hyperframes-animation` and `apple-design`. Do not run `npx create-video`, `npx remotion render`/`still`, Lambda, or paid map APIs unless the user asked.

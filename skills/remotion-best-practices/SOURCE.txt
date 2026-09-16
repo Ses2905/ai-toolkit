@@ -1,0 +1,9 @@
+Source: https://www.skills.sh/remotion-dev/skills/remotion-best-practices
+Repo: https://github.com/remotion-dev/skills
+Upstream folder: skills/remotion-best-practices
+Install name: remotion-best-practices
+Official CLI: npx skills add https://github.com/remotion-dev/skills --skill remotion-best-practices
+Pinned: 3b9e6561dababf40a485772a7cd641268bb7c365
+Version: 4.0.525
+License: unspecified (no LICENSE in remotion-dev/skills; Remotion the product uses the Remotion License)
+Related: nested remotion-create, remotion-markup, remotion-studio, remotion-render, remotion-maps, remotion-captions, remotion-saas, remotion-interactivity, remotion-docs, remotion-upgrade, remotion-multimedia
