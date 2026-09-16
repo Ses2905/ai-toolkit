@@ -1,0 +1,6 @@
+---
+description: Creates and edits Lark/Feishu slides via lark-cli XML. Use for Feishu presentations, slide page CRUD, or doubao.com /slides/ URLs.
+alwaysApply: false
+---
+
+lark-slides: Follow `skills/lark-slides/SKILL.md` (auth in `skills/lark-shared/SKILL.md`) when creating or editing Lark/Feishu slides. Requires `lark-cli`. Do not log in or write to Lark unless the user asked. Skip generic PPTX and non-Lark work.

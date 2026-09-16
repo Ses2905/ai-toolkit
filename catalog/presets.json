@@ -37,6 +37,12 @@
       "ref": "e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58",
       "root": "skills",
       "license": "MIT"
+    },
+    "larksuite-cli": {
+      "git": "https://github.com/larksuite/cli.git",
+      "ref": "cb5a3d704379552dc61e37898e5f74798783190d",
+      "root": "skills",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -77,6 +83,13 @@
     "all-awesome": {
       "description": "Every local skill under awesome-cursor-skills/resources (noisy; prefer design-product).",
       "expand": "awesome-cursor-skills"
+    },
+    "lark": {
+      "description": "Lark/Feishu slides via lark-cli (requires @larksuite/cli and user login).",
+      "skills": [
+        { "source": "larksuite-cli", "path": "lark-shared" },
+        { "source": "larksuite-cli", "path": "lark-slides" }
+      ]
     }
   }
 }

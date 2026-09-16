@@ -36,6 +36,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [High-End Visual Design](https://www.skills.sh/leonxlnx/taste-skill/high-end-visual-design) is a Leonxlnx taste-skill variant (`soft-skill` folder). Invoke `/high-end-visual-design`. Distinct from `/taste-skill`. Details: `skills/high-end-visual-design/SKILL.md`.
 
+[Lark Slides](https://www.skills.sh/larksuite/cli/lark-slides) needs the official CLI (`npm i -g @larksuite/cli`) and a Lark/Feishu login. Invoke `/lark-slides`. Auth rules live in `skills/lark-shared`. Details: `skills/lark-slides/SKILL.md`.
+
 ## Install if you do this work
 
 | You… | Plugin |

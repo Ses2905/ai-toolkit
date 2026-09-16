@@ -17,8 +17,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -75,6 +75,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Skill | `install-impeccable` | Install Impeccable globally for Cursor |
 | Skill | `install-github-skills` | Pull the design-product preset from GitHub catalogs |
 | Skill | `install-open-design` | Install Open Design from GitHub Releases + Cursor MCP |
+| Skill | `lark-slides` | Create/edit Lark Feishu slides via lark-cli XML |
+| Rule | `lark-slides` | Agent-decides — Feishu slides only, needs lark-cli |
 | Agent | `reviewer` / `debugger` | Dedicated review or debug pass |
 
 ## Marketplace plugins (user scope)

@@ -44,6 +44,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # every local skill under awesome-cursor-skills/resources (noisy)
 ./scripts/install-catalog-skills.sh --preset all-awesome
+
+# Lark/Feishu slides (needs @larksuite/cli + login)
+./scripts/install-catalog-skills.sh --preset lark
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.
