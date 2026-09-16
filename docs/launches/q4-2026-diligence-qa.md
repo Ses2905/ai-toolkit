@@ -8,7 +8,7 @@
 **Known risks.** Concentration n=1. Cursor platform paths. Install copy still fails G3. Secrets in a push. Single-operator bus factor. Teams can block local plugins.
 **Moat claim.** None that a fund would buy. Anyone can fork MIT skill text. What is defensible for Avery is habit plus `/ship` refusing junk, and only after the loop actually runs. Live copy does not yet teach `/plan` as step 3.
 **Source prompt:** [Diligence Q&A prep](https://aiuxplayground.com/prompts/diligence-qa-prep) (AI UX Playground)
-**Related:** [OKRs](../okrs/q4-2026-work-kit.md), [GTM](q4-2026-first-delivery-gtm.md), [Positioning](../messaging/work-kit-positioning.md), [SWOT](../messaging/work-kit-swot.md), [WK-1](../tickets/wk-1-g3-install-copy.md)
+**Related:** [OKRs](../okrs/q4-2026-work-kit.md), [GTM](q4-2026-first-delivery-gtm.md), [Positioning](../messaging/work-kit-positioning.md), [SWOT](../messaging/work-kit-swot.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Pilot LOI](q4-2026-pilot-loi.md)
 
 If a partner, employer, or friend asks "is this a company," use this file. Do not invent MRR. The prompt said to mark invented metrics as needing founder input. Here those cells are **N/A or 0**, not blanks to fill with a story.
 

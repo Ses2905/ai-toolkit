@@ -7,7 +7,7 @@
 **Price.** $0. No seat. No usage fee.
 **Sales motion.** None. README plus script echo. Not PLG, not sales-assisted, not enterprise. Calling this PLG is a fuzzy ICP.
 **Opinion.** Primary ICP is **Avery, one solo IC who owns the machine and git**. If that feels too narrow for a B2B prompt, the prompt is the wrong tool. Widening to "AI teams at Series B" is a failed output.
-**Related:** [Positioning](work-kit-positioning.md), [Recruitment](../research/first-delivery-recruitment.md), [GTM](../launches/q4-2026-first-delivery-gtm.md), [Diligence](../launches/q4-2026-diligence-qa.md)
+**Related:** [Positioning](work-kit-positioning.md), [Recruitment](../research/first-delivery-recruitment.md), [GTM](../launches/q4-2026-first-delivery-gtm.md), [Diligence](../launches/q4-2026-diligence-qa.md), [Pilot LOI](../launches/q4-2026-pilot-loi.md)
 **Source prompt:** [ICP definition](https://aiuxplayground.com/prompts/icp-definition-b2b-ai) (AI UX Playground)
 
 Do not print fake logos. Archetypes in section 6 are sitting types. The only named account is the owner.
