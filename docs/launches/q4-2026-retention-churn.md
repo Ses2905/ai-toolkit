@@ -5,7 +5,7 @@
 **Churn reasons pasted.** Interviews 0. Support tickets 0. Cancel surveys 0. What we have: product inspection of install copy, empty log, owner process (Playground chain vs line 30).
 **Segments.** Avery (desktop IC, primary). Casey (Cloud Agents, same human, phase 2). Riley (Teams, recovery). Clone visitor (README). Owner-as-C7 (templates instead of the loop).
 **Pricing changes.** None. Price stays $0. A discount cannot save a sitting that never started `/plan`.
-**Related:** [Metrics](q4-2026-first-delivery-metrics.md), [Session log](../okrs/session-log.md), [ICP](../messaging/work-kit-icp.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Affinity](../research/first-delivery-affinity.md)
+**Related:** [Metrics](q4-2026-first-delivery-metrics.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Session log](../okrs/session-log.md), [ICP](../messaging/work-kit-icp.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Affinity](../research/first-delivery-affinity.md)
 **Source prompt:** [Retention churn diagnosis](https://aiuxplayground.com/prompts/retention-churn-diagnosis) (AI UX Playground)
 
 Blunt line: value decays at **numbered step 3**, before habit, before cloud, before any email. Messaging that does not change `install-local.sh` cannot fix it.
