@@ -117,7 +117,7 @@ Work Kit is a user-scope delivery loop that makes the next change planned, revie
 
 Unlike default chat, skill lists, or `npx skills add` alone, Work Kit names `/plan` through `/ship` after one install, and `/ship` refuses junk staging.
 
-**Do not use.** "For teams drowning in AI sprawl, Work Kit is the enterprise copilot that unlocks aligned delivery." That sentence is false on audience, category, and proof.
+**Do not use.** "For teams drowning in AI sprawl, Work Kit is the enterprise copilot that promises aligned delivery." That sentence is false on audience, category, and proof.
 
 **False until G3.** If README or script step 3 is not `/plan`, do not say the statement out loud as if install already teaches it.
 
