@@ -5,7 +5,7 @@
 **Primary audience:** Avery, solo IC on desktop Cursor
 **Secondary audience:** Casey on Cloud Agents. Clone visitors on GitHub.
 **Not for:** Teams that need a billed product, a waitlist, or an unscoped skill dump
-**Related:** [Comms plan](../launches/q4-2026-first-delivery-comms.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [PR/FAQ](../launches/q4-2026-first-delivery-prfaq.md)
+**Related:** [Comms plan](../launches/q4-2026-first-delivery-comms.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [PR/FAQ](../launches/q4-2026-first-delivery-prfaq.md), [Positioning](work-kit-positioning.md)
 **Source prompt:** [Product messaging framework](https://aiuxplayground.com/prompts/product-messaging-framework) (AI UX Playground)
 
 Use this file as the single source for README, script echo, and teammate paste. If a line disagrees with the one-liner, cut the line.
@@ -132,7 +132,7 @@ Keep these three. Do not add a fourth pillar about slides, motion, or Remotion. 
 | Continual Learning | Durable facts in `AGENTS.md` | Plan-gate and ship staging |
 | Copying kit files into each repo | Never. Conflicts with this product. | n/a |
 
-Help them decide. If they want a list, send them to the list. If they want first delivery, send them to E1 and the one-liner. Longer desk analysis: [Competitive UX](work-kit-competitive-ux.md).
+Help them decide. If they want a list, send them to the list. If they want first delivery, send them to E1 and the one-liner. Longer desk analysis: [Competitive UX](work-kit-competitive-ux.md). Jobs-vs-jobs positioning (no TAM): [Positioning](work-kit-positioning.md).
 
 ---
 

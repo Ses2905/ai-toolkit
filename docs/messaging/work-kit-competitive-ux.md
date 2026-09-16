@@ -2,7 +2,7 @@
 
 **Job being compared:** How an IC starts and finishes a Cursor sitting: plan (or skip), edit, review the real diff, ship named files.
 **Not a market study.** No TAM, no share, no NPS, no paid tools. Desk analysis of adjacent jobs on 16 Sep 2026. We did not run competitor usability. Do not paste this as SEO.
-**Related:** [Messaging](work-kit.md), [STARTER_PLUGINS.md](../../STARTER_PLUGINS.md), [User flow](../user-flows/work-kit-first-delivery.md), [Scope](../launches/q4-2026-first-delivery-scope.md)
+**Related:** [Messaging](work-kit.md), [Positioning](work-kit-positioning.md), [STARTER_PLUGINS.md](../../STARTER_PLUGINS.md), [User flow](../user-flows/work-kit-first-delivery.md), [Scope](../launches/q4-2026-first-delivery-scope.md)
 **Source prompt:** [Competitive analysis](https://aiuxplayground.com/prompts/competitive-analysis) (AI UX Playground)
 
 Work Kit's live miss is not "missing a catalog." It is install copy that still congratulates Customize. Competitors below are **jobs Avery already has**, not companies to beat on a landing page.
