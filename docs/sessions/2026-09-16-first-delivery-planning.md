@@ -5,6 +5,7 @@
 **Date:** 16 September 2026
 **Format:** Remote. Cloud Agent on the `cursor-skills` repo. No in-person room. No recording.
 **Source prompt:** [Event summary generator](https://aiuxplayground.com/prompts/event-summary-generator) (AI UX Playground)
+**Related:** [17 Sep cleaned notes](2026-09-17-planning-chain-notes.md), [WK-1 agenda](../launches/q4-2026-wk1-agenda.md)
 
 Someone who was not in the chat should be able to pick up from this file plus the docs tree under `docs/`.
 
@@ -185,7 +186,7 @@ There was no pre-published agenda. Order is the chat order.
 
 **Communication.** No all-hands. If a teammate appears, messaging Template A after smoke, not before. Owner reads `docs/messaging/work-kit.md` as the one-liner source.
 
-**Next meeting.** Not scheduled. Suggested: a short implementation session (script + README only) before any new Playground template.
+**Next meeting.** Not scheduled. Suggested: a short implementation session (script + README only) before any new Playground template. Cleaned action list: [17 Sep notes](2026-09-17-planning-chain-notes.md). Still open as of 17 Sep.
 
 ---
 
