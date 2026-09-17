@@ -6,7 +6,7 @@
 **Raw paste.** The Playground brackets were empty. Stickies below are inspection notes from live files on 16 Sep, plus process notes from the planning chain. They are not interview quotes.
 **Questions this map can answer.** What does install tell someone to do next? Can we count whether the loop ran? Did planning change stdout?
 **Questions this map cannot answer.** Why other ICs skip `/plan`. Whether good copy produces `/plan` without a researcher. How often Teams hides the card. How often cloud runs miss skills.
-**Related:** [Insights](first-delivery-insights.md), [Synthesis](first-delivery-synthesis.md), [Survey analysis](first-delivery-survey-analysis.md), [WK-1](../tickets/wk-1-g3-install-copy.md)
+**Related:** [Insights](first-delivery-insights.md), [Synthesis](first-delivery-synthesis.md), [Survey analysis](first-delivery-survey-analysis.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Feedback triage](first-delivery-feedback-triage.md)
 **Source prompt:** [Affinity mapping assistant](https://aiuxplayground.com/prompts/affinity-mapping-assistant) (AI UX Playground)
 
 Do not present this as "what testers said." Rewrite after 5 interview notes exist, or after G3 usability, whichever comes first. Do not mix owner rows into a fake n=8.

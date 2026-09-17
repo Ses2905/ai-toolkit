@@ -6,7 +6,7 @@
 **Field window:** 8 to 14 Oct 2026, only if G3 copy matches. Close 14 Oct. No collection on 15 Oct.
 **Respondents (this extract):** 0 completes. 0 partials. 0 G1=yes. 0 G1=no. 0 invites sent.
 **Extract date:** 16 September 2026
-**Related:** [Insights](first-delivery-insights.md), [Recruitment](first-delivery-recruitment.md), [Feature priority](../okrs/q4-2026-feature-priority.md)
+**Related:** [Insights](first-delivery-insights.md), [Recruitment](first-delivery-recruitment.md), [Feature priority](../okrs/q4-2026-feature-priority.md), [Feedback triage](first-delivery-feedback-triage.md)
 **Source prompt:** [Survey analysis framework](https://aiuxplayground.com/prompts/survey-analysis-framework) (AI UX Playground)
 
 The Playground prompt asked to paste responses. There are none. This report does not invent distributions, correlations, quotes, or NPS. Product inspection (script echo, empty session log) lives in the insights file. It is not survey data. Rewrite sections 1 to 7 from a real export on 14 Oct. Until then, treat every chart below as a zero-count.
