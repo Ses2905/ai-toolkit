@@ -3,7 +3,7 @@
 **What this is.** A 12-minute readout of planning plus product inspection. Not a user-research shareout. Interviews 0. Survey 0. Log rows 0.
 **Room.** Sarah Scherer. She wears every hat. There is no exec staff, no design org, no eng team to convince.
 **Decision needed.** Next session edits `install-local.sh` and README (F1 / G3). Not another Playground template.
-**Related:** [Insights](../research/first-delivery-insights.md), [Synthesis](../research/first-delivery-synthesis.md), [Roadmap](../okrs/q4-2026-roadmap.md), [Comms](q4-2026-first-delivery-comms.md), [PR/FAQ](q4-2026-first-delivery-prfaq.md), [Shareout](q4-2026-first-delivery-shareout.md), [Stakeholder map](q4-2026-stakeholder-map.md)
+**Related:** [Insights](../research/first-delivery-insights.md), [Synthesis](../research/first-delivery-synthesis.md), [Roadmap](../okrs/q4-2026-roadmap.md), [Comms](q4-2026-first-delivery-comms.md), [PR/FAQ](q4-2026-first-delivery-prfaq.md), [Shareout](q4-2026-first-delivery-shareout.md), [Stakeholder map](q4-2026-stakeholder-map.md), [Exec summary](q4-2026-exec-summary.md)
 **Source prompt:** [Stakeholder presentation](https://aiuxplayground.com/prompts/stakeholder-presentation) (AI UX Playground)
 
 Do not present the PR/FAQ Avery quote as a finding. Do not show NPS. Do not ask for budget.
