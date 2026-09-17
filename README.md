@@ -41,8 +41,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -65,6 +65,36 @@ Pushes `main` to [Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skill
 ```
 
 That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/install-github-skills/SKILL.md`. List first with `--list`.
+
+## Skills database (find a skill)
+
+Every `skills/*/SKILL.md` is indexed into a searchable, categorized, and ranked
+database. Find the right skill from the terminal:
+
+```bash
+./scripts/skills-db.sh find animation      # ranked matches for a topic
+./scripts/skills-db.sh find "user story"   # multi-word query
+./scripts/skills-db.sh list                # categorized + ranked listing
+./scripts/skills-db.sh stats               # category counts + top skills
+```
+
+Or open **`skills-database.html`** for a self-contained UI with live search,
+category filters, and rank sorting (no server needed). In chat, `/find-a-skill`
+routes to the same finder.
+
+Skills fall into six categories — Product & Discovery, Design & Frontend,
+Motion & Animation, Presentations & Diagrams, Engineering Workflow, and Setup &
+Install. Each skill gets a 0–100 score that rewards invocability (a `/command`
+or auto-applying rule), bundled tooling (`scripts/`, tests, `examples/`,
+`docs/`), doc depth, metadata completeness, and catalog/README integration. See
+[SKILLS.md](SKILLS.md) for the full ranked catalog.
+
+Regenerate the committed artifacts (`SKILLS.md`, `skills-database.html`,
+`catalog/skills-index.json`) after adding or editing skills:
+
+```bash
+./scripts/skills-db.sh build
+```
 
 ## Cloud Agents
 
@@ -132,6 +162,8 @@ Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.curso
 | Rule | `improve-animations` | Agent-decides — animation audit/plans; does not implement |
 | Skill | `find-animation-opportunities` | Find missing motion; reject what should stay still |
 | Rule | `find-animation-opportunities` | Agent-decides — opportunity search only; does not implement |
+| Skill | `pm-handoff` | Compact this conversation into a handoff for another agent |
+| Rule | `pm-handoff` | Agent-decides — session handoff only; does not auto-invoke |
 | Agent | `reviewer` / `debugger` | Dedicated review or debug pass |
 
 ## Marketplace plugins (user scope)

@@ -199,6 +199,11 @@
           "name": "to-tickets"
         },
         {
+          "source": "mattpocock-skills",
+          "path": "productivity/handoff",
+          "name": "pm-handoff"
+        },
+        {
           "source": "emilkowalski-skills",
           "path": "apple-design"
         },
@@ -525,6 +530,16 @@
         {
           "source": "emilkowalski-skills",
           "path": "find-animation-opportunities"
+        }
+      ]
+    },
+    "pm-handoff": {
+      "description": "Matt Pocock conversation handoff for a fresh agent (MIT). Upstream skill name is handoff.",
+      "skills": [
+        {
+          "source": "mattpocock-skills",
+          "path": "productivity/handoff",
+          "name": "pm-handoff"
         }
       ]
     }

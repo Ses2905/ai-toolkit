@@ -1,0 +1,6 @@
+---
+description: Compact the current conversation into a handoff document for another agent or session. Use when handing work off, ending a session, or writing a pickup brief. Do not auto-apply; invoke with /pm-handoff.
+alwaysApply: false
+---
+
+pm-handoff: Follow `skills/pm-handoff/SKILL.md`. Write one handoff file in the OS temp directory. Suggest skills the next agent should invoke. Reference existing artifacts instead of duplicating them. Redact API keys, passwords, and PII. Distinct from `ship-the-change` (commit/push) and `capture-a-skill` (save a workflow).
