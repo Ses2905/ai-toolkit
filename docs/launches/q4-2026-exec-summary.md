@@ -4,7 +4,7 @@
 **Reader.** Sarah Scherer. She is the only executive. There is no board.
 **Date.** 17 Sep 2026. Q4 period opens 1 Oct. Go-live target 15 Oct.
 **Format.** Option 1 (standard). No icons. Readable in under 3 minutes.
-**Related:** [QBR](q4-2026-qbr.md), [Stakeholder presentation](q4-2026-stakeholder-presentation.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Tenets](../messaging/work-kit-tenets.md)
+**Related:** [QBR](q4-2026-qbr.md), [Stakeholder presentation](q4-2026-stakeholder-presentation.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Tenets](../messaging/work-kit-tenets.md), [WK-1 agenda](q4-2026-wk1-agenda.md)
 **Source prompt:** [Executive summary](https://aiuxplayground.com/prompts/executive-summary) (AI UX Playground)
 
 ---

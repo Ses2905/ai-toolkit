@@ -9,6 +9,7 @@
 **Epic:** First delivery. Plan to Ship as the default path.
 **IDs:** US-1, F1, G3, SMART A.
 **Status:** Open. Live product still fails.
+**Related:** [Agenda](../launches/q4-2026-wk1-agenda.md), [US-1 AC](../user-flows/us-1-g3-acceptance-criteria.md)
 **Source prompt:** [Rewrite JIRA tickets](https://aiuxplayground.com/prompts/rewrite-jira-tickets-clarity) (AI UX Playground)
 
 Paste this into Jira if you ever stand up a board. Until then this file is the ticket. There is no Jira project, no Linear, no designer queue.
