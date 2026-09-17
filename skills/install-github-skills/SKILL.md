@@ -29,7 +29,7 @@ That preset installs:
 | Motion | `react-view-transitions`, `hyperframes-animation`, `remotion-best-practices`, `review-animations`, `improve-animations`, `find-animation-opportunities` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines`, `html-diagram` |
 | Presentation / docs | `pptx`, `pdf`, `docx`, `verifying-markdown-formatting`, `writing-guidelines`, `slides`, `design-system`, `frontend-slides-editable`, `html-ppt` |
-| Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets`, `product-strategy-session` |
+| Product | `writing-copy`, `grill-me`, `grilling`, `to-tickets`, `product-strategy-session`, `pm-handoff` |
 
 Sources and the full mapping live in [catalog/presets.json](../../catalog/presets.json).
 
@@ -77,6 +77,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Emil Kowalski missing-motion finder
 ./scripts/install-catalog-skills.sh --preset find-animation-opportunities
+
+# Matt Pocock conversation handoff (upstream skill name: handoff)
+./scripts/install-catalog-skills.sh --preset pm-handoff
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.
