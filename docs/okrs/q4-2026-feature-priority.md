@@ -4,7 +4,7 @@
 **Owner:** Sarah Scherer
 **Primary user:** Avery
 **Horizon:** now through 31 December 2026. Phase dates: 15 Oct internal, 14 Nov cloud, 31 Dec grade.
-**Related:** [OKRs](q4-2026-work-kit.md), [Checklist](../launches/q4-2026-first-delivery-checklist.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Runbook](../launches/q4-2026-first-delivery-runbook.md)
+**Related:** [OKRs](q4-2026-work-kit.md), [Checklist](../launches/q4-2026-first-delivery-checklist.md), [Problem statement](../problem-statements/work-kit-first-delivery.md), [Runbook](../launches/q4-2026-first-delivery-runbook.md), [Idea synthesis](../research/first-delivery-idea-synthesis.md)
 **Source prompt:** [Feature prioritization matrix](https://aiuxplayground.com/prompts/feature-prioritization-matrix) (AI UX Playground)
 
 The Playground prompt left the feature list blank. Candidates are the OKR initiatives plus the live G3 copy miss. This is a one-operator kit. Rank work that makes Plan to Ship the default path. Do not rank a marketplace, a dashboard, or catalog dumps.

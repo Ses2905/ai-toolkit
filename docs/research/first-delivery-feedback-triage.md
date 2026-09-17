@@ -4,7 +4,7 @@
 **Source.** Not support, not reviews, not a fielded survey, not interviews. **Product inspection** of install copy, session log, and planning docs on 16 Sep, plus one owner process note. Same corpus as [affinity](first-delivery-affinity.md).
 **Volume.** User-feedback items: **0**. Inspection observations used below: 18 coded stickies (N1-N18). Testers: 0 of 8. Survey completes: 0. GitHub support tickets in this sitting: not counted as a KR; none were pasted.
 **Time period.** 16-17 Sep 2026. Do not backfill a quarter of imaginary comments.
-**Related:** [Affinity](first-delivery-affinity.md), [Insights](first-delivery-insights.md), [Survey analysis](first-delivery-survey-analysis.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Priority](../okrs/q4-2026-feature-priority.md), [Tenets](../messaging/work-kit-tenets.md)
+**Related:** [Affinity](first-delivery-affinity.md), [Insights](first-delivery-insights.md), [Survey analysis](first-delivery-survey-analysis.md), [WK-1](../tickets/wk-1-g3-install-copy.md), [Priority](../okrs/q4-2026-feature-priority.md), [Tenets](../messaging/work-kit-tenets.md), [Idea synthesis](first-delivery-idea-synthesis.md)
 **Source prompt:** [User feedback triage](https://aiuxplayground.com/prompts/user-feedback-triage) (AI UX Playground)
 
 This is not a voice-of-customer pack. Do not present N-codes as quotes. Rewrite after 5 interview notes or after G3 usability, whichever comes first. Discarded as non-evidence: PR/FAQ Avery quote, invented n, empty survey codebook (affinity X1-X7).
