@@ -5,7 +5,7 @@
 **My role.** Sarah Scherer. Owner, only employee, only approver. Authority is total and useless as an org chart: there is no one to escalate to. Approval means doing the sitting.
 **Timeline.** 16 Sep 2026 (inspection) through 31 Dec 2026 (grade). Phase 1 go-live 15 Oct or slip. Cloud 14 Nov.
 **Key decisions.** (1) Patch `install-local.sh` and both README lists this sitting, yes or no. (2) Go or no-go 15 Oct. (3) Whether cloud copy may appear as Avery step 3 (already no). (4) Whether to field interviews or a survey before G3 (already no).
-**Related:** [Stakeholder presentation](q4-2026-stakeholder-presentation.md), [Tenets](../messaging/work-kit-tenets.md), [Scope](q4-2026-first-delivery-scope.md), [Comms](q4-2026-first-delivery-comms.md), [ICP](../messaging/work-kit-icp.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md)
+**Related:** [Stakeholder presentation](q4-2026-stakeholder-presentation.md), [Tenets](../messaging/work-kit-tenets.md), [Scope](q4-2026-first-delivery-scope.md), [Comms](q4-2026-first-delivery-comms.md), [ICP](../messaging/work-kit-icp.md), [Focus metrics](../okrs/q4-2026-focus-metrics.md), [Design guidance](q4-2026-stakeholder-design-guidance.md)
 **Source prompt:** [Stakeholder mapping](https://aiuxplayground.com/prompts/stakeholder-mapping-template) (AI UX Playground)
 
 This is not a cross-functional initiative. There is no design org, eng team, legal, sales, or exec staff. Mapping fake directors would invent a company. The useful map is hats on one person, plus a few surfaces we do not own.
