@@ -340,7 +340,7 @@ class ServeTest(unittest.TestCase):
     def test_index_html(self):
         status, body = self._get("/")
         self.assertEqual(status, 200)
-        self.assertIn(b"Work Kit", body)
+        self.assertIn(b"Skills Field Guide", body)
 
     def test_api_skills(self):
         status, body = self._get("/api/skills")

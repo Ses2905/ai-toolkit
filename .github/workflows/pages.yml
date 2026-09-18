@@ -1,8 +1,8 @@
 name: Deploy site to GitHub Pages
 
-# Publishes a small static site: a landing page linking to the Verdant design
-# system and the Skills Field Guide app. Licensed fonts are NOT in the repo, so
-# the published site renders with the fallback type stacks (by design).
+# Publishes the Skills Field Guide (the library) at the site root, with the
+# Verdant design system kept at /design-system/ for reference. Brand fonts are
+# the committed OFL faces, so the site renders in the real type.
 
 on:
   push:
@@ -33,20 +33,16 @@ jobs:
       - name: Assemble site
         run: |
           set -euo pipefail
-          mkdir -p _site
-          # Landing page at the site root.
-          cp site/index.html _site/index.html
-          # Verdant design system (self-contained; tokens.css + OFL fonts beside it).
+          mkdir -p _site/fonts
+          # Site root IS the Skills Field Guide (the library) — no separate landing.
+          # Ship the OFL fonts so the backend Verdant theme renders (@font-face → ./fonts/*).
+          cp skills-database.html _site/index.html
+          cp design-system/fonts/*.woff2 _site/fonts/ 2>/dev/null || true
+          # Keep the Verdant design system reachable at /design-system/ (reference/admin).
           mkdir -p _site/design-system/fonts
           cp design-system/index.html design-system/tokens.css _site/design-system/
           [ -f design-system/README.md ] && cp design-system/README.md _site/design-system/ || true
           cp design-system/fonts/*.woff2 _site/design-system/fonts/ 2>/dev/null || true
-          # Skills Field Guide app (static build; search + themes work, Refresh
-          # needs the local server so it's a no-op here). Ship the OFL fonts so
-          # the Verdant theme renders (its @font-face points at ./fonts/*).
-          mkdir -p _site/app/fonts
-          cp skills-database.html _site/app/index.html
-          cp design-system/fonts/*.woff2 _site/app/fonts/ 2>/dev/null || true
           echo "Assembled:" && find _site -maxdepth 2 -type f | sort
 
       - name: Upload Pages artifact
