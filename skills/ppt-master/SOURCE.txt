@@ -1,0 +1,9 @@
+Source: https://github.com/hugohe3/ppt-master
+Repo: https://github.com/hugohe3/ppt-master
+Upstream: repository root
+Install name: ppt-master
+Copied from: Ses2905/claude-code-skills `.claude/skills/ppt-master`
+License: MIT (Hugo He) — see LICENSE
+Omitted: references/ai-image-comparison (large PNG comparison set), templates/sounds audio binaries (*.wav/*.mp3/*.m4a). Keep README and sound-vocabulary.md. Re-copy from upstream if you need those assets.
+Related: skills/codex-ppt (image-page PPTX), skills/html-ppt (HTML)
+Note: Native editable PPTX workflow. Distinct from HTML deck skills.

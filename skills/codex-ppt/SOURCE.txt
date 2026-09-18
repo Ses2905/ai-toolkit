@@ -1,0 +1,9 @@
+Source: https://github.com/ningzimu/codex-ppt-skill
+Repo: https://github.com/ningzimu/codex-ppt-skill
+Upstream: repository skill folder (SKILL.md + docs/prompts/references/scripts)
+Install name: codex-ppt
+Copied from: Ses2905/claude-code-skills `.claude/skills/codex-ppt`
+Official site: https://github.com/ningzimu/codex-ppt-skill
+License: unspecified in the vendored copy (retain upstream notices)
+Related: skills/ppt-master (native PPTX), skills/html-ppt (HTML decks)
+Note: Image-based full-slide PPTX generation. Distinct from HTML presentation skills.

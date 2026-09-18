@@ -1,0 +1,8 @@
+Source: https://github.com/op7418/guizang-ppt-skill
+Repo: https://github.com/op7418/guizang-ppt-skill
+Upstream: repository root
+Install name: guizang-ppt-skill
+Copied from: Ses2905/claude-code-skills `.claude/skills/guizang-ppt-skill`
+License: GNU Affero General Public License v3.0 (see LICENSE)
+Related: skills/html-ppt, skills/frontend-slides-editable, skills/slides
+Note: Single-file magazine / Swiss-style HTML decks with presenter view. Not a fork of html-ppt or frontend-slides-editable. AGPL-3.0 — keep LICENSE with this skill.

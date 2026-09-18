@@ -41,8 +41,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -193,6 +193,20 @@ AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.
 | Rule | `find-animation-opportunities` | Agent-decides — opportunity search only; does not implement |
 | Skill | `pm-handoff` | Compact this conversation into a handoff for another agent |
 | Rule | `pm-handoff` | Agent-decides — session handoff only; does not auto-invoke |
+| Skill | `codex-ppt` | Image-based PPTX decks from articles or outlines |
+| Rule | `codex-ppt` | Agent-decides — full-slide generated images, not native PPTX shapes |
+| Skill | `ppt-master` | Native editable PPTX generate / reconstruct / template / beautify |
+| Rule | `ppt-master` | Agent-decides — PowerPoint files, not HTML decks |
+| Skill | `guizang-ppt-skill` | Magazine or Swiss single-file HTML PPT with presenter view |
+| Rule | `guizang-ppt-skill` | Agent-decides — 归藏 magazine/Swiss HTML, not html-ppt templates |
+| Skill | `huashu-design` | HTML studio for prototypes, decks, and motion (three directions first) |
+| Rule | `huashu-design` | Agent-decides — 花叔 HTML design, not production backends |
+| Skill | `ui-ux-pro-max` | Searchable UI/UX styles, palettes, type, charts, and stacks |
+| Rule | `ui-ux-pro-max` | Agent-decides — product UI intelligence, not slide generation |
+| Skill | `rad-spacing` | Hierarchical Figma spacing from Gestalt proximity |
+| Rule | `rad-spacing` | Agent-decides — Figma layout spacing only |
+| Skill | `walmart-ads-terminology` | Advertiser-facing Walmart Connect / Global Ads naming |
+| Rule | `walmart-ads-terminology` | Agent-decides — terminology layer; does not invent product names |
 | Agent | `reviewer` / `debugger` | Dedicated review or debug pass |
 
 ## Marketplace plugins (user scope)

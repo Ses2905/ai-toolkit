@@ -1,0 +1,10 @@
+Source: https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill
+Repo: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+Upstream folder: cli/assets/skills/ui-ux-pro-max (searchable CSV design intelligence)
+Install name: ui-ux-pro-max
+Official CLI: npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max
+Copied from: Ses2905/claude-code-skills `.claude/skills/ui-ux-pro-max`
+Pinned catalog source: nextlevelbuilder-ui-ux-pro-max (15de38fb70bc80ae9276fa7703b48ae861a672e6)
+License: MIT (Next Level Builder)
+Related: skills/slides and skills/design-system are siblings from the same repo, not this skill
+Note: This is the UI/UX intelligence database. It is not a duplicate of /slides (Chart.js decks) or /design-system (token CSVs for those decks).

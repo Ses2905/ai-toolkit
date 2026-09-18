@@ -1,0 +1,6 @@
+---
+description: Generate visually unified image-based PPT/PPTX decks from articles, reports, or outlines. Use when the user wants Codex PPT, full-slide generated images assembled into PowerPoint, or image-page presentations.
+alwaysApply: false
+---
+
+codex-ppt: Follow `skills/codex-ppt/SKILL.md`. Approval gates before deck_spec, sample, or PPTX assembly. Distinct from `ppt-master` and HTML deck skills. Do not substitute local drawing for the image backend.

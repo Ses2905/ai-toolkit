@@ -1,0 +1,10 @@
+Source: https://www.skills.sh/alchaincyf/huashu-design
+Repo: https://github.com/alchaincyf/huashu-design
+Upstream: repository root
+Install name: huashu-design
+Official CLI: npx skills add https://github.com/alchaincyf/huashu-design --skill huashu-design
+Copied from: synced user skill at ~/.cursor/skills/huashu-design (upstream remote alchaincyf/huashu-design @ c4b8367)
+License: MIT (alchaincyf / 花叔) — see LICENSE
+Omitted: .git/, assets/showcases/ (gallery screenshots)
+Related: skills/taste-skill, skills/high-end-visual-design, skills/html-ppt
+Note: HTML design studio with a mandatory three-direction draft gate. Distinct from taste-skill (anti-slop pages) and html-ppt (template HTML decks).

@@ -1,0 +1,6 @@
+---
+description: Canonical advertiser-facing terminology for Walmart Global Ads / Walmart Connect. Use when writing, reviewing, or naming anything an advertiser will read.
+alwaysApply: false
+---
+
+walmart-ads-terminology: Follow `skills/walmart-ads-terminology/SKILL.md`. Registry first. Never invent a Walmart-specific name. Distinct from `product-strategy-session`.

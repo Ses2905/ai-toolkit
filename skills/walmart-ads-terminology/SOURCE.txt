@@ -1,0 +1,4 @@
+Source: Ses2905/claude-code-skills `.claude/skills/walmart-ads-terminology`
+Install name: walmart-ads-terminology
+License: MIT (Sarah Scherer / this work-kit)
+Note: Advertiser-facing terminology layer for Walmart Global Ads / Walmart Connect. Registry is a seeded public-name draft until entries are marked canonical. Distinct from skills/product-strategy-session.

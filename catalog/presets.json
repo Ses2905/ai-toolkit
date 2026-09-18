@@ -85,6 +85,30 @@
       "ref": "3b9e6561dababf40a485772a7cd641268bb7c365",
       "root": "skills",
       "license": "unspecified"
+    },
+    "ningzimu-codex-ppt": {
+      "git": "https://github.com/ningzimu/codex-ppt-skill.git",
+      "ref": "main",
+      "root": "",
+      "license": "unspecified"
+    },
+    "hugohe-ppt-master": {
+      "git": "https://github.com/hugohe3/ppt-master.git",
+      "ref": "main",
+      "root": "",
+      "license": "MIT"
+    },
+    "op7418-guizang-ppt": {
+      "git": "https://github.com/op7418/guizang-ppt-skill.git",
+      "ref": "main",
+      "root": "",
+      "license": "AGPL-3.0"
+    },
+    "alchaincyf-huashu-design": {
+      "git": "https://github.com/alchaincyf/huashu-design.git",
+      "ref": "main",
+      "root": "",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -540,6 +564,55 @@
           "source": "mattpocock-skills",
           "path": "productivity/handoff",
           "name": "pm-handoff"
+        }
+      ]
+    },
+    "codex-ppt": {
+      "description": "Image-based PPTX generation (ningzimu/codex-ppt-skill).",
+      "skills": [
+        {
+          "source": "ningzimu-codex-ppt",
+          "path": ".",
+          "name": "codex-ppt"
+        }
+      ]
+    },
+    "ppt-master": {
+      "description": "Native editable PPTX workflow (hugohe3/ppt-master, MIT).",
+      "skills": [
+        {
+          "source": "hugohe-ppt-master",
+          "path": ".",
+          "name": "ppt-master"
+        }
+      ]
+    },
+    "guizang-ppt-skill": {
+      "description": "Magazine / Swiss single-file HTML PPT (op7418/guizang-ppt-skill, AGPL-3.0).",
+      "skills": [
+        {
+          "source": "op7418-guizang-ppt",
+          "path": ".",
+          "name": "guizang-ppt-skill"
+        }
+      ]
+    },
+    "huashu-design": {
+      "description": "HTML design studio with a three-direction draft gate (alchaincyf/huashu-design, MIT).",
+      "skills": [
+        {
+          "source": "alchaincyf-huashu-design",
+          "path": ".",
+          "name": "huashu-design"
+        }
+      ]
+    },
+    "ui-ux-pro-max": {
+      "description": "UI/UX intelligence database (nextlevelbuilder/ui-ux-pro-max-skill). Distinct from the slides sibling.",
+      "skills": [
+        {
+          "source": "nextlevelbuilder-ui-ux-pro-max",
+          "path": "ui-ux-pro-max"
         }
       ]
     }

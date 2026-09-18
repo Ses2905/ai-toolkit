@@ -1,0 +1,4 @@
+Source: Ses2905/claude-code-skills `.claude/skills/rad-spacing`
+Install name: rad-spacing
+License: unspecified in the vendored copy
+Note: Figma layout spacing using Gestalt proximity and 8px/4px increments. Distinct from skills/design-system (slide tokens) and skills/ui-ux-pro-max (product UI palettes).
