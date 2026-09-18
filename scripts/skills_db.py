@@ -687,7 +687,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Work Kit — Skills Field Guide</title>
+<title>Skills Field Guide</title>
 <style>
   /* Design tokens — a "field guide / catalog" register: cool paper, pine accent,
      serif display + humanist UI sans. Deliberately avoids the cream+serif and
