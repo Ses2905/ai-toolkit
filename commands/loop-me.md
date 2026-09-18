@@ -1,0 +1,6 @@
+---
+name: loop-me
+description: Grill me about specs for the workflows I want to build, within this workspace.
+---
+
+Follow `skills/loop-me/SKILL.md`.

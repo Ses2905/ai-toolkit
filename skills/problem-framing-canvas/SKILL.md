@@ -15,6 +15,7 @@ scenarios:
   - "We need a clearer problem statement for onboarding drop-off"
 theme: discovery-research
 estimated_time: "30-45 min"
+disable-model-invocation: true
 ---
 
 

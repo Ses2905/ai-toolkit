@@ -15,6 +15,7 @@ scenarios:
   - "Facilitate a workshop on the support journey for churn-risk customers"
 theme: workshops-facilitation
 estimated_time: "45-90 min"
+disable-model-invocation: true
 ---
 
 

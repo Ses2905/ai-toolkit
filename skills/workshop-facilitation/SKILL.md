@@ -13,6 +13,7 @@ scenarios:
   - "I want to run a structured positioning workshop with my product team — set up the facilitation protocol"
   - "Help me facilitate a discovery sprint kickoff with clear questions, options, and progress labels"
 estimated_time: "varies by workshop"
+disable-model-invocation: true
 ---
 
 ## Purpose

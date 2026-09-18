@@ -15,6 +15,7 @@ scenarios:
   - "We need to define who we serve and why we're different"
 theme: workshops-facilitation
 estimated_time: "60-90 min"
+disable-model-invocation: true
 ---
 
 

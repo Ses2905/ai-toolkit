@@ -15,6 +15,7 @@ scenarios:
   - "Which story-splitting pattern should I use for this admin workflow epic?"
 theme: pm-artifacts
 estimated_time: "20-30 min"
+disable-model-invocation: true
 ---
 
 

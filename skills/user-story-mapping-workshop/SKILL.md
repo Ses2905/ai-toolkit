@@ -14,6 +14,7 @@ scenarios:
   - "I'm facilitating a mapping session tomorrow and need the structure and questions"
   - "The team needs a shared map of the workflow before we can scope an MVP"
 estimated_time: "60-120 min"
+disable-model-invocation: true
 ---
 
 

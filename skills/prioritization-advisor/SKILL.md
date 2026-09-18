@@ -15,6 +15,7 @@ scenarios:
   - "We keep arguing about prioritization. Recommend a framework."
 theme: strategy-positioning
 estimated_time: "15-25 min"
+disable-model-invocation: true
 ---
 
 

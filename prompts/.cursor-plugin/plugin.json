@@ -1,0 +1,24 @@
+{
+  "name": "prompt-kit",
+  "displayName": "Prompt Kit",
+  "version": "1.1.0",
+  "description": "Personal slash-prompt library shipped with Work Kit. Reusable one-shot instructions live here; multi-step agent workflows stay in Work Kit.",
+  "author": {
+    "name": "Sarah Scherer"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "prompts",
+    "slash-commands",
+    "library",
+    "writing",
+    "product"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "personal",
+    "prompts",
+    "commands"
+  ]
+}

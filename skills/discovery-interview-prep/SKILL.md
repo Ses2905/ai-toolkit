@@ -15,6 +15,7 @@ scenarios:
   - "I'm validating a new product idea with a 2-week deadline and cold outreach only"
   - "I want to understand why users aren't activating on our core feature"
 estimated_time: "15-20 min"
+disable-model-invocation: true
 ---
 
 

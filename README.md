@@ -41,8 +41,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/add-to-library`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`, `/dashi-ppt`, `/nanobanana-ppt-skills`, `/emil-design-eng`, `/find-skills`, `/loop-me`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/add-to-library`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`, `/dashi-ppt`, `/nanobanana-ppt-skills`, `/emil-design-eng`, `/find-skills`, `/loop-me`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -175,8 +175,6 @@ AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.
 | Rule | `html-ppt` | Agent-decides — html-ppt templates, not Chart.js or Feishu |
 | Skill | `product-strategy-session` | End-to-end PM strategy: positioning → discovery → roadmap |
 | Rule | `product-strategy-session` | Agent-decides — product strategy sessions, not implementation |
-| Skill | `board-room-strategy` | Board/exec strategy pack: governing question → recommendation deck |
-| Rule | `board-room-strategy` | Agent-decides — board decks, not PM discovery or engineering |
 | Skill | `html-diagram` | Self-contained HTML diagrams (topology, sequence, state, hierarchy) |
 | Rule | `html-diagram` | Agent-decides — explicit diagram requests, not general UI |
 | Skill | `design-artifact` | Visual register sibling for Effective HTML artifacts |
@@ -207,6 +205,12 @@ AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.
 | Rule | `rad-spacing` | Agent-decides — Figma layout spacing only |
 | Skill | `walmart-ads-terminology` | Advertiser-facing Walmart Connect / Global Ads naming |
 | Rule | `walmart-ads-terminology` | Agent-decides — terminology layer; does not invent product names |
+| Skill | `library-add` | One door: classify and save a prompt, skill, or rule |
+| Skill | `dashi-ppt` | Slash-only — browser-editable HTML decks, PPTX/PDF export |
+| Skill | `nanobanana-ppt-skills` | Slash-only — Nano Banana PPT images and Kling transitions |
+| Skill | `emil-design-eng` | Slash-only — Emil Kowalski design-engineering craft |
+| Skill | `find-skills` | Slash-only — search skills.sh / Work Kit for a skill |
+| Skill | `loop-me` | Slash-only — grill workflow specs for personal loops |
 | Agent | `reviewer` / `debugger` | Dedicated review or debug pass |
 
 ## Marketplace plugins (user scope)
@@ -226,13 +230,16 @@ Put short communication preferences in **Customize → Rules** (account-level, s
 ## Layout
 
 ```text
-work-kit/
-├── .cursor-plugin/plugin.json
+cursor-skills/                 # this repo — the library
+├── .cursor-plugin/plugin.json # Work Kit
 ├── catalog/presets.json
 ├── rules/
 ├── skills/
 ├── agents/
 ├── commands/
-├── scripts/
+├── prompts/                   # Prompt Kit (own plugin.json; installed separately)
+├── scripts/install-local.sh   # copies Work Kit + Prompt Kit; never nested
 └── assets/logo.svg
 ```
+
+`./scripts/install-local.sh` writes `~/.cursor/plugins/local/work-kit` **without** `prompts/`, and `~/.cursor/plugins/local/prompt-kit` from `prompts/`. `./scripts/sync-user-skills.sh` is the Cloud Agent copy of `skills/`. Do not drop folders into `~/.cursor/skills` by hand — use `/add-to-library`. `impeccable` stays a user-library install via `/install-impeccable`.

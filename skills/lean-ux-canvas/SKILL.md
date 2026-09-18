@@ -15,6 +15,7 @@ scenarios:
   - "We have a business problem but too many assumptions. Run a Lean UX Canvas session."
 theme: validation-experiments
 estimated_time: "30-45 min"
+disable-model-invocation: true
 ---
 
 ## Purpose

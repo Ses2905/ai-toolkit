@@ -14,6 +14,7 @@ scenarios:
   - "A stakeholder asked for a specific feature and I want to reframe it as a problem first"
   - "I need to show leadership why we picked this solution over the three alternatives"
 estimated_time: "30-45 min"
+disable-model-invocation: true
 ---
 
 

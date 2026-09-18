@@ -168,14 +168,17 @@ class RepoScanTest(unittest.TestCase):
         cases = {
             "apple-design": "Design & Frontend",
             "product-strategy-session": "Product & Discovery",
-            "board-room-strategy": "Product & Discovery",
             "walmart-ads-terminology": "Product & Discovery",
-            "executive-summary-slide": "Presentations & Diagrams",
             "codex-ppt": "Presentations & Diagrams",
+            "dashi-ppt": "Presentations & Diagrams",
             "ui-ux-pro-max": "Design & Frontend",
+            "emil-design-eng": "Design & Frontend",
             "hyperframes-animation": "Motion & Animation",
             "plan-the-work": "Engineering Workflow",
+            "loop-me": "Engineering Workflow",
             "install-work-kit": "Setup & Install",
+            "library-add": "Setup & Install",
+            "find-skills": "Setup & Install",
         }
         for name, cat in cases.items():
             if name in self.by_name:

@@ -5,18 +5,21 @@ description: Turn a repeated workflow into a Cursor skill, rule, or command. Use
 
 # Capture a skill
 
+Prefer `/add-to-library` (or `skills/library-add/SKILL.md`) for anything new. This skill is the skill-only path.
+
 Save durable workflow as files the agent can reuse, not as chat memory.
 
 ## Choose the component
 
 | Need | Put it here |
 | --- | --- |
-| Multi-step workflow the agent should follow when relevant | `skills/<name>/SKILL.md` |
-| Short always-on constraint | `rules/<name>.mdc` with `alwaysApply: true` |
-| Explicit slash action | `commands/<name>.md` |
+| Multi-step workflow the agent should follow when relevant | `skills/<name>/SKILL.md` via `./scripts/library-add.py skill …` |
+| One-shot reusable ask, rewrite, or template fill | **Prompt Kit** via `./scripts/library-add.py prompt …` |
+| Short always-on constraint | `rules/<name>.mdc` via `./scripts/library-add.py rule …` |
+| Explicit slash action that launches a skill here | `commands/<name>.md` (use `--with-command` / `--slash-only`) |
 | Repo-only knowledge | that repo's `.cursor/skills` or `AGENTS.md` |
 
-Default for personal, cross-project workflows: this plugin under `skills/`.
+If the user pastes something they would send as a chat message, stop and save it as a **prompt**. Do not wrap it as a `SKILL.md`.
 
 ## Skill file
 
@@ -37,9 +40,9 @@ description: What it does and when to use it. Include trigger phrases.
 
 ## Where to write
 
-- Editing **work-kit**: add the file here, then re-run `scripts/install-local.sh` so `~/.cursor/plugins/local/work-kit` stays in sync.
-- One-off personal skill (no plugin bump): `~/.cursor/skills/<name>/SKILL.md`
-- Cloud Agents: copy or keep skills in `~/.cursor/skills/` and enable **Settings → Agents → Sync Skills for Cloud Agents**. Local plugin folders do not sync to cloud VMs.
+- Editing **work-kit**: use `./scripts/library-add.py` so indexes and both plugins stay in sync, then re-run `scripts/install-local.sh`.
+- One-off personal skill (no plugin bump): `~/.cursor/skills/<name>/SKILL.md` — avoid unless temporary.
+- Cloud Agents: `./scripts/sync-user-skills.sh` then **Settings → Agents → Sync Skills for Cloud Agents**.
 
 ## After writing
 

@@ -47,4 +47,6 @@ Kept in Work Kit as **slash-only skills** (workshops — they interview, then wr
 
 Kept in Work Kit as auto skills: plan / debug / review / ship, design, motion, slides, installers, `product-strategy-session`.
 
-Parked on disk, **not** installed into Cursor: Wondel downloads, designer-skill zips, Claude Code slash files, board-room pack. Add those here one at a time; do not dump them into `~/.cursor/skills`.
+Folded into Work Kit as **slash-only** (Claude / Agents extras): `dashi-ppt`, `nanobanana-ppt-skills`, `emil-design-eng`, `find-skills`, `loop-me`.
+
+Parked on disk, **not** installed into Cursor: Wondel downloads, designer-skill zips, leftover Claude Code slash files, board-room pack. On the Mac library folder those go in `_parked/2026-09-18/`. Add keepers with `/add-to-library`; do not dump them into `~/.cursor/skills`.

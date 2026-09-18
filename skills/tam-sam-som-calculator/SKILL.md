@@ -14,6 +14,7 @@ scenarios:
   - "I need market sizing for a business case our CFO will pick apart"
   - "Our TAM number came from a slide nobody can source — rebuild it properly"
 estimated_time: "20-40 min"
+disable-model-invocation: true
 ---
 
 
