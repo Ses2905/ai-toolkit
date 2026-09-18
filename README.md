@@ -108,6 +108,8 @@ Then **Settings → Agents → Context and Tools → Sync Skills for Cloud Agent
 
 Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.cursor/skills`).
 
+AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.json`. Those are local leftovers and are gitignored. Vendor a skill into this plugin at `skills/<name>/`; do not commit a second catalog root. Taste is `skills/taste-skill`, not `.agents/skills/gpt-taste`.
+
 ## What you get
 
 | Kind | Name | When |

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -14,15 +15,16 @@ import skills_db  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# Expected category distribution for the current repo (48 skills).
+# Expected category distribution for the current repo.
 EXPECTED_COUNTS = {
     "Product & Discovery": 18,
     "Design & Frontend": 9,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 6,
-    "Engineering Workflow": 5,
+    "Engineering Workflow": 6,
     "Setup & Install": 4,
 }
+EXPECTED_TOTAL = sum(EXPECTED_COUNTS.values())
 
 
 class FrontmatterTest(unittest.TestCase):
@@ -120,11 +122,16 @@ class RepoScanTest(unittest.TestCase):
         cls.by_name = {s.name: s for s in cls.skills}
 
     def test_total(self):
-        self.assertEqual(len(self.skills), 48)
+        self.assertEqual(len(self.skills), EXPECTED_TOTAL)
 
     def test_no_uncategorized(self):
         unc = [s.name for s in self.skills if s.category == skills_db.UNCATEGORIZED]
         self.assertEqual(unc, [], f"uncategorized skills: {unc}")
+
+    def test_no_playground_taste_duplicate(self):
+        self.assertNotIn("gpt-taste", self.by_name)
+        self.assertIn("taste-skill", self.by_name)
+        self.assertIn("pm-handoff", self.by_name)
 
     def test_category_counts(self):
         counts = {c: sum(1 for s in self.skills if s.category == c) for c in skills_db.CATEGORIES}
@@ -177,9 +184,9 @@ class BuildTest(unittest.TestCase):
 
     def test_index_shape(self):
         idx = skills_db.build_index(self.skills)
-        self.assertEqual(idx["total"], 48)
+        self.assertEqual(idx["total"], EXPECTED_TOTAL)
         self.assertEqual(idx["categories"], skills_db.CATEGORIES)
-        self.assertEqual(sum(idx["counts_by_category"].values()), 48)
+        self.assertEqual(sum(idx["counts_by_category"].values()), EXPECTED_TOTAL)
         # skills sorted by overall rank
         first = idx["skills"][0]
         self.assertEqual(first["rank_overall"], 1)
@@ -190,12 +197,27 @@ class BuildTest(unittest.TestCase):
         start = html.index(marker) + len(marker)
         end = html.index(";\nconst state", start)
         data = json.loads(html[start:end].replace("<\\/", "</"))
-        self.assertEqual(data["total"], 48)
+        self.assertEqual(data["total"], EXPECTED_TOTAL)
 
     def test_markdown_has_all_categories(self):
         md = skills_db.render_markdown(self.skills)
         for c in skills_db.CATEGORIES:
             self.assertIn(f"## {c}", md)
+
+
+class PlaygroundDumpGuardTest(unittest.TestCase):
+    def test_gitignore_covers_second_skills_root(self):
+        gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
+        self.assertIn(".agents/", gi)
+        self.assertIn("skills-lock.json", gi)
+
+    def test_no_tracked_agents_skill_files(self):
+        tracked = subprocess.check_output(
+            ["git", "ls-files", ".agents/skills", "skills-lock.json"],
+            cwd=ROOT,
+            text=True,
+        ).strip()
+        self.assertEqual(tracked, "", f"tracked Playground dump:\n{tracked}")
 
 
 if __name__ == "__main__":

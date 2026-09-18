@@ -22,13 +22,13 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 48,
+  "total": 49,
   "counts_by_category": {
     "Product & Discovery": 18,
     "Design & Frontend": 9,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 6,
-    "Engineering Workflow": 5,
+    "Engineering Workflow": 6,
     "Setup & Install": 4
   },
   "skills": [
@@ -47,7 +47,7 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": true,
-      "file_count": 173,
+      "file_count": 160,
       "skill_md_bytes": 38342,
       "in_catalog": true,
       "in_readme": true,
@@ -155,7 +155,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 59,
+      "file_count": 52,
       "skill_md_bytes": 28939,
       "in_catalog": false,
       "in_readme": true,
@@ -519,7 +519,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 36,
+      "file_count": 29,
       "skill_md_bytes": 8298,
       "in_catalog": false,
       "in_readme": true,
@@ -631,11 +631,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 8,
+      "file_count": 7,
       "skill_md_bytes": 11457,
       "in_catalog": false,
       "in_readme": false,
-      "score": 54,
+      "score": 53,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -644,7 +644,7 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 8,
+        "breadth": 7,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
@@ -671,11 +671,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 7,
+      "file_count": 6,
       "skill_md_bytes": 19112,
       "in_catalog": false,
       "in_readme": false,
-      "score": 53,
+      "score": 52,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -684,7 +684,7 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 7,
+        "breadth": 6,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
@@ -729,6 +729,42 @@
       "rank_in_category": 5
     },
     {
+      "name": "pm-handoff",
+      "category": "Engineering Workflow",
+      "type": "",
+      "theme": "",
+      "description": "Compact the current conversation into a handoff document for another agent or session to pick up, with suggested skills and redacted sensitive data. Use when handing work to a fresh agent, ending a session, or writing a pickup brief. Upstream CLI name is `handoff`.",
+      "argument_hint": "What will the next session be used for?",
+      "best_for": [],
+      "command": "pm-handoff",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 4,
+      "skill_md_bytes": 2055,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 46,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 4,
+        "breadth": 4,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 20,
+      "rank_in_category": 1
+    },
+    {
       "name": "hyperframes-core",
       "category": "Motion & Animation",
       "type": "",
@@ -761,7 +797,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 20,
+      "rank_overall": 21,
       "rank_in_category": 6
     },
     {
@@ -797,7 +833,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 21,
+      "rank_overall": 22,
       "rank_in_category": 1
     },
     {
@@ -837,7 +873,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 22,
+      "rank_overall": 23,
       "rank_in_category": 4
     },
     {
@@ -877,7 +913,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 23,
+      "rank_overall": 24,
       "rank_in_category": 5
     },
     {
@@ -917,7 +953,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 24,
+      "rank_overall": 25,
       "rank_in_category": 6
     },
     {
@@ -957,7 +993,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 25,
+      "rank_overall": 26,
       "rank_in_category": 7
     },
     {
@@ -997,7 +1033,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 26,
+      "rank_overall": 27,
       "rank_in_category": 8
     },
     {
@@ -1033,7 +1069,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 27,
+      "rank_overall": 28,
       "rank_in_category": 7
     },
     {
@@ -1073,7 +1109,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 28,
+      "rank_overall": 29,
       "rank_in_category": 9
     },
     {
@@ -1113,7 +1149,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 29,
+      "rank_overall": 30,
       "rank_in_category": 10
     },
     {
@@ -1153,7 +1189,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 30,
+      "rank_overall": 31,
       "rank_in_category": 11
     },
     {
@@ -1189,7 +1225,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 31,
+      "rank_overall": 32,
       "rank_in_category": 8
     },
     {
@@ -1225,8 +1261,44 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 32,
+      "rank_overall": 33,
       "rank_in_category": 9
+    },
+    {
+      "name": "install-github-skills",
+      "category": "Setup & Install",
+      "type": "",
+      "theme": "",
+      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "argument_hint": "",
+      "best_for": [],
+      "command": "install-github-skills",
+      "has_command": true,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 5439,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 37,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 11,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 34,
+      "rank_in_category": 2
     },
     {
       "name": "user-story-mapping-workshop",
@@ -1265,7 +1337,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 33,
+      "rank_overall": 35,
       "rank_in_category": 12
     },
     {
@@ -1305,7 +1377,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 34,
+      "rank_overall": 36,
       "rank_in_category": 13
     },
     {
@@ -1345,7 +1417,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 37,
       "rank_in_category": 14
     },
     {
@@ -1385,44 +1457,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
+      "rank_overall": 38,
       "rank_in_category": 15
-    },
-    {
-      "name": "install-github-skills",
-      "category": "Setup & Install",
-      "type": "",
-      "theme": "",
-      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "argument_hint": "",
-      "best_for": [],
-      "command": "install-github-skills",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 4902,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 35,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 10,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
-      "rank_overall": 37,
-      "rank_in_category": 2
     },
     {
       "name": "positioning-workshop",
@@ -1461,7 +1497,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 38,
+      "rank_overall": 39,
       "rank_in_category": 16
     },
     {
@@ -1501,7 +1537,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 39,
+      "rank_overall": 40,
       "rank_in_category": 17
     },
     {
@@ -1541,7 +1577,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 40,
+      "rank_overall": 41,
       "rank_in_category": 18
     },
     {
@@ -1577,7 +1613,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 41,
+      "rank_overall": 42,
       "rank_in_category": 3
     },
     {
@@ -1613,8 +1649,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 42,
-      "rank_in_category": 1
+      "rank_overall": 43,
+      "rank_in_category": 2
     },
     {
       "name": "debug-from-evidence",
@@ -1649,8 +1685,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 43,
-      "rank_in_category": 2
+      "rank_overall": 44,
+      "rank_in_category": 3
     },
     {
       "name": "plan-the-work",
@@ -1685,8 +1721,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 44,
-      "rank_in_category": 3
+      "rank_overall": 45,
+      "rank_in_category": 4
     },
     {
       "name": "review-the-diff",
@@ -1721,8 +1757,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 45,
-      "rank_in_category": 4
+      "rank_overall": 46,
+      "rank_in_category": 5
     },
     {
       "name": "ship-the-change",
@@ -1757,8 +1793,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 46,
-      "rank_in_category": 5
+      "rank_overall": 47,
+      "rank_in_category": 6
     },
     {
       "name": "lark-shared",
@@ -1793,7 +1829,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 6
     },
     {
@@ -1812,7 +1848,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2377,
+      "skill_md_bytes": 2539,
       "in_catalog": false,
       "in_readme": true,
       "score": 17,
@@ -1829,7 +1865,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 48,
+      "rank_overall": 49,
       "rank_in_category": 4
     }
   ]
