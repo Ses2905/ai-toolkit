@@ -17,8 +17,10 @@ import argparse
 import html
 import json
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field, asdict
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -171,6 +173,11 @@ class Skill:
     description: str
     argument_hint: str
     best_for: list[str]
+    summary: str
+    best_use: str
+    watch_outs: str
+    date_added: str
+    date_updated: str
     command: str
     has_command: bool
     has_rule: bool
@@ -309,6 +316,90 @@ def score_skill(skill: Skill) -> tuple[int, dict[str, int]]:
 
 # --- Scanning -------------------------------------------------------------
 
+_USE_RE = re.compile(r"\b(use (?:when|for|to|this)\b.*)", re.IGNORECASE)
+# High-precision boundary cues: a skill explicitly saying where it does NOT fit
+# or what it won't do. Kept strict to avoid mis-extracting descriptive prose.
+_WATCH_RE = re.compile(
+    r"(?<![A-Za-z])("
+    r"do not use\b[^.;]*|do not apply\b[^.;]*|do not activate\b[^.;]*|"
+    r"not for\b[^.;]*|not meant (?:for|to)\b[^.;]*|"
+    r"does not (?:implement|apply|handle|cover|change|edit|modify|touch|support|build)\b[^.;]*|"
+    r"distinct from\b[^.;]*|instead of\b[^.;]*|read-only\b[^.;]*)",
+    re.IGNORECASE,
+)
+
+
+def _sentences(text: str) -> list[str]:
+    parts = re.split(r"(?<=[.!?])\s+", text.strip())
+    return [p.strip() for p in parts if p.strip()]
+
+
+def derive_summary(description: str) -> str:
+    """The 'what it is' — sentences before the first 'Use when/for/to' cue."""
+    sents = _sentences(description)
+    kept: list[str] = []
+    for s in sents:
+        if re.match(r"^use (when|for|to|this)\b", s, re.IGNORECASE):
+            break
+        kept.append(s)
+    summary = " ".join(kept) if kept else (sents[0] if sents else description)
+    return summary.strip()
+
+
+def derive_best_use(description: str, best_for: list[str]) -> str:
+    """Best use case — explicit best_for, else the skill's own 'Use when…' cue."""
+    if best_for:
+        return "; ".join(best_for[:3])
+    m = _USE_RE.search(description)
+    return m.group(1).strip() if m else ""
+
+
+def derive_watch_outs(description: str) -> str:
+    """When it doesn't fit — boundary/caveat clauses pulled from the skill text."""
+    found: list[str] = []
+    for m in _WATCH_RE.finditer(description):
+        clause = m.group(1).strip().rstrip(".,;")
+        clause = clause[0].upper() + clause[1:] if clause else clause
+        if clause and clause not in found:
+            found.append(clause)
+    return "; ".join(found[:3])
+
+
+def _git_dates(root: Path, skill_md: Path, skill_dir: Path) -> tuple[str, str]:
+    """(date_added, date_updated) as YYYY-MM-DD from git history.
+
+    Falls back to filesystem mtime when git history is unavailable (e.g. a
+    freshly created skill that is not committed yet, or a non-git checkout).
+    """
+    def _mtime(p: Path) -> str:
+        try:
+            return datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).strftime("%Y-%m-%d")
+        except OSError:
+            return ""
+
+    added = updated = ""
+    try:
+        rel_md = skill_md.relative_to(root)
+        rel_dir = skill_dir.relative_to(root)
+        add_out = subprocess.run(
+            ["git", "-C", str(root), "log", "--diff-filter=A", "--format=%as", "--", str(rel_md)],
+            capture_output=True, text=True, timeout=15,
+        )
+        add_lines = [ln for ln in add_out.stdout.splitlines() if ln.strip()]
+        if add_lines:
+            added = add_lines[-1].strip()  # oldest add
+        upd_out = subprocess.run(
+            ["git", "-C", str(root), "log", "-1", "--format=%as", "--", str(rel_dir)],
+            capture_output=True, text=True, timeout=15,
+        )
+        if upd_out.stdout.strip():
+            updated = upd_out.stdout.strip().splitlines()[0].strip()
+    except (subprocess.SubprocessError, OSError, ValueError):
+        pass
+
+    return added or _mtime(skill_md), updated or _mtime(skill_md)
+
+
 def _preset_keys(root: Path) -> set[str]:
     presets_path = root / "catalog" / "presets.json"
     if not presets_path.is_file():
@@ -377,6 +468,7 @@ def scan_skills(root: Path) -> list[Skill]:
         best_for = [str(x) for x in best_for]
 
         files = [p for p in d.rglob("*") if p.is_file()]
+        date_added, date_updated = _git_dates(root, skill_md, d)
         skill = Skill(
             name=name,
             source_root=source_root,
@@ -386,6 +478,11 @@ def scan_skills(root: Path) -> list[Skill]:
             description=description,
             argument_hint=str(fm.get("argument-hint", "") or ""),
             best_for=best_for,
+            summary=derive_summary(description),
+            best_use=derive_best_use(description, best_for),
+            watch_outs=derive_watch_outs(description),
+            date_added=date_added,
+            date_updated=date_updated,
             command=command_by_skill.get(name, ""),
             has_command=name in command_by_skill,
             has_rule=name in rules,
@@ -452,6 +549,11 @@ def search(skills: list[Skill], query: str) -> list[tuple[Skill, int]]:
 
 def build_index(skills: list[Skill]) -> dict:
     cats = present_categories(skills)
+    skills_out: list[dict] = []
+    for s in sorted(skills, key=lambda s: s.rank_overall):
+        d = asdict(s)
+        d["tags"] = s.tags  # computed property; asdict() omits it
+        skills_out.append(d)
     return {
         "generated_by": "scripts/skills_db.py",
         "categories": cats,
@@ -461,7 +563,7 @@ def build_index(skills: list[Skill]) -> dict:
         "counts_by_category": {
             c: sum(1 for s in skills if s.category == c) for c in cats
         },
-        "skills": [asdict(s) for s in sorted(skills, key=lambda s: s.rank_overall)],
+        "skills": skills_out,
     }
 
 
@@ -510,8 +612,8 @@ def render_markdown(skills: list[Skill]) -> str:
         lines.append("")
         lines.append(f"_{CATEGORY_BLURB.get(c, '')}_")
         lines.append("")
-        lines.append("| Rank | Skill | Score | Type | Invoke | Description |")
-        lines.append("| --- | --- | --- | --- | --- | --- |")
+        lines.append("| Rank | Skill | Score | Type | Invoke | Added | Updated | What it is |")
+        lines.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
         for s in group:
             invoke = []
             if s.command:
@@ -519,12 +621,13 @@ def render_markdown(skills: list[Skill]) -> str:
             if s.has_rule:
                 invoke.append("rule")
             invoke_str = ", ".join(invoke) if invoke else "—"
-            desc = s.description.replace("|", "\\|")
-            if len(desc) > 160:
-                desc = desc[:157] + "…"
+            summary = (s.summary or s.description).replace("|", "\\|")
+            if len(summary) > 150:
+                summary = summary[:147] + "…"
             lines.append(
                 f"| {s.rank_in_category} | `{s.name}` | {s.score} | "
-                f"{s.type or '—'} | {invoke_str} | {desc} |"
+                f"{s.type or '—'} | {invoke_str} | {s.date_added or '—'} | "
+                f"{s.date_updated or '—'} | {summary} |"
             )
         lines.append("")
 
@@ -550,193 +653,259 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Work Kit — Skills Database</title>
+<title>Work Kit — Skills Field Guide</title>
 <style>
+  /* Design tokens — a "field guide / catalog" register: cool paper, pine accent,
+     serif display + humanist UI sans. Deliberately avoids the cream+serif and
+     near-black+neon AI-default looks; one accent, structure carries meaning. */
   :root {
-    --bg: #0f1115; --panel: #171a21; --panel-2: #1e2230; --line: #2a2f3d;
-    --ink: #e7e9ee; --muted: #9aa3b2; --accent: #6ea8fe; --accent-2: #8b7bff;
-    --good: #4ade80; --chip: #232838;
-    --radius: 14px; --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    --paper: #f3f5f2; --surface: #ffffff; --surface-2: #f7faf8;
+    --ink: #14232a; --muted: #57666c; --faint: #8a979c;
+    --line: #e3e8e4; --line-strong: #ccd4cf;
+    --pine: #0f766e; --pine-ink: #0b5a54; --pine-wash: #e6f1ef; --amber: #b4691a;
+    --shadow: 0 1px 2px rgba(20,35,42,.04), 0 10px 30px rgba(20,35,42,.06);
+    --display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(.32,.72,0,1);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: radial-gradient(1200px 600px at 80% -10%, #1a2033 0%, var(--bg) 55%); color: var(--ink); font-family: var(--font); }
-  header { padding: 40px 24px 8px; max-width: 1180px; margin: 0 auto; }
-  h1 { font-size: 30px; letter-spacing: -0.02em; margin: 0 0 6px; }
-  .sub { color: var(--muted); font-size: 15px; }
-  .toolbar { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(8px);
-    background: rgba(15,17,21,0.82); border-bottom: 1px solid var(--line); }
-  .toolbar-inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .search { flex: 1 1 320px; display: flex; align-items: center; gap: 10px; background: var(--panel);
-    border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
-  .search input { flex: 1; background: transparent; border: 0; outline: 0; color: var(--ink); font-size: 15px; }
-  .search svg { flex: none; opacity: 0.6; }
-  select { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 14px; }
-  button.refresh { cursor: pointer; border: 1px solid transparent; border-radius: 10px; padding: 9px 14px; font-size: 14px; font-weight: 600;
-    color: #0b0d12; background: linear-gradient(135deg, var(--good), #22c55e); transition: 0.15s; }
-  button.refresh:hover { filter: brightness(1.08); }
-  button.refresh:disabled { opacity: 0.6; cursor: default; }
-  .updated { color: var(--muted); font-size: 12px; margin-left: 2px; }
-  .chips { max-width: 1180px; margin: 0 auto; padding: 14px 24px 0; display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip { cursor: pointer; user-select: none; border: 1px solid var(--line); background: var(--chip);
-    color: var(--muted); padding: 7px 13px; border-radius: 999px; font-size: 13px; transition: 0.15s; }
-  .chip:hover { color: var(--ink); }
-  .chip.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0b0d12; border-color: transparent; font-weight: 600; }
-  .count { max-width: 1180px; margin: 16px auto 0; padding: 0 24px; color: var(--muted); font-size: 13px; }
-  main { max-width: 1180px; margin: 0 auto; padding: 12px 24px 60px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
-  .card { background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
-    border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-  .card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-  .name { font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
-  .rank { font-size: 12px; color: var(--muted); }
-  .cat { font-size: 12px; color: var(--accent); font-weight: 600; }
-  .desc { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag { font-size: 11.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-  .tag.cmd { color: var(--good); border-color: rgba(74,222,128,0.4); }
-  .tag.rule { color: var(--accent); border-color: rgba(110,168,254,0.4); }
-  .scorebar { height: 7px; background: #0c0e13; border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
-  .scorefill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
-  .score-line { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
-  .empty { text-align: center; color: var(--muted); padding: 60px 0; }
-  footer { max-width: 1180px; margin: 0 auto; padding: 0 24px 40px; color: var(--muted); font-size: 12px; }
-  code { background: #0c0e13; border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; font-size: 12px; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--ui);
+    font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  code { font-size: .85em; background: var(--surface); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+  header { padding: 46px 0 20px; }
+  .eyebrow { font-family: var(--display); font-style: italic; color: var(--pine-ink); font-size: 17px; margin: 0 0 4px; }
+  h1 { font-family: var(--display); font-weight: 600; font-size: 41px; line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 12px; }
+  .lede { color: var(--muted); font-size: 16px; max-width: 64ch; margin: 0; }
+  .counts { margin-top: 16px; display: flex; gap: 22px; flex-wrap: wrap; color: var(--faint); font-size: 13px; }
+  .counts b { color: var(--ink); font-weight: 600; }
+
+  .toolbar { position: sticky; top: 0; z-index: 20; background: rgba(243,245,242,.9);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .toolbar .wrap { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding-top: 13px; padding-bottom: 13px; }
+  .field { display: flex; align-items: center; gap: 9px; background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 10px; padding: 9px 12px; }
+  .field svg { flex: none; color: var(--faint); }
+  .field.search { flex: 1 1 300px; }
+  .field input { flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; }
+  .field.sel { padding: 0; }
+  select { font: inherit; color: var(--ink); background: var(--surface); border: 0; border-radius: 10px; padding: 10px 12px; cursor: pointer; outline: 0; }
+  .btn { font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 9px 15px; border: 1px solid var(--pine-ink);
+    background: var(--pine); color: #fff; display: inline-flex; align-items: center; gap: 8px; transition: background .2s var(--ease); }
+  .btn:hover { background: var(--pine-ink); }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .btn svg { transition: transform .5s var(--ease); }
+  .btn.spin svg { transform: rotate(360deg); }
+  .updated { color: var(--faint); font-size: 12.5px; }
+
+  .board { padding: 22px 0 40px; }
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; min-width: 1040px; }
+  thead th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); text-align: left; font-weight: 600; font-size: 12px;
+    color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
+  th .arrow { color: var(--pine); font-size: 11px; }
+  tbody td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr.row { cursor: pointer; }
+  tbody tr.row:hover td { background: var(--surface-2); }
+  .skill-name { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 8px; }
+  .chev { color: var(--faint); transition: transform .18s var(--ease); font-size: 10px; }
+  tr.row.open .chev { transform: rotate(90deg); }
+  .skill-sum { color: var(--muted); font-size: 12.5px; margin-top: 3px; max-width: 44ch;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .catcell { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: 13px; }
+  .dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+  .type-pill { font-size: 13px; color: var(--muted); text-transform: capitalize; }
+  .prose { color: var(--muted); font-size: 12.5px; max-width: 32ch;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .prose.none { color: var(--faint); }
+  .cmd { color: var(--pine-ink); font-weight: 600; }
+  .model { color: var(--faint); }
+  .score { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+  .bar { width: 60px; height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--pine); }
+  .num { font-variant-numeric: tabular-nums; color: var(--ink); font-size: 13px; min-width: 24px; }
+  .date { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; font-size: 12.5px; }
+
+  tr.detail td { background: var(--surface-2); border-bottom: 1px solid var(--line-strong); padding: 0; }
+  tr.detail .inner { padding: 6px 18px 20px 42px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px 30px; }
+  .fb h4 { margin: 12px 0 5px; font-size: 11px; letter-spacing: .03em; color: var(--faint); font-weight: 600; }
+  .fb p { margin: 0; color: var(--ink); font-size: 13px; line-height: 1.55; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+  .badge { font-size: 11.5px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); background: var(--surface); }
+  .badge.on { color: var(--pine-ink); border-color: var(--pine); background: var(--pine-wash); }
+
+  .empty { text-align: center; color: var(--faint); padding: 70px 0; }
+  footer { color: var(--faint); font-size: 12.5px; padding: 14px 0 60px; }
+  @media (prefers-reduced-motion: reduce) { *, html { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
 <body>
-<header>
-  <h1>Work Kit — Skills Database</h1>
-  <div class="sub"><strong>__TOTAL__</strong> skills · <strong>__NCATS__</strong> categories · search, filter, and rank built in · generated by <code>__GENERATED__</code></div>
-</header>
-<div class="toolbar">
-  <div class="toolbar-inner">
-    <label class="search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="q" type="search" placeholder="Find a skill… (name, description, category, tag)" autofocus />
-    </label>
-    <select id="sort">
-      <option value="rank">Sort: Rank (score)</option>
-      <option value="name">Sort: Name (A–Z)</option>
-      <option value="category">Sort: Category</option>
-    </select>
-    <button id="refresh" class="refresh" hidden>&#8635; Refresh</button>
-    <span id="updated" class="updated"></span>
+<header><div class="wrap">
+  <p class="eyebrow">Work Kit</p>
+  <h1>Skills Field Guide</h1>
+  <p class="lede">Every skill in the kit — what it does, where it fits, where it doesn't, how it's invoked, and how current it is. Filter and sort the table, or open any row for the full brief.</p>
+  <div class="counts"><span><b id="c-total">0</b> skills</span><span><b id="c-cats">0</b> categories</span><span>generated by <code>__GENERATED__</code></span></div>
+</div></header>
+
+<div class="toolbar"><div class="wrap">
+  <label class="field search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="q" type="search" placeholder="Search skills — name, what it does, best use…" autofocus />
+  </label>
+  <div class="field sel"><select id="fcat" aria-label="Filter by category"></select></div>
+  <div class="field sel"><select id="ftype" aria-label="Filter by type"></select></div>
+  <button id="refresh" class="btn" hidden><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span class="lbl">Refresh</span></button>
+  <span id="updated" class="updated"></span>
+</div></div>
+
+<main class="board"><div class="wrap">
+  <div class="tablewrap">
+    <table>
+      <thead><tr>
+        <th class="sortable" data-sort="name">Skill <span class="arrow"></span></th>
+        <th class="sortable" data-sort="category">Category <span class="arrow"></span></th>
+        <th class="sortable" data-sort="type">Type <span class="arrow"></span></th>
+        <th>Best for</th>
+        <th>Watch-outs</th>
+        <th class="sortable" data-sort="score">Score <span class="arrow"></span></th>
+        <th>Invoke</th>
+        <th class="sortable" data-sort="date_added">Added <span class="arrow"></span></th>
+        <th class="sortable" data-sort="date_updated">Updated <span class="arrow"></span></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
   </div>
-  <div class="chips" id="chips"></div>
-</div>
-<div class="count" id="count"></div>
-<main><div class="grid" id="grid"></div><div class="empty" id="empty" hidden>No skills match your search.</div></main>
-<footer>Regenerate with <code>./scripts/skills-db.sh build</code>. Score rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.</footer>
+  <div class="empty" id="empty" hidden>No skills match your filters.</div>
+  <footer id="foot"></footer>
+</div></main>
+
 <script>
 let DB = __DATA__;
 const LIVE = location.protocol !== "file:";
-const state = { q: "", cat: "All", sort: "rank" };
-const grid = document.getElementById("grid");
-const empty = document.getElementById("empty");
-const countEl = document.getElementById("count");
-const updatedEl = document.getElementById("updated");
-const refreshBtn = document.getElementById("refresh");
-
+const CAT_COLORS = ["#0f766e","#7c3aed","#c2410c","#2563eb","#5f7a33","#a1348a","#0e7490","#9a6b00"];
+const state = { q:"", cat:"All", type:"All", sort:"score", dir:-1 };
+const $ = id => document.getElementById(id);
+function esc(s){ return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function catColor(cat){ const i = DB.categories.indexOf(cat); return CAT_COLORS[(i<0?DB.categories.length:i)%CAT_COLORS.length]; }
 function tokenize(s){ return s.toLowerCase().split(/\s+/).filter(Boolean); }
 function relevance(sk, toks){
-  if(!toks.length) return 0;
-  let rel = 0;
-  const name = sk.name.toLowerCase(), desc = (sk.description||"").toLowerCase();
-  const cat = sk.category.toLowerCase(), best = (sk.best_for||[]).join(" ").toLowerCase();
-  const tags = (sk.tags||[]).join(" ").toLowerCase();
-  for(const t of toks){
-    if(t===name) rel+=100; else if(name.includes(t)) rel+=40;
-    if(desc.includes(t)) rel+=12;
-    if(cat.includes(t)) rel+=8;
-    if(best.includes(t)) rel+=6;
-    if(tags.includes(t)) rel+=4;
+  if(!toks.length) return 0; let r = 0;
+  const hay = [sk.name, sk.summary, sk.description, sk.best_use, sk.category, (sk.tags||[]).join(" ")].join(" \u0001 ").toLowerCase();
+  const name = sk.name.toLowerCase();
+  for(const t of toks){ if(t===name) r+=100; else if(name.includes(t)) r+=40; if(hay.includes(t)) r+=8; }
+  return r;
+}
+function types(){ return Array.from(new Set(DB.skills.map(s=>s.type).filter(Boolean))).sort(); }
+function fillFilters(){
+  const cat = $("fcat");
+  cat.innerHTML = ['<option value="All">All categories</option>']
+    .concat(DB.categories.map(c=>`<option value="${esc(c)}">${esc(c)} (${DB.counts_by_category[c]||0})</option>`)).join("");
+  cat.value = DB.categories.includes(state.cat) ? state.cat : "All";
+  const ty = $("ftype");
+  ty.innerHTML = ['<option value="All">All types</option>']
+    .concat(types().map(t=>`<option value="${esc(t)}">${esc(t)}</option>`)).join("");
+  ty.value = types().includes(state.type) ? state.type : "All";
+}
+function sortVal(sk){
+  switch(state.sort){
+    case "name": return sk.name.toLowerCase();
+    case "category": return String(DB.categories.indexOf(sk.category)).padStart(3,"0") + sk.name;
+    case "type": return (sk.type||"~") + sk.name;
+    case "date_added": return sk.date_added || "";
+    case "date_updated": return sk.date_updated || "";
+    default: return sk.score;
   }
-  return rel;
 }
-function esc(s){ return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
-
-function render(){
+function apply(){
   const toks = tokenize(state.q);
-  let rows = DB.skills.map(sk => ({ sk, rel: relevance(sk, toks) }));
-  if(toks.length) rows = rows.filter(r => r.rel > 0);
-  if(state.cat !== "All") rows = rows.filter(r => r.sk.category === state.cat);
+  let rows = DB.skills.map(sk=>({sk, rel:relevance(sk,toks)}));
+  if(toks.length) rows = rows.filter(r=>r.rel>0);
+  if(state.cat!=="All") rows = rows.filter(r=>r.sk.category===state.cat);
+  if(state.type!=="All") rows = rows.filter(r=>r.sk.type===state.type);
   rows.sort((a,b)=>{
-    if(toks.length && b.rel !== a.rel) return b.rel - a.rel;
-    if(state.sort === "name") return a.sk.name.localeCompare(b.sk.name);
-    if(state.sort === "category"){
-      if(a.sk.category !== b.sk.category) return DB.categories.indexOf(a.sk.category) - DB.categories.indexOf(b.sk.category);
-      return b.sk.score - a.sk.score;
-    }
-    return b.sk.score - a.sk.score || a.sk.name.localeCompare(b.sk.name);
+    if(toks.length && b.rel!==a.rel) return b.rel-a.rel;
+    const va=sortVal(a.sk), vb=sortVal(b.sk);
+    let c = va<vb?-1:va>vb?1:0;
+    if(c===0) c = b.sk.score-a.sk.score;
+    return c*state.dir;
   });
-  grid.innerHTML = rows.map(({sk}) => card(sk)).join("");
-  empty.hidden = rows.length > 0;
-  countEl.textContent = `${rows.length} of ${DB.total} skills`;
+  return rows.map(r=>r.sk);
 }
-function card(sk){
+function invokeCell(sk){ return sk.command ? `<span class="cmd">/${esc(sk.command)}</span>` : `<span class="model">model-invoked</span>`; }
+function proseCell(t){ return t ? `<div class="prose">${esc(t)}</div>` : `<div class="prose none">—</div>`; }
+function rowHTML(sk, idx){
+  const color = catColor(sk.category);
+  const main = `<tr class="row" data-idx="${idx}">
+    <td><div class="skill-name"><span class="chev">▶</span>${esc(sk.name)}</div><div class="skill-sum">${esc(sk.summary)}</div></td>
+    <td><span class="catcell"><span class="dot" style="background:${color}"></span>${esc(sk.category)}</span></td>
+    <td><span class="type-pill">${esc(sk.type||"—")}</span></td>
+    <td>${proseCell(sk.best_use)}</td>
+    <td>${proseCell(sk.watch_outs)}</td>
+    <td><div class="score"><span class="bar"><span style="width:${sk.score}%"></span></span><span class="num">${sk.score}</span></div></td>
+    <td>${invokeCell(sk)}</td>
+    <td class="date">${esc(sk.date_added||"—")}</td>
+    <td class="date">${esc(sk.date_updated||"—")}</td>
+  </tr>`;
   const badges = [];
-  if(sk.command) badges.push(`<span class="tag cmd">/${esc(sk.command)}</span>`);
-  if(sk.has_rule) badges.push(`<span class="tag rule">rule</span>`);
-  if(sk.has_scripts) badges.push(`<span class="tag">scripts</span>`);
-  if(sk.has_tests) badges.push(`<span class="tag">tests</span>`);
-  (sk.tags||[]).forEach(t => badges.push(`<span class="tag">${esc(t)}</span>`));
-  return `<div class="card">
-    <div class="card-top"><span class="name">${esc(sk.name)}</span><span class="rank">#${sk.rank_overall}</span></div>
-    <div class="cat">${esc(sk.category)}</div>
-    <div class="desc">${esc(sk.description)}</div>
-    <div class="tags">${badges.join("")}</div>
-    <div class="score-line"><span>Score</span><span>${sk.score}/100 · rank ${sk.rank_in_category} in category</span></div>
-    <div class="scorebar"><div class="scorefill" style="width:${sk.score}%"></div></div>
-  </div>`;
+  badges.push(`<span class="badge${sk.command?" on":""}">${sk.command?"/"+esc(sk.command):"no command"}</span>`);
+  badges.push(`<span class="badge${sk.has_rule?" on":""}">rule</span>`);
+  ["scripts","tests","examples","docs"].forEach(k=>{ if(sk["has_"+k]) badges.push(`<span class="badge on">${k}</span>`); });
+  if(sk.theme) badges.push(`<span class="badge">${esc(sk.theme)}</span>`);
+  const detail = `<tr class="detail" data-for="${idx}" hidden><td colspan="9"><div class="inner">
+    <div class="fb" style="grid-column:1/-1"><h4>WHAT IT IS</h4><p>${esc(sk.description)}</p></div>
+    <div class="fb"><h4>BEST USED FOR</h4><p>${sk.best_use?esc(sk.best_use):"—"}</p></div>
+    <div class="fb"><h4>WATCH-OUTS</h4><p>${sk.watch_outs?esc(sk.watch_outs):"No limits stated in the skill — check its SKILL.md."}</p></div>
+    <div class="fb"><h4>RANK</h4><p>#${sk.rank_overall} overall · #${sk.rank_in_category} in ${esc(sk.category)} · ${sk.score}/100</p></div>
+    <div class="fb"><h4>ADDED / UPDATED</h4><p>${esc(sk.date_added||"—")} → ${esc(sk.date_updated||"—")}</p></div>
+    <div class="fb"><h4>INVOKE</h4><p>${sk.command?"/"+esc(sk.command):"model-invoked"}${sk.argument_hint?" · "+esc(sk.argument_hint):""}</p></div>
+    <div class="fb" style="grid-column:1/-1"><h4>SIGNALS</h4><div class="badges">${badges.join("")}</div></div>
+  </div></td></tr>`;
+  return main + detail;
 }
-function buildChips(){
-  const cats = ["All", ...DB.categories];
-  const box = document.getElementById("chips");
-  box.innerHTML = cats.map(c => {
-    const n = c === "All" ? DB.total : (DB.counts_by_category[c]||0);
-    return `<span class="chip${c===state.cat?" active":""}" data-cat="${esc(c)}">${esc(c)} <span style="opacity:.6">${n}</span></span>`;
-  }).join("");
-  box.querySelectorAll(".chip").forEach(el => el.onclick = () => {
-    state.cat = el.dataset.cat;
-    box.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    el.classList.add("active"); render();
+function render(){
+  const rows = apply();
+  $("tbody").innerHTML = rows.map((sk,i)=>rowHTML(sk,i)).join("");
+  $("empty").hidden = rows.length>0;
+  $("foot").textContent = `Showing ${rows.length} of ${DB.total} skills. Score (0–100) rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.`;
+  document.querySelectorAll("thead th.sortable").forEach(th=>{
+    th.querySelector(".arrow").textContent = th.dataset.sort===state.sort ? (state.dir<0?"▼":"▲") : "";
+  });
+  document.querySelectorAll("tbody tr.row").forEach(tr=>{
+    tr.addEventListener("click", ()=>{
+      const d = document.querySelector(`tr.detail[data-for="${tr.dataset.idx}"]`);
+      if(d.hasAttribute("hidden")){ d.removeAttribute("hidden"); tr.classList.add("open"); }
+      else { d.setAttribute("hidden",""); tr.classList.remove("open"); }
+    });
   });
 }
-function stamp(label){
-  const t = new Date().toLocaleTimeString();
-  updatedEl.textContent = `${label} ${t} · ${DB.total} skills`;
+function setSort(key){
+  if(state.sort===key) state.dir *= -1;
+  else { state.sort = key; state.dir = (key==="name"||key==="category"||key==="type") ? 1 : -1; }
+  render();
 }
+function stamp(label){ $("updated").textContent = `${label} ${new Date().toLocaleTimeString()} · ${DB.total} skills`; }
+function counts(){ $("c-total").textContent = DB.total; $("c-cats").textContent = DB.categories.length; }
 async function fetchData(path){
-  const r = await fetch(path, { method: path.indexOf("refresh") >= 0 ? "POST" : "GET", cache: "no-store" });
-  if(!r.ok) throw new Error("HTTP " + r.status);
-  return await r.json();
+  const r = await fetch(path, { method: path.indexOf("refresh")>=0?"POST":"GET", cache:"no-store" });
+  if(!r.ok) throw new Error("HTTP "+r.status); return await r.json();
 }
 async function refresh(){
-  refreshBtn.disabled = true;
-  const original = refreshBtn.innerHTML;
-  refreshBtn.textContent = "Refreshing…";
-  try {
-    DB = await fetchData("/api/refresh");
-    if(!DB.categories.includes(state.cat)) state.cat = "All";
-    buildChips(); render(); stamp("Refreshed");
-  } catch(e) {
-    stamp("Refresh failed —");
-  } finally {
-    refreshBtn.disabled = false;
-    refreshBtn.innerHTML = original;
-  }
+  const btn = $("refresh"); btn.disabled = true; btn.classList.add("spin");
+  const lbl = btn.querySelector(".lbl"); lbl.textContent = "Refreshing…";
+  try { DB = await fetchData("/api/refresh"); if(!DB.categories.includes(state.cat)) state.cat="All"; fillFilters(); counts(); render(); stamp("Refreshed"); }
+  catch(e){ stamp("Refresh failed —"); }
+  finally { btn.disabled = false; btn.classList.remove("spin"); lbl.textContent = "Refresh"; }
 }
-document.getElementById("q").addEventListener("input", e => { state.q = e.target.value; render(); });
-document.getElementById("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
-
+$("q").addEventListener("input", e=>{ state.q=e.target.value; render(); });
+$("fcat").addEventListener("change", e=>{ state.cat=e.target.value; render(); });
+$("ftype").addEventListener("change", e=>{ state.type=e.target.value; render(); });
+document.querySelectorAll("thead th.sortable").forEach(th=> th.addEventListener("click", ()=>setSort(th.dataset.sort)));
 async function init(){
-  if(LIVE){
-    refreshBtn.hidden = false;
-    refreshBtn.addEventListener("click", refresh);
-    try { DB = await fetchData("/api/skills"); } catch(e) { /* fall back to embedded data */ }
-  }
-  buildChips(); render();
-  stamp(LIVE ? "Loaded" : "Snapshot");
+  if(LIVE){ const b=$("refresh"); b.hidden=false; b.addEventListener("click", refresh); try { DB = await fetchData("/api/skills"); } catch(e) {} }
+  fillFilters(); counts(); render(); stamp(LIVE ? "Loaded" : "Snapshot");
 }
 init();
 </script>

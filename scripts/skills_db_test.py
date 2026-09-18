@@ -9,6 +9,7 @@ rather than hard-coding the number of skills.
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import threading
 import unittest
@@ -92,14 +93,38 @@ class CategorizeTest(unittest.TestCase):
         )
 
 
+class DeriveTest(unittest.TestCase):
+    def test_summary_stops_at_use_cue(self):
+        d = "Does a specific thing well. Use when you need that thing."
+        self.assertEqual(skills_db.derive_summary(d), "Does a specific thing well.")
+
+    def test_best_use_prefers_best_for(self):
+        self.assertEqual(
+            skills_db.derive_best_use("whatever", ["Alpha", "Beta"]), "Alpha; Beta"
+        )
+
+    def test_best_use_falls_back_to_use_cue(self):
+        d = "A tool. Use when the build breaks."
+        self.assertEqual(skills_db.derive_best_use(d, []), "Use when the build breaks.")
+
+    def test_watch_outs_extracts_boundaries(self):
+        self.assertIn("Distinct from", skills_db.derive_watch_outs("Great. Distinct from the other one."))
+        self.assertTrue(skills_db.derive_watch_outs("Read-only on source; plans only."))
+
+    def test_watch_outs_ignores_descriptive_prose(self):
+        # "why something does not work" is description, not a boundary.
+        self.assertEqual(skills_db.derive_watch_outs("Explains why something does not work."), "")
+
+
 class ScoreTest(unittest.TestCase):
     def _skill(self, **kw):
         base = dict(
             name="x", source_root="skills", category="Engineering Workflow", type="",
-            theme="", description="", argument_hint="", best_for=[], command="",
-            has_command=False, has_rule=False, has_scripts=False, has_tests=False,
-            has_examples=False, has_docs=False, file_count=1, skill_md_bytes=1000,
-            in_catalog=False, in_readme=False,
+            theme="", description="", argument_hint="", best_for=[],
+            summary="", best_use="", watch_outs="", date_added="", date_updated="",
+            command="", has_command=False, has_rule=False, has_scripts=False,
+            has_tests=False, has_examples=False, has_docs=False, file_count=1,
+            skill_md_bytes=1000, in_catalog=False, in_readme=False,
         )
         base.update(kw)
         return skills_db.Skill(**base)
@@ -156,6 +181,13 @@ class RepoScanTest(unittest.TestCase):
         for s in self.skills:
             self.assertIn(s.source_root, skills_db.SKILL_ROOTS)
 
+    def test_dates_and_summary_present(self):
+        date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+        for s in self.skills:
+            self.assertTrue(date_re.match(s.date_added), f"{s.name} added={s.date_added!r}")
+            self.assertTrue(date_re.match(s.date_updated), f"{s.name} updated={s.date_updated!r}")
+            self.assertTrue(s.summary, f"{s.name} has empty summary")
+
     def test_command_linking_by_body_reference(self):
         self.assertEqual(self.by_name["plan-the-work"].command, "plan")
         self.assertEqual(self.by_name["debug-from-evidence"].command, "debug")
@@ -211,11 +243,27 @@ class BuildTest(unittest.TestCase):
         data = json.loads(html[start:end].replace("<\\/", "</"))
         self.assertEqual(data["total"], len(self.skills))
 
+    def test_index_includes_new_fields(self):
+        idx = skills_db.build_index(self.skills)
+        s = idx["skills"][0]
+        for key in ("summary", "best_use", "watch_outs", "date_added", "date_updated", "tags"):
+            self.assertIn(key, s)
+
     def test_html_has_refresh_and_live_api(self):
         html = skills_db.render_html(self.skills)
         self.assertIn('id="refresh"', html)
         self.assertIn("/api/refresh", html)
         self.assertIn("/api/skills", html)
+
+    def test_html_is_a_sortable_filterable_table(self):
+        html = skills_db.render_html(self.skills)
+        self.assertIn("<table>", html)
+        self.assertIn('data-sort="score"', html)
+        self.assertIn('data-sort="date_added"', html)
+        self.assertIn('id="fcat"', html)   # category filter
+        self.assertIn('id="ftype"', html)  # type filter
+        self.assertIn("Watch-outs", html)
+        self.assertIn("Best for", html)
 
     def test_markdown_has_present_categories(self):
         md = skills_db.render_markdown(self.skills)
