@@ -278,7 +278,7 @@ class BuildTest(unittest.TestCase):
         self.assertIn('[data-theme="verdant"]', html)
         self.assertIn('value="verdant"', html)
         self.assertIn("@font-face", html)
-        self.assertIn("Juturu", html)
+        self.assertIn("Space Grotesk", html)
         self.assertIn('id="ftheme"', html)
         # accessibility affordances
         self.assertIn("aria-sort", html)

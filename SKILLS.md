@@ -38,8 +38,8 @@ _Frame problems, run discovery, and shape product strategy before building._
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `product-strategy-session` | 75 | workflow | `/product-strategy-session`, rule | 2026-09-16 | 2026-09-16 | Run an end-to-end product strategy session across positioning, discovery, and roadmap planning. |
 | 2 | `board-room-strategy` | 55 | workflow | `/board-room-strategy`, rule | 2026-09-18 | 2026-09-18 | Run the Board Room Strategy pack from a messy executive ask to a decision-ready board deck. |
-| 3 | `user-story` | 53 | component | — | 2026-09-16 | 2026-09-16 | Create user stories with Mike Cohn format and Gherkin acceptance criteria. |
-| 4 | `tam-sam-som-calculator` | 52 | interactive | — | 2026-09-16 | 2026-09-16 | Calculate TAM, SAM, and SOM with explicit assumptions, methods, and caveats. |
+| 3 | `user-story` | 54 | component | — | 2026-09-16 | 2026-09-16 | Create user stories with Mike Cohn format and Gherkin acceptance criteria. |
+| 4 | `tam-sam-som-calculator` | 53 | interactive | — | 2026-09-16 | 2026-09-16 | Calculate TAM, SAM, and SOM with explicit assumptions, methods, and caveats. |
 | 5 | `walmart-ads-terminology` | 52 | — | `/walmart-ads-terminology`, rule | 2026-09-18 | 2026-09-18 | The canonical terminology, naming rules, and platform map for Walmart Global Ads advertiser-facing work. |
 | 6 | `epic-hypothesis` | 43 | component | — | 2026-09-16 | 2026-09-16 | Frame an epic as a testable hypothesis with target user, expected outcome, and validation method. |
 | 7 | `jobs-to-be-done` | 43 | component | — | 2026-09-16 | 2026-09-16 | Uncover customer jobs, pains, and gains in a structured JTBD format. |
