@@ -1,19 +1,32 @@
-/* Library UI — structural wireframe styles. Neutral by design (IA/UX focus;
-   brand/type/color polish is intentionally deferred). */
+/* Library UI — Verdant design system applied (see /DESIGN.md).
+   Space Grotesk (display) + Plus Jakarta Sans (body), botanical teal/emerald. */
+@font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+@font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
+@font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+@font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
+@font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
+@font-face { font-family:"Fraunces"; src:url("fonts/Fraunces-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
 :root {
-  --bg: #f6f8f8; --surface: #ffffff; --surface-2: #f1f5f4;
-  --ink: #16232a; --muted: #55666d; --faint: #8a969c;
-  --line: #e5ebe9; --line-strong: #d3dcd9;
-  --accent: #0f766e; --accent-ink: #0b544e; --accent-wash: #e6f2f0;
+  --bg: #f4faf8; --surface: #ffffff; --surface-2: #ecfbf4;
+  --ink: #0c2a30; --muted: #48696b; --faint: #7fa1a1;
+  --line: #dcece7; --line-strong: #c3ded6;
+  --accent: #0e7490; --accent-ink: #06323d; --accent-wash: #d7eef0;
   --warn: #b5730d; --warn-wash: #fdecc8; --danger: #c23b1e; --danger-wash: #fbe3db;
-  --shadow-1: 0 1px 2px rgba(16,35,42,.05);
-  --shadow-2: 0 8px 30px rgba(16,35,42,.12);
+  --shadow-1: 0 1px 2px rgba(8,51,68,.05);
+  --shadow-2: 0 10px 34px rgba(8,51,68,.14);
   --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
   --nav-w: 232px; --max: 1180px;
-  --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ui: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --serif: "Fraunces", Georgia, serif;
   --ease: cubic-bezier(.32,.72,0,1);
   color-scheme: light;
 }
+h1, h2, .brand, .page-head h1, .drawer h2, .modal .mhead h2, .summary .s .n, .card .name, .empty h3 { font-family: var(--display); }
+.brand .mark { background: linear-gradient(135deg, var(--accent), #34d399); }
+.progress > span, .bar > span { background: linear-gradient(90deg, var(--accent), #34d399); }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: var(--ui); background: var(--bg); color: var(--ink);
   font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
