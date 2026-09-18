@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Thin launcher for ai-lib. Put this dir on your PATH, or symlink it:
+#   ln -s "$PWD/tools/ai-lib/ai-lib" ~/.local/bin/ai-lib
+set -euo pipefail
+exec python3 "$(cd "$(dirname "$0")" && pwd)/ai_lib.py" "$@"
