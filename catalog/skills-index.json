@@ -22,18 +22,19 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 48,
+  "total": 50,
   "counts_by_category": {
     "Product & Discovery": 18,
-    "Design & Frontend": 9,
+    "Design & Frontend": 10,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 6,
-    "Engineering Workflow": 5,
+    "Engineering Workflow": 6,
     "Setup & Install": 4
   },
   "skills": [
     {
       "name": "frontend-slides-editable",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -70,6 +71,7 @@
     },
     {
       "name": "html-ppt",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -106,6 +108,7 @@
     },
     {
       "name": "hyperframes-animation",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -142,6 +145,7 @@
     },
     {
       "name": "lark-slides",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -178,6 +182,7 @@
     },
     {
       "name": "product-strategy-session",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "workflow",
       "theme": "strategy-positioning",
@@ -218,6 +223,7 @@
     },
     {
       "name": "canvas-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -254,6 +260,7 @@
     },
     {
       "name": "find-animation-opportunities",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -290,6 +297,7 @@
     },
     {
       "name": "improve-animations",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -326,6 +334,7 @@
     },
     {
       "name": "review-animations",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -362,6 +371,7 @@
     },
     {
       "name": "remotion-best-practices",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -398,6 +408,7 @@
     },
     {
       "name": "high-end-visual-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -434,6 +445,7 @@
     },
     {
       "name": "taste-skill",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -470,6 +482,7 @@
     },
     {
       "name": "apple-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -506,6 +519,7 @@
     },
     {
       "name": "design-system",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -542,6 +556,7 @@
     },
     {
       "name": "frontend-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -578,6 +593,7 @@
     },
     {
       "name": "slides",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -614,6 +630,7 @@
     },
     {
       "name": "user-story",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -654,6 +671,7 @@
     },
     {
       "name": "tam-sam-som-calculator",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "market-intelligence",
@@ -694,6 +712,7 @@
     },
     {
       "name": "html-diagram",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -729,7 +748,45 @@
       "rank_in_category": 5
     },
     {
+      "name": "pm-handoff",
+      "source_root": "skills",
+      "category": "Engineering Workflow",
+      "type": "",
+      "theme": "",
+      "description": "Compact the current conversation into a handoff document for another agent or session to pick up, with suggested skills and redacted sensitive data. Use when handing work to a fresh agent, ending a session, or writing a pickup brief. Upstream CLI name is `handoff`.",
+      "argument_hint": "What will the next session be used for?",
+      "best_for": [],
+      "command": "pm-handoff",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 4,
+      "skill_md_bytes": 2055,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 46,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 4,
+        "breadth": 4,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 20,
+      "rank_in_category": 1
+    },
+    {
       "name": "hyperframes-core",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -761,11 +818,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 20,
+      "rank_overall": 21,
       "rank_in_category": 6
     },
     {
       "name": "install-open-design",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -797,11 +855,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 21,
+      "rank_overall": 22,
       "rank_in_category": 1
     },
     {
       "name": "epic-hypothesis",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -837,11 +896,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 22,
+      "rank_overall": 23,
       "rank_in_category": 4
     },
     {
       "name": "jobs-to-be-done",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -877,11 +937,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 23,
+      "rank_overall": 24,
       "rank_in_category": 5
     },
     {
       "name": "press-release",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -917,11 +978,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 24,
+      "rank_overall": 25,
       "rank_in_category": 6
     },
     {
       "name": "problem-statement",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -957,11 +1019,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 25,
+      "rank_overall": 26,
       "rank_in_category": 7
     },
     {
       "name": "proto-persona",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -997,11 +1060,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 26,
+      "rank_overall": 27,
       "rank_in_category": 8
     },
     {
       "name": "react-bits",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1033,11 +1097,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 27,
+      "rank_overall": 28,
       "rank_in_category": 7
     },
     {
       "name": "lean-ux-canvas",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "validation-experiments",
@@ -1073,11 +1138,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 28,
+      "rank_overall": 29,
       "rank_in_category": 9
     },
     {
       "name": "opportunity-solution-tree",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1113,11 +1179,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 29,
+      "rank_overall": 30,
       "rank_in_category": 10
     },
     {
       "name": "problem-framing-canvas",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1153,11 +1220,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 30,
+      "rank_overall": 31,
       "rank_in_category": 11
     },
     {
       "name": "web-design-guidelines",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1189,11 +1257,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 31,
+      "rank_overall": 32,
       "rank_in_category": 8
     },
     {
       "name": "design-artifact",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1225,11 +1294,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 32,
+      "rank_overall": 33,
       "rank_in_category": 9
     },
     {
       "name": "user-story-mapping-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1265,11 +1335,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 33,
+      "rank_overall": 34,
       "rank_in_category": 12
     },
     {
       "name": "customer-journey-mapping-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1305,11 +1376,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 34,
+      "rank_overall": 35,
       "rank_in_category": 13
     },
     {
       "name": "discovery-interview-prep",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1345,11 +1417,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 36,
       "rank_in_category": 14
     },
     {
       "name": "epic-breakdown-advisor",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "pm-artifacts",
@@ -1385,11 +1458,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
+      "rank_overall": 37,
       "rank_in_category": 15
     },
     {
       "name": "install-github-skills",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -1404,7 +1478,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 4902,
+      "skill_md_bytes": 5039,
       "in_catalog": false,
       "in_readme": true,
       "score": 35,
@@ -1421,11 +1495,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 37,
+      "rank_overall": 38,
       "rank_in_category": 2
     },
     {
       "name": "positioning-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1461,11 +1536,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 38,
+      "rank_overall": 39,
       "rank_in_category": 16
     },
     {
       "name": "prioritization-advisor",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "strategy-positioning",
@@ -1501,11 +1577,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 39,
+      "rank_overall": 40,
       "rank_in_category": 17
     },
     {
       "name": "workshop-facilitation",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1541,11 +1618,12 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 40,
+      "rank_overall": 41,
       "rank_in_category": 18
     },
     {
       "name": "install-impeccable",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -1577,11 +1655,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 41,
+      "rank_overall": 42,
       "rank_in_category": 3
     },
     {
       "name": "capture-a-skill",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1613,11 +1692,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 42,
-      "rank_in_category": 1
+      "rank_overall": 43,
+      "rank_in_category": 2
     },
     {
       "name": "debug-from-evidence",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1649,11 +1729,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 43,
-      "rank_in_category": 2
+      "rank_overall": 44,
+      "rank_in_category": 3
     },
     {
       "name": "plan-the-work",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1685,11 +1766,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 44,
-      "rank_in_category": 3
+      "rank_overall": 45,
+      "rank_in_category": 4
     },
     {
       "name": "review-the-diff",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1721,11 +1803,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 45,
-      "rank_in_category": 4
+      "rank_overall": 46,
+      "rank_in_category": 5
     },
     {
       "name": "ship-the-change",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1757,11 +1840,12 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 46,
-      "rank_in_category": 5
+      "rank_overall": 47,
+      "rank_in_category": 6
     },
     {
       "name": "lark-shared",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -1793,11 +1877,49 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 6
     },
     {
+      "name": "gpt-taste",
+      "source_root": ".agents/skills",
+      "category": "Design & Frontend",
+      "type": "",
+      "theme": "",
+      "description": "Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for layout variance, strict AIDA page structure, wide editorial typography (bans 6-line wraps), gapless bento grids, strict GSAP ScrollTriggers (pinning, stacking, scrubbing), inline micro-images, and massive section spacing.",
+      "argument_hint": "",
+      "best_for": [],
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 7857,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 23,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 15,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 49,
+      "rank_in_category": 10
+    },
+    {
       "name": "install-work-kit",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -1812,7 +1934,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2377,
+      "skill_md_bytes": 2392,
       "in_catalog": false,
       "in_readme": true,
       "score": 17,
@@ -1829,7 +1951,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 48,
+      "rank_overall": 50,
       "rank_in_category": 4
     }
   ]
