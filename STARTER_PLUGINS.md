@@ -54,6 +54,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Remotion Best Practices](https://www.skills.sh/remotion-dev/skills/remotion-best-practices) routes Remotion React-video work to nested topic files. Invoke `/remotion-best-practices`. Distinct from `/hyperframes-animation`. Details: `skills/remotion-best-practices/SKILL.md`.
 
+[Design Engineering](https://aiuxplayground.com/skills/emil-design-eng) is Emil Kowalski's UI polish, component, and motion bar. Invoke `/emil-design-eng`. Distinct from `/review-animations` and `/frontend-design`. Details: `skills/emil-design-eng/SKILL.md`.
+
 [Review Animations](https://www.skills.sh/emilkowalski/skills/review-animations) reviews motion code against Emil Kowalski's craft bar. Invoke `/review-animations`. Distinct from `/review-the-diff` and `/improve-animations`. Details: `skills/review-animations/SKILL.md`.
 
 [Improve Animations](https://www.skills.sh/emilkowalski/skills/improve-animations) audits a codebase's motion, then writes self-contained plans. Invoke `/improve-animations`. Read-only on source. Distinct from `/review-animations`. Details: `skills/improve-animations/SKILL.md`.

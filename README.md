@@ -4,6 +4,12 @@ A personal Cursor plugin for **every** project: plan first, debug from evidence,
 
 Public GitHub home: **[github.com/Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skills)**.
 
+> **Library system.** This repo is organized as a composable library — Prompts,
+> Skills, Workflows, and Global instructions. See **[LIBRARY.md](LIBRARY.md)** for
+> the model, **[AGENTS.md](AGENTS.md)** / **[DESIGN.md](DESIGN.md)** / **[CLAUDE.md](CLAUDE.md)**
+> for global context, and **[tools/ai-lib](tools/ai-lib/README.md)** to install
+> new prompts/skills/workflows from a folder, zip, or GitHub URL.
+
 Install it once at **user** scope. Do not copy these files into each repo.
 
 ## Install from GitHub (desktop skill library)
@@ -41,8 +47,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -185,6 +191,8 @@ AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.
 | Skill | `hyperframes-core` | Composition contract sibling for `/hyperframes-animation` |
 | Skill | `remotion-best-practices` | Router for Remotion React video skills |
 | Rule | `remotion-best-practices` | Agent-decides — Remotion video, not HyperFrames or web UI |
+| Skill | `emil-design-eng` | Emil Kowalski design engineering bar for UI polish and motion |
+| Rule | `emil-design-eng` | Agent-decides — UI craft; not backend or general diffs |
 | Skill | `review-animations` | Review motion code against Emil Kowalski's craft bar |
 | Rule | `review-animations` | Agent-decides — animation review only, not general diffs |
 | Skill | `improve-animations` | Audit motion across a codebase, then write execution plans |

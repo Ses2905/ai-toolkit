@@ -233,6 +233,10 @@
         },
         {
           "source": "emilkowalski-skills",
+          "path": "emil-design-eng"
+        },
+        {
+          "source": "emilkowalski-skills",
           "path": "review-animations"
         },
         {
@@ -523,6 +527,15 @@
         {
           "source": "remotion-dev-skills",
           "path": "remotion-best-practices"
+        }
+      ]
+    },
+    "emil-design-eng": {
+      "description": "Emil Kowalski design engineering bar for UI polish, components, and motion (MIT).",
+      "skills": [
+        {
+          "source": "emilkowalski-skills",
+          "path": "emil-design-eng"
         }
       ]
     },
