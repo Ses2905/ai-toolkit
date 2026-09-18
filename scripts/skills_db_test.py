@@ -272,14 +272,24 @@ class BuildTest(unittest.TestCase):
 
     def test_html_theming_and_accessibility(self):
         html = skills_db.render_html(self.skills)
-        # multi-theme token system + switcher (incl. the applied Verdant theme)
+        # multi-theme token system + switcher
         self.assertIn('[data-theme="slate"]', html)
         self.assertIn('[data-theme="nocturne"]', html)
+        # Verdant stays defined (backend brand theme) but is NOT a user-facing option.
         self.assertIn('[data-theme="verdant"]', html)
-        self.assertIn('value="verdant"', html)
+        self.assertNotIn('value="verdant"', html)
         self.assertIn("@font-face", html)
         self.assertIn("Space Grotesk", html)
         self.assertIn('id="ftheme"', html)
+
+    def test_header_and_settings(self):
+        html = skills_db.render_html(self.skills)
+        # "Work Kit" eyebrow removed — straight into the title.
+        self.assertNotIn('class="eyebrow"', html)
+        self.assertIn("<h1>Skills Field Guide</h1>", html)
+        # theme control moved into an admin/settings panel.
+        self.assertIn('id="admin"', html)
+        self.assertIn("Admin", html)
         # accessibility affordances
         self.assertIn("aria-sort", html)
         self.assertIn("th-sort", html)               # sort headers are buttons
