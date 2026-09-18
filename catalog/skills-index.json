@@ -6,8 +6,7 @@
     "Motion & Animation",
     "Presentations & Diagrams",
     "Engineering Workflow",
-    "Setup & Install",
-    "Uncategorized"
+    "Setup & Install"
   ],
   "kinds": [
     "skill",
@@ -27,19 +26,18 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 80,
+  "total": 78,
   "counts_by_category": {
-    "Product & Discovery": 20,
-    "Design & Frontend": 19,
+    "Product & Discovery": 28,
+    "Design & Frontend": 14,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 9,
-    "Engineering Workflow": 11,
-    "Setup & Install": 5,
-    "Uncategorized": 10
+    "Engineering Workflow": 17,
+    "Setup & Install": 4
   },
   "counts_by_kind": {
     "skill": 52,
-    "prompt": 28
+    "prompt": 26
   },
   "skills": [
     {
@@ -2285,7 +2283,7 @@
     {
       "name": "a11y-audit",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Run an accessibility audit on the current project for WCAG compliance.",
@@ -2322,7 +2320,7 @@
         "readme": 0
       },
       "rank_overall": 50,
-      "rank_in_category": 1,
+      "rank_in_category": 7,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2332,7 +2330,7 @@
     {
       "name": "code-to-prd",
       "source_root": "prompts/commands",
-      "category": "Design & Frontend",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "product",
       "description": "Reverse-engineer a Product Requirements Document from existing code.",
@@ -2379,7 +2377,7 @@
     {
       "name": "financial-health",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Assess financial health of a SaaS business using key metrics.",
@@ -2416,7 +2414,7 @@
         "readme": 0
       },
       "rank_overall": 52,
-      "rank_in_category": 2,
+      "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2426,7 +2424,7 @@
     {
       "name": "focused-fix",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Apply a focused, minimal-change bugfix with minimal blast radius.",
@@ -2463,7 +2461,7 @@
         "readme": 0
       },
       "rank_overall": 53,
-      "rank_in_category": 3,
+      "rank_in_category": 8,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2554,7 +2552,7 @@
         "readme": 0
       },
       "rank_overall": 55,
-      "rank_in_category": 7,
+      "rank_in_category": 9,
       "kind": "skill",
       "tags": [
         "skill"
@@ -2563,7 +2561,7 @@
     {
       "name": "okr",
       "source_root": "prompts/commands",
-      "category": "Engineering Workflow",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Create or review OKRs (Objectives and Key Results).",
@@ -2600,7 +2598,7 @@
         "readme": 0
       },
       "rank_overall": 56,
-      "rank_in_category": 8,
+      "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2647,7 +2645,7 @@
         "readme": 0
       },
       "rank_overall": 57,
-      "rank_in_category": 14,
+      "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2657,7 +2655,7 @@
     {
       "name": "pipeline",
       "source_root": "prompts/commands",
-      "category": "Design & Frontend",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Design or review a CI/CD pipeline for the current project.",
@@ -2694,7 +2692,7 @@
         "readme": 0
       },
       "rank_overall": 58,
-      "rank_in_category": 15,
+      "rank_in_category": 10,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2704,7 +2702,7 @@
     {
       "name": "plugin-audit",
       "source_root": "prompts/commands",
-      "category": "Setup & Install",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Audit installed plugins, extensions, and dependencies for security and health.",
@@ -2741,7 +2739,7 @@
         "readme": 0
       },
       "rank_overall": 59,
-      "rank_in_category": 4,
+      "rank_in_category": 11,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2751,7 +2749,7 @@
     {
       "name": "prd",
       "source_root": "prompts/commands",
-      "category": "Design & Frontend",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "product",
       "description": "Create a Product Requirements Document from scratch.",
@@ -2788,7 +2786,7 @@
         "readme": 0
       },
       "rank_overall": 60,
-      "rank_in_category": 16,
+      "rank_in_category": 18,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2835,7 +2833,7 @@
         "readme": 0
       },
       "rank_overall": 61,
-      "rank_in_category": 9,
+      "rank_in_category": 12,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2845,7 +2843,7 @@
     {
       "name": "retro",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Run a sprint retrospective with data-driven insights from git history.",
@@ -2882,7 +2880,7 @@
         "readme": 0
       },
       "rank_overall": 62,
-      "rank_in_category": 4,
+      "rank_in_category": 19,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2892,7 +2890,7 @@
     {
       "name": "saas-health",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Generate a SaaS health dashboard with key business metrics.",
@@ -2929,7 +2927,7 @@
         "readme": 0
       },
       "rank_overall": 63,
-      "rank_in_category": 5,
+      "rank_in_category": 20,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2939,7 +2937,7 @@
     {
       "name": "seo-auditor",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Run an SEO audit on web content and HTML files.",
@@ -2976,7 +2974,7 @@
         "readme": 0
       },
       "rank_overall": 64,
-      "rank_in_category": 6,
+      "rank_in_category": 13,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -2986,7 +2984,7 @@
     {
       "name": "sprint-health",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Check current sprint health and identify risks.",
@@ -3023,7 +3021,7 @@
         "readme": 0
       },
       "rank_overall": 65,
-      "rank_in_category": 7,
+      "rank_in_category": 21,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3033,7 +3031,7 @@
     {
       "name": "sprint-plan",
       "source_root": "prompts/commands",
-      "category": "Engineering Workflow",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Plan a sprint by analyzing backlog, estimating capacity, and selecting work.",
@@ -3070,7 +3068,7 @@
         "readme": 0
       },
       "rank_overall": 66,
-      "rank_in_category": 10,
+      "rank_in_category": 22,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3080,7 +3078,7 @@
     {
       "name": "tdd",
       "source_root": "prompts/commands",
-      "category": "Design & Frontend",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Guide a Test-Driven Development workflow for the current task.",
@@ -3117,7 +3115,7 @@
         "readme": 0
       },
       "rank_overall": 67,
-      "rank_in_category": 17,
+      "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3127,7 +3125,7 @@
     {
       "name": "tech-debt",
       "source_root": "prompts/commands",
-      "category": "Product & Discovery",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Scan and prioritize technical debt in the codebase.",
@@ -3174,7 +3172,7 @@
     {
       "name": "changelog",
       "source_root": "prompts/commands",
-      "category": "Uncategorized",
+      "category": "Engineering Workflow",
       "type": "prompt",
       "theme": "engineering",
       "description": "Generate a changelog from git history since the last tag or release.",
@@ -3211,7 +3209,7 @@
         "readme": 0
       },
       "rank_overall": 69,
-      "rank_in_category": 8,
+      "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3221,7 +3219,7 @@
     {
       "name": "competitive-matrix",
       "source_root": "prompts/commands",
-      "category": "Design & Frontend",
+      "category": "Product & Discovery",
       "type": "prompt",
       "theme": "strategy",
       "description": "Build a competitive analysis matrix comparing products or tools.",
@@ -3258,7 +3256,7 @@
         "readme": 0
       },
       "rank_overall": 70,
-      "rank_in_category": 18,
+      "rank_in_category": 23,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3305,7 +3303,7 @@
         "readme": 0
       },
       "rank_overall": 71,
-      "rank_in_category": 16,
+      "rank_in_category": 24,
       "kind": "prompt",
       "tags": [
         "prompt",
@@ -3352,7 +3350,7 @@
         "readme": 0
       },
       "rank_overall": 72,
-      "rank_in_category": 17,
+      "rank_in_category": 25,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3398,7 +3396,7 @@
         "readme": 0
       },
       "rank_overall": 73,
-      "rank_in_category": 18,
+      "rank_in_category": 26,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3444,7 +3442,7 @@
         "readme": 0
       },
       "rank_overall": 74,
-      "rank_in_category": 19,
+      "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3490,7 +3488,7 @@
         "readme": 0
       },
       "rank_overall": 75,
-      "rank_in_category": 19,
+      "rank_in_category": 27,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3536,7 +3534,7 @@
         "readme": 0
       },
       "rank_overall": 76,
-      "rank_in_category": 20,
+      "rank_in_category": 28,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3582,99 +3580,7 @@
         "readme": 0
       },
       "rank_overall": 77,
-      "rank_in_category": 11,
-      "kind": "prompt",
-      "tags": [
-        "prompt"
-      ]
-    },
-    {
-      "name": "new-prompt",
-      "source_root": "prompts/commands",
-      "category": "Uncategorized",
-      "type": "prompt",
-      "theme": "",
-      "description": "Save the pasted text as a reusable Prompt Kit slash command",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Save the pasted text as a reusable Prompt Kit slash command",
-      "best_use": "",
-      "watch_outs": "",
-      "date_added": "2026-09-18",
-      "date_updated": "2026-09-18",
-      "command": "new-prompt",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 283,
-      "in_catalog": false,
-      "in_readme": false,
-      "score": 20,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 1,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 0
-      },
-      "rank_overall": 78,
-      "rank_in_category": 9,
-      "kind": "prompt",
-      "tags": [
-        "prompt"
-      ]
-    },
-    {
-      "name": "sort-skill-or-prompt",
-      "source_root": "prompts/commands",
-      "category": "Uncategorized",
-      "type": "prompt",
-      "theme": "",
-      "description": "Classify a dump as a prompt, skill, or rule before saving it",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Classify a dump as a prompt, skill, or rule before saving it",
-      "best_use": "",
-      "watch_outs": "",
-      "date_added": "2026-09-18",
-      "date_updated": "2026-09-18",
-      "command": "sort-skill-or-prompt",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 242,
-      "in_catalog": false,
-      "in_readme": false,
-      "score": 19,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 0,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 0
-      },
-      "rank_overall": 79,
-      "rank_in_category": 10,
+      "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
         "prompt"
@@ -3719,8 +3625,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 80,
-      "rank_in_category": 5,
+      "rank_overall": 78,
+      "rank_in_category": 4,
       "kind": "skill",
       "tags": []
     }

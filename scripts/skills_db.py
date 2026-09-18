@@ -58,6 +58,11 @@ CATEGORY_BY_THEME: dict[str, str] = {
     "validation-experiments": "Product & Discovery",
     "market-intelligence": "Product & Discovery",
     "workshops-facilitation": "Product & Discovery",
+    # Prompt Kit themes (prompts carry a coarse `theme` in front-matter).
+    "product": "Product & Discovery",
+    "strategy": "Product & Discovery",
+    "research": "Product & Discovery",
+    "engineering": "Engineering Workflow",
 }
 
 # Explicit overrides for skills whose category is unambiguous by name.
