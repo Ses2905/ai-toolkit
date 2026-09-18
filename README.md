@@ -4,6 +4,12 @@ A personal Cursor plugin for **every** project: plan first, debug from evidence,
 
 Public GitHub home: **[github.com/Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skills)**.
 
+> **Library system.** This repo is organized as a composable library — Prompts,
+> Skills, Workflows, and Global instructions. See **[LIBRARY.md](LIBRARY.md)** for
+> the model, **[AGENTS.md](AGENTS.md)** / **[DESIGN.md](DESIGN.md)** / **[CLAUDE.md](CLAUDE.md)**
+> for global context, and **[tools/ai-lib](tools/ai-lib/README.md)** to install
+> new prompts/skills/workflows from a folder, zip, or GitHub URL.
+
 Install it once at **user** scope. Do not copy these files into each repo.
 
 ## Install from GitHub (desktop skill library)
