@@ -52,6 +52,8 @@ Then **Settings → Agents → Context and Tools → Sync Skills for Cloud Agent
 
 Repo-specific knowledge still belongs in that repo (`AGENTS.md`, `.cursor/rules`, `.cursor/skills`).
 
+Do not commit `.agents/skills/` or `skills-lock.json`. Playground `npx skills add` dumps there for local use; this plugin's catalog is `skills/`.
+
 ## GitHub catalogs
 
 ```bash

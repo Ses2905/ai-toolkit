@@ -28,9 +28,10 @@ except ImportError:  # pragma: no cover - exercised only without PyYAML
     yaml = None
 
 
-# Directories (repo-relative) scanned for `*/SKILL.md`. Add new roots here as
-# the kit grows; both are scanned so nothing is missed.
-SKILL_ROOTS: list[str] = ["skills", ".agents/skills"]
+# Directories (repo-relative) scanned for `*/SKILL.md`. The kit vendors its
+# skills under skills/; `.agents/` is a `npx skills add` dump and is gitignored,
+# so it is intentionally not scanned. Add new first-class roots here as needed.
+SKILL_ROOTS: list[str] = ["skills"]
 
 
 # --- Taxonomy -------------------------------------------------------------
@@ -124,7 +125,7 @@ CATEGORY_BLURB: dict[str, str] = {
     "Design & Frontend": "Distinctive UI, design systems, typography, and visual direction.",
     "Motion & Animation": "Add, audit, and review motion with a craft bar for animation.",
     "Presentations & Diagrams": "Build editable decks, HTML presentations, and self-contained diagrams.",
-    "Engineering Workflow": "Plan, debug from evidence, review the diff, and ship clean changes.",
+    "Engineering Workflow": "Plan, debug from evidence, review the diff, ship a clean commit, and hand off a session.",
     "Setup & Install": "Install this kit and pull in external skill catalogs and tools.",
 }
 

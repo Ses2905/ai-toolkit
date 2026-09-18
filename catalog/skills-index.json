@@ -22,10 +22,10 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 50,
+  "total": 49,
   "counts_by_category": {
     "Product & Discovery": 18,
-    "Design & Frontend": 10,
+    "Design & Frontend": 9,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 6,
     "Engineering Workflow": 6,
@@ -1298,6 +1298,43 @@
       "rank_in_category": 9
     },
     {
+      "name": "install-github-skills",
+      "source_root": "skills",
+      "category": "Setup & Install",
+      "type": "",
+      "theme": "",
+      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "argument_hint": "",
+      "best_for": [],
+      "command": "install-github-skills",
+      "has_command": true,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 5439,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 37,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 11,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 34,
+      "rank_in_category": 2
+    },
+    {
       "name": "user-story-mapping-workshop",
       "source_root": "skills",
       "category": "Product & Discovery",
@@ -1335,7 +1372,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 34,
+      "rank_overall": 35,
       "rank_in_category": 12
     },
     {
@@ -1376,7 +1413,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 36,
       "rank_in_category": 13
     },
     {
@@ -1417,7 +1454,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
+      "rank_overall": 37,
       "rank_in_category": 14
     },
     {
@@ -1458,45 +1495,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 37,
-      "rank_in_category": 15
-    },
-    {
-      "name": "install-github-skills",
-      "source_root": "skills",
-      "category": "Setup & Install",
-      "type": "",
-      "theme": "",
-      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "argument_hint": "",
-      "best_for": [],
-      "command": "install-github-skills",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 5039,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 35,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 10,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
       "rank_overall": 38,
-      "rank_in_category": 2
+      "rank_in_category": 15
     },
     {
       "name": "positioning-workshop",
@@ -1881,43 +1881,6 @@
       "rank_in_category": 6
     },
     {
-      "name": "gpt-taste",
-      "source_root": ".agents/skills",
-      "category": "Design & Frontend",
-      "type": "",
-      "theme": "",
-      "description": "Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for layout variance, strict AIDA page structure, wide editorial typography (bans 6-line wraps), gapless bento grids, strict GSAP ScrollTriggers (pinning, stacking, scrubbing), inline micro-images, and massive section spacing.",
-      "argument_hint": "",
-      "best_for": [],
-      "command": "",
-      "has_command": false,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 7857,
-      "in_catalog": false,
-      "in_readme": false,
-      "score": 23,
-      "score_breakdown": {
-        "command": 0,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 15,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 0
-      },
-      "rank_overall": 49,
-      "rank_in_category": 10
-    },
-    {
       "name": "install-work-kit",
       "source_root": "skills",
       "category": "Setup & Install",
@@ -1934,7 +1897,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2392,
+      "skill_md_bytes": 2539,
       "in_catalog": false,
       "in_readme": true,
       "score": 17,
@@ -1951,7 +1914,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 50,
+      "rank_overall": 49,
       "rank_in_category": 4
     }
   ]

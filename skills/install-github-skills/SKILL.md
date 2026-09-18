@@ -103,3 +103,7 @@ The destination folder name must match the `name` frontmatter in `SKILL.md`.
 ## Project-only
 
 Copy into that repo's `.cursor/skills/<skill-name>/` and commit it. Do not vendor catalog skills into work-kit unless the user asked to pin them here.
+
+## Do not commit Playground dumps
+
+`npx skills add` from [AI UX Playground](https://aiuxplayground.com) copies into `.agents/skills/` and writes `skills-lock.json`. That is a local leftover, not the plugin catalog. Work Kit vendors chosen skills under `skills/<name>/`. `.agents/` and `skills-lock.json` are gitignored. Do not keep a second copy of taste (`gpt-taste`) next to `skills/taste-skill`.

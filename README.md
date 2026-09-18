@@ -68,8 +68,8 @@ That installs design-system, visual QA, motion, presentation, copy, and product-
 
 ## Skills database (find a skill)
 
-Every skill (under `skills/` and `.agents/skills/`) is indexed into a
-searchable, categorized, and ranked database.
+Every skill under `skills/` is indexed into a searchable, categorized, and
+ranked database.
 
 **Interactive app (recommended).** Run the local server and open the page — it
 has live search, category filters, rank sorting, and a **Refresh** button that
@@ -120,6 +120,8 @@ Cloud VMs do not see `~/.cursor/plugins/local`. To reuse the skills there:
 Then **Settings → Agents → Context and Tools → Sync Skills for Cloud Agents**.
 
 Keep repo-specific knowledge in that repo (`AGENTS.md`, `.cursor/rules`, `.cursor/skills`).
+
+AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.json`. Those are local leftovers and are gitignored. Vendor a skill into this plugin at `skills/<name>/`; do not commit a second catalog root. Taste is `skills/taste-skill`, not `.agents/skills/gpt-taste`.
 
 ## What you get
 

@@ -9,4 +9,4 @@ Help the user find the right Work Kit skill for their task.
 2. If they want to browse instead of search, run `./scripts/skills-db.sh list` (categorized + ranked) or `./scripts/skills-db.sh stats`. For an interactive UI, run `./scripts/skills-db.sh serve` and open the printed URL — it has search, filters, sorting, and a Refresh button that rescans skills live.
 3. Recommend the top match, say how to invoke it (its `/command` when present, otherwise it is model-invoked), and read that skill's `SKILL.md` before acting.
 
-The database is generated from every skill under `skills/` and `.agents/skills/`. The served app's Refresh button (or `./scripts/skills-db.sh build`) regenerates the committed catalog (`SKILLS.md`, `skills-database.html`, `catalog/skills-index.json`) after you add or change skills.
+The database is generated from every skill under `skills/`. The served app's Refresh button (or `./scripts/skills-db.sh build`) regenerates the committed catalog (`SKILLS.md`, `skills-database.html`, `catalog/skills-index.json`) after you add or change skills.

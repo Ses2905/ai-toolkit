@@ -151,11 +151,10 @@ class RepoScanTest(unittest.TestCase):
             if name in self.by_name:
                 self.assertEqual(self.by_name[name].category, cat, name)
 
-    def test_multi_root_scanning(self):
-        # gpt-taste lives under .agents/skills; it must be discovered with its root.
-        if ".agents/skills" in skills_db.SKILL_ROOTS and (ROOT / ".agents/skills").is_dir():
-            self.assertIn("gpt-taste", self.by_name)
-            self.assertEqual(self.by_name["gpt-taste"].source_root, ".agents/skills")
+    def test_source_root_is_a_known_root(self):
+        # Every discovered skill records the SKILL_ROOTS entry it came from.
+        for s in self.skills:
+            self.assertIn(s.source_root, skills_db.SKILL_ROOTS)
 
     def test_command_linking_by_body_reference(self):
         self.assertEqual(self.by_name["plan-the-work"].command, "plan")
