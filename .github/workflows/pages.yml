@@ -36,14 +36,17 @@ jobs:
           mkdir -p _site
           # Landing page at the site root.
           cp site/index.html _site/index.html
-          # Verdant design system (self-contained; tokens.css sits beside it).
-          mkdir -p _site/design-system
+          # Verdant design system (self-contained; tokens.css + OFL fonts beside it).
+          mkdir -p _site/design-system/fonts
           cp design-system/index.html design-system/tokens.css _site/design-system/
           [ -f design-system/README.md ] && cp design-system/README.md _site/design-system/ || true
+          cp design-system/fonts/*.woff2 _site/design-system/fonts/ 2>/dev/null || true
           # Skills Field Guide app (static build; search + themes work, Refresh
-          # needs the local server so it's a no-op here).
-          mkdir -p _site/app
+          # needs the local server so it's a no-op here). Ship the OFL fonts so
+          # the Verdant theme renders (its @font-face points at ./fonts/*).
+          mkdir -p _site/app/fonts
           cp skills-database.html _site/app/index.html
+          cp design-system/fonts/*.woff2 _site/app/fonts/ 2>/dev/null || true
           echo "Assembled:" && find _site -maxdepth 2 -type f | sort
 
       - name: Upload Pages artifact

@@ -36,18 +36,21 @@ python3 -m http.server 8080 -d design-system   # then open http://localhost:8080
 
 ## Type roles
 
-- **Display — Juturu** (neo-grotesque): headings, KPI numbers, wordmark.
-- **Body — Lenia Sans** (geometric sans): all UI and reading text.
-- **Serif — Virtus Verona**: editorial eyebrows / lead-ins, used sparingly.
-- **Script — Bombshell**: a single decorative flourish only.
+- **Display — Space Grotesk** (neo-grotesque): headings, KPI numbers, wordmark.
+- **Body — Plus Jakarta Sans** (geometric sans): all UI and reading text.
+- **Serif — Fraunces**: editorial eyebrows / lead-ins, used sparingly.
+- **Script — Caveat**: a single decorative flourish only.
 
 Fallbacks are defined in `tokens.css` so the system degrades gracefully.
 
 ## Fonts &amp; licensing
 
-The type families (Juturu, Lenia Sans, Virtus Verona, Bombshell) are **purchased
-commercial fonts**. This is a public repository, so the font binaries are **not
-committed** — `design-system/fonts/` is git-ignored. To render the branded type
-locally, copy your licensed files into `design-system/fonts/` using the names
-referenced in `tokens.css` (e.g. `Juturu-Semibold.woff2`, `LeniaSans-Regular.ttf`,
-`VirtusVerona-Serif.woff`, `Bombshell-Script.woff`). Do not redistribute them.
+The type families are **open-licensed (SIL OFL)** — Space Grotesk, Plus Jakarta
+Sans, Fraunces, and Caveat (woff2 from Google Fonts). They are safe to embed and
+self-host on public **or** private pages, so the binaries are **committed** under
+`design-system/fonts/` and the system renders branded type everywhere.
+
+If you'd rather use a purchased commercial face (e.g. Juturu, Lenia Sans), drop
+its licensed files into `design-system/fonts/` and point the relevant
+`@font-face`/`--font-*` token at them — but keep those binaries out of this
+public repo (they're git-ignored by family name).

@@ -9,7 +9,11 @@ __pycache__/
 .agents/
 skills-lock.json
 
-# Verdant design system uses purchased commercial fonts (Juturu, Lenia Sans,
-# Virtus Verona, Bombshell). Do not redistribute the binaries in this public
-# repo — drop your licensed files into design-system/fonts/ locally.
-design-system/fonts/
+# The Verdant design system ships open-licensed (OFL) fonts committed under
+# design-system/fonts/. The optional purchased commercial fonts (Juturu, Lenia
+# Sans, Virtus Verona, Bombshell) may be dropped in the same folder locally but
+# must NOT be committed to this public repo — ignore those families by name.
+design-system/fonts/Juturu-*
+design-system/fonts/LeniaSans-*
+design-system/fonts/VirtusVerona-*
+design-system/fonts/Bombshell-*

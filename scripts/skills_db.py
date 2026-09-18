@@ -692,16 +692,15 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   /* Design tokens — a "field guide / catalog" register: cool paper, pine accent,
      serif display + humanist UI sans. Deliberately avoids the cream+serif and
      near-black+neon AI-default looks; one accent, structure carries meaning. */
-  /* Verdant brand faces (licensed, self-hosted). In serve mode they load from
-     /fonts/*; the static file and unlicensed setups fall back to the stacks. */
-  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
-  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Semibold.woff2") format("woff2"); font-weight:600; font-display:swap; }
-  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
-  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Black.woff2") format("woff2"); font-weight:900; font-display:swap; }
-  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Regular.ttf") format("truetype"); font-weight:400; font-display:swap; }
-  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Medium.ttf") format("truetype"); font-weight:500; font-display:swap; }
-  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-SemiBold.ttf") format("truetype"); font-weight:600; font-display:swap; }
-  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Bold.ttf") format("truetype"); font-weight:700; font-display:swap; }
+  /* Verdant brand faces — open-licensed (OFL), committed under
+     design-system/fonts and served at /fonts/*. Space Grotesk + Plus Jakarta Sans. */
+  @font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+  @font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+  @font-face { font-family:"Space Grotesk"; src:url("fonts/SpaceGrotesk-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
+  @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+  @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+  @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
+  @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
 
   /* Semantic tokens (design-system: the semantic layer enables theming).
      --pine* alias --accent* so the many component rules stay theme-agnostic. */
@@ -740,8 +739,8 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
     --line: #d7ebe6; --line-strong: #bfe0d8;
     --accent: #0e7490; --accent-ink: #06323d; --accent-wash: #d7eef0; --on-accent: #ffffff;
     --shadow: 0 1px 2px rgba(8,51,68,.05), 0 10px 30px rgba(8,51,68,.08);
-    --display: "Juturu", "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
-    --ui: "Lenia Sans", "Century Gothic", "URW Geometric", ui-sans-serif, system-ui, sans-serif;
+    --display: "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Plus Jakarta Sans", "Century Gothic", ui-sans-serif, system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
