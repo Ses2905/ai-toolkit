@@ -262,8 +262,22 @@ class BuildTest(unittest.TestCase):
         self.assertIn('data-sort="date_added"', html)
         self.assertIn('id="fcat"', html)   # category filter
         self.assertIn('id="ftype"', html)  # type filter
-        self.assertIn("Watch-outs", html)
-        self.assertIn("Best for", html)
+        self.assertIn("Watch-Outs", html)
+        self.assertIn("Best For", html)
+
+    def test_html_theming_and_accessibility(self):
+        html = skills_db.render_html(self.skills)
+        # three-theme token system + switcher
+        self.assertIn('[data-theme="slate"]', html)
+        self.assertIn('[data-theme="nocturne"]', html)
+        self.assertIn('id="ftheme"', html)
+        # accessibility affordances
+        self.assertIn("aria-sort", html)
+        self.assertIn("th-sort", html)               # sort headers are buttons
+        self.assertIn('aria-expanded="false"', html)  # row disclosure buttons
+        self.assertIn('aria-live="polite"', html)
+        self.assertIn(":focus-visible", html)
+        self.assertIn('aria-hidden="true"', html)     # decorative icons
 
     def test_markdown_has_present_categories(self):
         md = skills_db.render_markdown(self.skills)
