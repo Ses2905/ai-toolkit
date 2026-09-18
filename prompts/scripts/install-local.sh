@@ -27,4 +27,4 @@ echo
 echo "Next:"
 echo "  1. Command Palette → Developer: Reload Window"
 echo "  2. Customize → filter User → confirm Prompt Kit"
-echo "  3. Add prompts with /new-prompt (they are slash commands, not skills)"
+echo "  3. Add prompts with /add-to-library (routes skills → Work Kit, prompts → Prompt Kit)"
