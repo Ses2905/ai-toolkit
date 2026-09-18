@@ -1,4 +1,0 @@
-Source: uploaded pack "board room strategy.zip"
-Title: 25 Claude Skills to Build Boardroom Strategy Decks
-Pack skills: skills/<name>/ for the 25 siblings listed in README.md
-License: not specified in the source pack; sibling SKILL.md files are unmodified
