@@ -41,6 +41,11 @@
       "description": "Use when the user wants a single-file HTML presentation that stays editable in the browser after generation, or needs object-level layout editing, slide reordering, local save/export, or PPT/PDF-to-web conversion with continued editing.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Use when the user wants a single-file HTML presentation that stays editable in the browser after generation, or needs object-level layout editing, slide reordering, local save/export, or PPT/PDF-to-web conversion with continued editing.",
+      "best_use": "Use when the user wants a single-file HTML presentation that stays editable in the browser after generation, or needs object-level layout editing, slide reordering, local save/export, or PPT/PDF-to-web conversion with continued editing.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "frontend-slides-editable",
       "has_command": true,
       "has_rule": true,
@@ -67,7 +72,8 @@
         "readme": 5
       },
       "rank_overall": 1,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": []
     },
     {
       "name": "html-ppt",
@@ -78,6 +84,11 @@
       "description": "HTML PPT Studio — author professional static HTML presentations in many styles, layouts, and animations, all driven by templates. Use when the user asks for a presentation, PPT, slides, keynote, deck, slideshow, \"幻灯片\", \"演讲稿\", \"做一份 PPT\", \"做一份 slides\", a reveal-style HTML deck, a 小红书 图文, or any kind of multi-slide pitch/report/sharing document that should look tasteful and be usable with keyboard navigation. Triggers include keywords like \"presentation\", \"ppt\", \"slides\", \"deck\", \"keynote\", \"reveal\", \"slideshow\", \"幻灯片\", \"演讲稿\", \"分享稿\", \"小红书图文\", \"talk slides\", \"pitch deck\", \"tech sharing\", \"technical presentation\".",
       "argument_hint": "",
       "best_for": [],
+      "summary": "HTML PPT Studio — author professional static HTML presentations in many styles, layouts, and animations, all driven by templates.",
+      "best_use": "Use when the user asks for a presentation, PPT, slides, keynote, deck, slideshow, \"幻灯片\", \"演讲稿\", \"做一份 PPT\", \"做一份 slides\", a reveal-style HTML deck, a 小红书 图文, or any kind of multi-slide pitch/report/sharing document that should look tasteful and be usable with keyboard navigation. Triggers include keywords like \"presentation\", \"ppt\", \"slides\", \"deck\", \"keynote\", \"reveal\", \"slideshow\", \"幻灯片\", \"演讲稿\", \"分享稿\", \"小红书图文\", \"talk slides\", \"pitch deck\", \"tech sharing\", \"technical presentation\".",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "html-ppt",
       "has_command": true,
       "has_rule": true,
@@ -104,7 +115,8 @@
         "readme": 5
       },
       "rank_overall": 2,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": []
     },
     {
       "name": "hyperframes-animation",
@@ -115,6 +127,11 @@
       "description": "All animation knowledge for HyperFrames — atomic motion rules, multi-phase scene blueprints, scene transitions, broader motion-design techniques, AND the seven runtime adapters (GSAP default, plus Lottie, Three.js, Anime.js, CSS keyframes, Web Animations API, TypeGPU). Use for any motion or animation task: pick 2-4 rules and compose, or load a blueprint, or look up runtime-specific API (e.g. GSAP eases / Lottie player / Three.js mixer). Also covers auditing an existing composition's choreography (animation map) and 24 named text-animation effects. HyperFrames-native: single paused timeline, seek-safe, deterministic.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "All animation knowledge for HyperFrames — atomic motion rules, multi-phase scene blueprints, scene transitions, broader motion-design techniques, AND the seven runtime adapters (GSAP default, plus Lottie, Three.js, Anime.js, CSS keyframes, Web Animations API, TypeGPU).",
+      "best_use": "Use for any motion or animation task: pick 2-4 rules and compose, or load a blueprint, or look up runtime-specific API (e.g. GSAP eases / Lottie player / Three.js mixer). Also covers auditing an existing composition's choreography (animation map) and 24 named text-animation effects. HyperFrames-native: single paused timeline, seek-safe, deterministic.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "hyperframes-animation",
       "has_command": true,
       "has_rule": true,
@@ -141,7 +158,8 @@
         "readme": 5
       },
       "rank_overall": 3,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": []
     },
     {
       "name": "lark-slides",
@@ -152,6 +170,11 @@
       "description": "Creates and edits Lark/Feishu slides via lark-cli XML. Use for Feishu presentations, slide page CRUD, block replace, or doubao.com /slides/ URLs. 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Creates and edits Lark/Feishu slides via lark-cli XML.",
+      "best_use": "Use for Feishu presentations, slide page CRUD, block replace, or doubao.com /slides/ URLs. 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "lark-slides",
       "has_command": true,
       "has_rule": true,
@@ -178,7 +201,8 @@
         "readme": 5
       },
       "rank_overall": 4,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": []
     },
     {
       "name": "product-strategy-session",
@@ -193,6 +217,11 @@
         "Giving a team validated direction instead of a feature list",
         "Aligning leadership on where the product is going and why"
       ],
+      "summary": "Run an end-to-end product strategy session across positioning, discovery, and roadmap planning.",
+      "best_use": "Running a full strategy arc from positioning through roadmap; Giving a team validated direction instead of a feature list; Aligning leadership on where the product is going and why",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "product-strategy-session",
       "has_command": true,
       "has_rule": true,
@@ -219,7 +248,11 @@
         "readme": 5
       },
       "rank_overall": 5,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": [
+        "workflow",
+        "strategy-positioning"
+      ]
     },
     {
       "name": "canvas-design",
@@ -230,6 +263,11 @@
       "description": "Create original visual art, posters, PNG assets, and PDF documents through a clear design philosophy.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Create original visual art, posters, PNG assets, and PDF documents through a clear design philosophy.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "canvas-design",
       "has_command": true,
       "has_rule": true,
@@ -256,7 +294,8 @@
         "readme": 5
       },
       "rank_overall": 6,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": []
     },
     {
       "name": "find-animation-opportunities",
@@ -267,6 +306,11 @@
       "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it.",
+      "best_use": "Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
+      "watch_outs": "Read-only; Does not implement it",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "find-animation-opportunities",
       "has_command": true,
       "has_rule": true,
@@ -293,7 +337,8 @@
         "readme": 5
       },
       "rank_overall": 7,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": []
     },
     {
       "name": "improve-animations",
@@ -304,6 +349,11 @@
       "description": "Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them. Use when the user asks to \"improve the animations\", \"audit the motion\", \"make this app feel better\", or wants a roadmap of animation fixes rather than a review of a single diff.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them.",
+      "best_use": "Use when the user asks to \"improve the animations\", \"audit the motion\", \"make this app feel better\", or wants a roadmap of animation fixes rather than a review of a single diff.",
+      "watch_outs": "Read-only on source code — it plans improvements, it does not apply them",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "improve-animations",
       "has_command": true,
       "has_rule": true,
@@ -330,7 +380,8 @@
         "readme": 5
       },
       "rank_overall": 8,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": []
     },
     {
       "name": "review-animations",
@@ -341,6 +392,11 @@
       "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "review-animations",
       "has_command": true,
       "has_rule": true,
@@ -367,7 +423,8 @@
         "readme": 5
       },
       "rank_overall": 9,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": []
     },
     {
       "name": "remotion-best-practices",
@@ -378,6 +435,11 @@
       "description": "Router for all Remotion skills",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Router for all Remotion skills",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "remotion-best-practices",
       "has_command": true,
       "has_rule": true,
@@ -404,7 +466,8 @@
         "readme": 5
       },
       "rank_overall": 10,
-      "rank_in_category": 5
+      "rank_in_category": 5,
+      "tags": []
     },
     {
       "name": "high-end-visual-design",
@@ -415,6 +478,11 @@
       "description": "Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive. Blocks all the common defaults that make AI designs look cheap or generic.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive. Blocks all the common defaults that make AI designs look cheap or generic.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "high-end-visual-design",
       "has_command": true,
       "has_rule": true,
@@ -441,7 +509,8 @@
         "readme": 5
       },
       "rank_overall": 11,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": []
     },
     {
       "name": "taste-skill",
@@ -452,6 +521,11 @@
       "description": "Design and implementation guidance for distinctive landing pages, portfolios, product demos, and purposeful redesigns.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Design and implementation guidance for distinctive landing pages, portfolios, product demos, and purposeful redesigns.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "taste-skill",
       "has_command": true,
       "has_rule": true,
@@ -478,7 +552,8 @@
         "readme": 5
       },
       "rank_overall": 12,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": []
     },
     {
       "name": "apple-design",
@@ -489,6 +564,11 @@
       "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Apple's approach to interface design and fluid, physical motion, translated for the web.",
+      "best_use": "Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "apple-design",
       "has_command": true,
       "has_rule": true,
@@ -515,7 +595,8 @@
         "readme": 5
       },
       "rank_overall": 13,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": []
     },
     {
       "name": "design-system",
@@ -526,6 +607,11 @@
       "description": "Token architecture, component specifications, and slide generation. Three-layer tokens (primitive→semantic→component), CSS variables, spacing/typography scales, component specs, strategic slide creation. Use for design tokens, systematic design, brand-compliant presentations.",
       "argument_hint": "[component or token]",
       "best_for": [],
+      "summary": "Token architecture, component specifications, and slide generation. Three-layer tokens (primitive→semantic→component), CSS variables, spacing/typography scales, component specs, strategic slide creation.",
+      "best_use": "Use for design tokens, systematic design, brand-compliant presentations.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -552,7 +638,8 @@
         "readme": 5
       },
       "rank_overall": 14,
-      "rank_in_category": 5
+      "rank_in_category": 5,
+      "tags": []
     },
     {
       "name": "frontend-design",
@@ -563,6 +650,11 @@
       "description": "Guidance for distinctive, intentional UI design, typography, visual direction, and non-template-like product interfaces.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Guidance for distinctive, intentional UI design, typography, visual direction, and non-template-like product interfaces.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "frontend-design",
       "has_command": true,
       "has_rule": true,
@@ -589,7 +681,8 @@
         "readme": 5
       },
       "rank_overall": 15,
-      "rank_in_category": 6
+      "rank_in_category": 6,
+      "tags": []
     },
     {
       "name": "slides",
@@ -600,6 +693,11 @@
       "description": "Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies. Use for marketing presentations, pitch decks, Chart.js slides, ckmslides, or HTML slide decks. Distinct from Lark/Feishu slides.",
       "argument_hint": "[topic] [slide-count]",
       "best_for": [],
+      "summary": "Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies.",
+      "best_use": "Use for marketing presentations, pitch decks, Chart.js slides, ckmslides, or HTML slide decks. Distinct from Lark/Feishu slides.",
+      "watch_outs": "Distinct from Lark/Feishu slides",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "slides",
       "has_command": true,
       "has_rule": true,
@@ -626,7 +724,8 @@
         "readme": 5
       },
       "rank_overall": 16,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": []
     },
     {
       "name": "user-story",
@@ -641,6 +740,11 @@
         "Converting requirements into development-ready stories",
         "Establishing story quality standards across your team"
       ],
+      "summary": "Create user stories with Mike Cohn format and Gherkin acceptance criteria.",
+      "best_use": "Writing user stories with proper acceptance criteria; Converting requirements into development-ready stories; Establishing story quality standards across your team",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -667,7 +771,11 @@
         "readme": 0
       },
       "rank_overall": 17,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": [
+        "component",
+        "pm-artifacts"
+      ]
     },
     {
       "name": "tam-sam-som-calculator",
@@ -682,6 +790,11 @@
         "Making your market assumptions explicit and attackable",
         "Replacing a top-down guess with a defensible bottom-up estimate"
       ],
+      "summary": "Calculate TAM, SAM, and SOM with explicit assumptions, methods, and caveats.",
+      "best_use": "Sizing a market for a business case an executive will question; Making your market assumptions explicit and attackable; Replacing a top-down guess with a defensible bottom-up estimate",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -708,7 +821,11 @@
         "readme": 0
       },
       "rank_overall": 18,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": [
+        "interactive",
+        "market-intelligence"
+      ]
     },
     {
       "name": "html-diagram",
@@ -719,6 +836,11 @@
       "description": "Direct-invocation specialist for self-contained HTML diagrams whose layout, notation, and interaction clarify relationships, sequence, topology, state, hierarchy, or quantitative structure. Use when the user explicitly invokes html-diagram or the broad html skill routes a diagram request here. Do not activate independently from a general request.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Direct-invocation specialist for self-contained HTML diagrams whose layout, notation, and interaction clarify relationships, sequence, topology, state, hierarchy, or quantitative structure.",
+      "best_use": "Use when the user explicitly invokes html-diagram or the broad html skill routes a diagram request here. Do not activate independently from a general request.",
+      "watch_outs": "Do not activate independently from a general request",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "html-diagram",
       "has_command": true,
       "has_rule": true,
@@ -745,7 +867,8 @@
         "readme": 5
       },
       "rank_overall": 19,
-      "rank_in_category": 5
+      "rank_in_category": 5,
+      "tags": []
     },
     {
       "name": "pm-handoff",
@@ -756,6 +879,11 @@
       "description": "Compact the current conversation into a handoff document for another agent or session to pick up, with suggested skills and redacted sensitive data. Use when handing work to a fresh agent, ending a session, or writing a pickup brief. Upstream CLI name is `handoff`.",
       "argument_hint": "What will the next session be used for?",
       "best_for": [],
+      "summary": "Compact the current conversation into a handoff document for another agent or session to pick up, with suggested skills and redacted sensitive data.",
+      "best_use": "Use when handing work to a fresh agent, ending a session, or writing a pickup brief. Upstream CLI name is `handoff`.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "pm-handoff",
       "has_command": true,
       "has_rule": true,
@@ -782,7 +910,8 @@
         "readme": 5
       },
       "rank_overall": 20,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": []
     },
     {
       "name": "hyperframes-core",
@@ -793,6 +922,11 @@
       "description": "The HyperFrames composition contract — build one renderable project. Use for composition structure, the `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, deterministic-render rules, and validation. Read before writing composition HTML.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "The HyperFrames composition contract — build one renderable project.",
+      "best_use": "Use for composition structure, the `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, deterministic-render rules, and validation. Read before writing composition HTML.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -819,7 +953,8 @@
         "readme": 5
       },
       "rank_overall": 21,
-      "rank_in_category": 6
+      "rank_in_category": 6,
+      "tags": []
     },
     {
       "name": "install-open-design",
@@ -830,6 +965,11 @@
       "description": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP. Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP.",
+      "best_use": "Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "install-open-design",
       "has_command": true,
       "has_rule": true,
@@ -856,7 +996,8 @@
         "readme": 5
       },
       "rank_overall": 22,
-      "rank_in_category": 1
+      "rank_in_category": 1,
+      "tags": []
     },
     {
       "name": "epic-hypothesis",
@@ -871,6 +1012,11 @@
         "Forcing an outcome and a validation method before build starts",
         "Giving a team a shared bet to test instead of a scope to deliver"
       ],
+      "summary": "Frame an epic as a testable hypothesis with target user, expected outcome, and validation method.",
+      "best_use": "Framing a major initiative as something that can be proven wrong; Forcing an outcome and a validation method before build starts; Giving a team a shared bet to test instead of a scope to deliver",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -897,7 +1043,11 @@
         "readme": 0
       },
       "rank_overall": 23,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": [
+        "component",
+        "pm-artifacts"
+      ]
     },
     {
       "name": "jobs-to-be-done",
@@ -912,6 +1062,11 @@
         "Repositioning a product around unmet needs rather than features",
         "Turning fuzzy user feedback into structured jobs, pains, and gains"
       ],
+      "summary": "Uncover customer jobs, pains, and gains in a structured JTBD format.",
+      "best_use": "Clarifying what customers actually hire your product to do; Repositioning a product around unmet needs rather than features; Turning fuzzy user feedback into structured jobs, pains, and gains",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -938,7 +1093,11 @@
         "readme": 0
       },
       "rank_overall": 24,
-      "rank_in_category": 5
+      "rank_in_category": 5,
+      "tags": [
+        "component",
+        "discovery-research"
+      ]
     },
     {
       "name": "press-release",
@@ -953,6 +1112,11 @@
         "Aligning stakeholders on what a launch actually promises",
         "Killing a weak idea early by trying to write its announcement"
       ],
+      "summary": "Write an Amazon-style press release that defines customer value before building.",
+      "best_use": "Defining customer value before a line of spec gets written; Aligning stakeholders on what a launch actually promises; Killing a weak idea early by trying to write its announcement",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -979,7 +1143,11 @@
         "readme": 0
       },
       "rank_overall": 25,
-      "rank_in_category": 6
+      "rank_in_category": 6,
+      "tags": [
+        "component",
+        "pm-artifacts"
+      ]
     },
     {
       "name": "problem-statement",
@@ -994,6 +1162,11 @@
         "Getting a team to agree on who is blocked and why it matters",
         "Turning a vague complaint into something a team can act on"
       ],
+      "summary": "Write a user-centered problem statement with who is blocked, what they are trying to do, why it matters, and how it feels.",
+      "best_use": "Framing a problem before anyone proposes a solution; Getting a team to agree on who is blocked and why it matters; Turning a vague complaint into something a team can act on",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1020,7 +1193,11 @@
         "readme": 0
       },
       "rank_overall": 26,
-      "rank_in_category": 7
+      "rank_in_category": 7,
+      "tags": [
+        "component",
+        "discovery-research"
+      ]
     },
     {
       "name": "proto-persona",
@@ -1035,6 +1212,11 @@
         "Making team assumptions about users explicit and challengeable",
         "Setting up a persona you intend to validate, not defend"
       ],
+      "summary": "Create a proto-persona from current research, market signals, and team knowledge.",
+      "best_use": "Getting a working customer profile before you can afford real research; Making team assumptions about users explicit and challengeable; Setting up a persona you intend to validate, not defend",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1061,7 +1243,11 @@
         "readme": 0
       },
       "rank_overall": 27,
-      "rank_in_category": 8
+      "rank_in_category": 8,
+      "tags": [
+        "component",
+        "discovery-research"
+      ]
     },
     {
       "name": "react-bits",
@@ -1072,6 +1258,11 @@
       "description": "Maps briefs to React Bits animated components and installs them via the official shadcn registry. Use when the user wants React Bits, reactbits.dev, animated text, shader backgrounds, cursor effects, docks, galleries, or interactive React UI flourishes.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Maps briefs to React Bits animated components and installs them via the official shadcn registry.",
+      "best_use": "Use when the user wants React Bits, reactbits.dev, animated text, shader backgrounds, cursor effects, docks, galleries, or interactive React UI flourishes.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "react-bits",
       "has_command": true,
       "has_rule": true,
@@ -1098,7 +1289,8 @@
         "readme": 5
       },
       "rank_overall": 28,
-      "rank_in_category": 7
+      "rank_in_category": 7,
+      "tags": []
     },
     {
       "name": "lean-ux-canvas",
@@ -1113,6 +1305,11 @@
         "Surfacing assumptions in a cross-functional workshop",
         "Turning a vague initiative into hypotheses and learning goals"
       ],
+      "summary": "Guide teams through Lean UX Canvas v2.",
+      "best_use": "Framing a business problem before solutioning; Surfacing assumptions in a cross-functional workshop; Turning a vague initiative into hypotheses and learning goals",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1139,7 +1336,11 @@
         "readme": 0
       },
       "rank_overall": 29,
-      "rank_in_category": 9
+      "rank_in_category": 9,
+      "tags": [
+        "interactive",
+        "validation-experiments"
+      ]
     },
     {
       "name": "opportunity-solution-tree",
@@ -1154,6 +1355,11 @@
         "Connecting a desired outcome to opportunities, solutions, and tests",
         "Showing why one solution was chosen over the alternatives"
       ],
+      "summary": "Build an Opportunity Solution Tree from outcomes to opportunities, solutions, and tests.",
+      "best_use": "Turning a stakeholder feature request back into a problem worth solving; Connecting a desired outcome to opportunities, solutions, and tests; Showing why one solution was chosen over the alternatives",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1180,7 +1386,11 @@
         "readme": 0
       },
       "rank_overall": 30,
-      "rank_in_category": 10
+      "rank_in_category": 10,
+      "tags": [
+        "interactive",
+        "discovery-research"
+      ]
     },
     {
       "name": "problem-framing-canvas",
@@ -1195,6 +1405,11 @@
         "Surfacing assumptions and overlooked stakeholders",
         "Creating a bias-resistant problem statement in a workshop"
       ],
+      "summary": "Guide teams through MITRE's Problem Framing Canvas.",
+      "best_use": "Clarifying a messy problem before solutioning; Surfacing assumptions and overlooked stakeholders; Creating a bias-resistant problem statement in a workshop",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1221,7 +1436,11 @@
         "readme": 0
       },
       "rank_overall": 31,
-      "rank_in_category": 11
+      "rank_in_category": 11,
+      "tags": [
+        "interactive",
+        "discovery-research"
+      ]
     },
     {
       "name": "web-design-guidelines",
@@ -1232,6 +1451,11 @@
       "description": "Review UI code for web interface guidelines, UX quality, accessibility, and interaction design best practices. Use when asked to review UI, check accessibility, audit design, review UX, or check a site against Web Interface Guidelines.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Review UI code for web interface guidelines, UX quality, accessibility, and interaction design best practices.",
+      "best_use": "Use when asked to review UI, check accessibility, audit design, review UX, or check a site against Web Interface Guidelines.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "web-design-guidelines",
       "has_command": true,
       "has_rule": true,
@@ -1258,7 +1482,8 @@
         "readme": 5
       },
       "rank_overall": 32,
-      "rank_in_category": 8
+      "rank_in_category": 8,
+      "tags": []
     },
     {
       "name": "design-artifact",
@@ -1269,6 +1494,11 @@
       "description": "Design principles and creative direction for building HTML artifacts — pages, reports, plans, landing pages, demos, decks, and small tools. Use when creating or restyling any visual HTML deliverable and deciding its palette, type pairing, layout, theming, or overall register, or when the output must not look generically AI-generated.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Design principles and creative direction for building HTML artifacts — pages, reports, plans, landing pages, demos, decks, and small tools.",
+      "best_use": "Use when creating or restyling any visual HTML deliverable and deciding its palette, type pairing, layout, theming, or overall register, or when the output must not look generically AI-generated.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1295,7 +1525,8 @@
         "readme": 5
       },
       "rank_overall": 33,
-      "rank_in_category": 9
+      "rank_in_category": 9,
+      "tags": []
     },
     {
       "name": "install-github-skills",
@@ -1306,6 +1537,11 @@
       "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills.",
+      "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-18",
       "command": "install-github-skills",
       "has_command": true,
       "has_rule": false,
@@ -1332,7 +1568,8 @@
         "readme": 5
       },
       "rank_overall": 34,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": []
     },
     {
       "name": "user-story-mapping-workshop",
@@ -1347,6 +1584,11 @@
         "Building a backbone, tasks, and release slices collaboratively",
         "Getting a shared view of the workflow before slicing an MVP"
       ],
+      "summary": "Run a user story mapping workshop with adaptive questions and a structured map output.",
+      "best_use": "Running a facilitated story mapping session with a real team; Building a backbone, tasks, and release slices collaboratively; Getting a shared view of the workflow before slicing an MVP",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1373,7 +1615,11 @@
         "readme": 0
       },
       "rank_overall": 35,
-      "rank_in_category": 12
+      "rank_in_category": 12,
+      "tags": [
+        "interactive",
+        "workshops-facilitation"
+      ]
     },
     {
       "name": "customer-journey-mapping-workshop",
@@ -1388,6 +1634,11 @@
         "Finding pain points across a user's journey",
         "Aligning teams on the stages, emotions, and breakdowns in an experience"
       ],
+      "summary": "Run a customer journey mapping workshop with adaptive questions and outputs.",
+      "best_use": "Running a workshop to map an end-to-end customer experience; Finding pain points across a user's journey; Aligning teams on the stages, emotions, and breakdowns in an experience",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1414,7 +1665,11 @@
         "readme": 0
       },
       "rank_overall": 36,
-      "rank_in_category": 13
+      "rank_in_category": 13,
+      "tags": [
+        "interactive",
+        "workshops-facilitation"
+      ]
     },
     {
       "name": "discovery-interview-prep",
@@ -1429,6 +1684,11 @@
         "Choosing the right interview methodology for your goals and constraints",
         "Preparing for research with limited customer access"
       ],
+      "summary": "Plan customer discovery interviews with the right goal, segment, constraints, and method.",
+      "best_use": "Designing a customer discovery interview plan; Choosing the right interview methodology for your goals and constraints; Preparing for research with limited customer access",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1455,7 +1715,11 @@
         "readme": 0
       },
       "rank_overall": 37,
-      "rank_in_category": 14
+      "rank_in_category": 14,
+      "tags": [
+        "interactive",
+        "discovery-research"
+      ]
     },
     {
       "name": "epic-breakdown-advisor",
@@ -1470,6 +1734,11 @@
         "Choosing the right story split pattern for a large backlog item",
         "Turning vague feature blobs into sprint-sized stories"
       ],
+      "summary": "Break down epics into user stories with Humanizing Work split patterns.",
+      "best_use": "Splitting epics into smaller vertical slices; Choosing the right story split pattern for a large backlog item; Turning vague feature blobs into sprint-sized stories",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1496,7 +1765,11 @@
         "readme": 0
       },
       "rank_overall": 38,
-      "rank_in_category": 15
+      "rank_in_category": 15,
+      "tags": [
+        "interactive",
+        "pm-artifacts"
+      ]
     },
     {
       "name": "positioning-workshop",
@@ -1511,6 +1784,11 @@
         "Clarifying target customer, category, and differentiation",
         "Fixing fuzzy or generic messaging before launch"
       ],
+      "summary": "Run a positioning workshop that surfaces target customer, unmet need, category, benefits, and differentiation.",
+      "best_use": "Running a workshop to sharpen product positioning; Clarifying target customer, category, and differentiation; Fixing fuzzy or generic messaging before launch",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1537,7 +1815,11 @@
         "readme": 0
       },
       "rank_overall": 39,
-      "rank_in_category": 16
+      "rank_in_category": 16,
+      "tags": [
+        "interactive",
+        "workshops-facilitation"
+      ]
     },
     {
       "name": "prioritization-advisor",
@@ -1552,6 +1834,11 @@
         "Deciding between RICE, ICE, value/effort, and similar models",
         "Reducing debate about how to prioritize competing work"
       ],
+      "summary": "Choose a prioritization framework based on stage, team context, and stakeholder needs.",
+      "best_use": "Choosing the right prioritization framework for a team or stage; Deciding between RICE, ICE, value/effort, and similar models; Reducing debate about how to prioritize competing work",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1578,7 +1865,11 @@
         "readme": 0
       },
       "rank_overall": 40,
-      "rank_in_category": 17
+      "rank_in_category": 17,
+      "tags": [
+        "interactive",
+        "strategy-positioning"
+      ]
     },
     {
       "name": "workshop-facilitation",
@@ -1593,6 +1884,11 @@
         "Running interactive sessions with numbered recommendations and progress tracking",
         "Ensuring your workshops stay on track and end with actionable choices"
       ],
+      "summary": "Facilitate workshop sessions in a one-step, multi-turn flow.",
+      "best_use": "Adding structured facilitation to any PM workshop or guided session; Running interactive sessions with numbered recommendations and progress tracking; Ensuring your workshops stay on track and end with actionable choices",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1619,7 +1915,11 @@
         "readme": 0
       },
       "rank_overall": 41,
-      "rank_in_category": 18
+      "rank_in_category": 18,
+      "tags": [
+        "interactive",
+        "workshops-facilitation"
+      ]
     },
     {
       "name": "install-impeccable",
@@ -1630,6 +1930,11 @@
       "description": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable). Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable).",
+      "best_use": "Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "install-impeccable",
       "has_command": true,
       "has_rule": false,
@@ -1656,7 +1961,8 @@
         "readme": 5
       },
       "rank_overall": 42,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": []
     },
     {
       "name": "capture-a-skill",
@@ -1667,6 +1973,11 @@
       "description": "Turn a repeated workflow into a Cursor skill, rule, or command. Use when the user wants to save a workflow, says this should be a skill, or notices the same instructions repeating across projects.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Turn a repeated workflow into a Cursor skill, rule, or command.",
+      "best_use": "Use when the user wants to save a workflow, says this should be a skill, or notices the same instructions repeating across projects.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "new-skill",
       "has_command": true,
       "has_rule": false,
@@ -1693,7 +2004,8 @@
         "readme": 5
       },
       "rank_overall": 43,
-      "rank_in_category": 2
+      "rank_in_category": 2,
+      "tags": []
     },
     {
       "name": "debug-from-evidence",
@@ -1704,6 +2016,11 @@
       "description": "Debug by reproducing the failure and gathering evidence before changing code. Use when something is broken, a test fails, a bug is reported, or the user asks why something does not work.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Debug by reproducing the failure and gathering evidence before changing code.",
+      "best_use": "Use when something is broken, a test fails, a bug is reported, or the user asks why something does not work.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "debug",
       "has_command": true,
       "has_rule": false,
@@ -1730,7 +2047,8 @@
         "readme": 5
       },
       "rank_overall": 44,
-      "rank_in_category": 3
+      "rank_in_category": 3,
+      "tags": []
     },
     {
       "name": "plan-the-work",
@@ -1741,6 +2059,11 @@
       "description": "Turn a request into a scoped implementation plan before writing code. Use when the user asks to plan, the work has multiple approaches, scope is unclear, or before a non-trivial implementation.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Turn a request into a scoped implementation plan before writing code.",
+      "best_use": "Use when the user asks to plan, the work has multiple approaches, scope is unclear, or before a non-trivial implementation.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "plan",
       "has_command": true,
       "has_rule": false,
@@ -1767,7 +2090,8 @@
         "readme": 5
       },
       "rank_overall": 45,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": []
     },
     {
       "name": "review-the-diff",
@@ -1778,6 +2102,11 @@
       "description": "Review uncommitted or branch changes for bugs, regressions, missing tests, and scope creep. Use when the user asks for a review, before merging, or after a sizable implementation.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Review uncommitted or branch changes for bugs, regressions, missing tests, and scope creep.",
+      "best_use": "Use when the user asks for a review, before merging, or after a sizable implementation.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "review-diff",
       "has_command": true,
       "has_rule": false,
@@ -1804,7 +2133,8 @@
         "readme": 5
       },
       "rank_overall": 46,
-      "rank_in_category": 5
+      "rank_in_category": 5,
+      "tags": []
     },
     {
       "name": "ship-the-change",
@@ -1815,6 +2145,11 @@
       "description": "Prepare a clean commit and push with a precise message. Use when the user asks to commit, push, ship, wrap up, or land the work.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Prepare a clean commit and push with a precise message.",
+      "best_use": "Use when the user asks to commit, push, ship, wrap up, or land the work.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "ship",
       "has_command": true,
       "has_rule": false,
@@ -1841,7 +2176,8 @@
         "readme": 5
       },
       "rank_overall": 47,
-      "rank_in_category": 6
+      "rank_in_category": 6,
+      "tags": []
     },
     {
       "name": "lark-shared",
@@ -1852,6 +2188,11 @@
       "description": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
+      "best_use": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-16",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1878,7 +2219,8 @@
         "readme": 0
       },
       "rank_overall": 48,
-      "rank_in_category": 6
+      "rank_in_category": 6,
+      "tags": []
     },
     {
       "name": "install-work-kit",
@@ -1889,6 +2231,11 @@
       "description": "Install this personal Cursor plugin at user scope, copy skills for Cloud Agent sync, and recommend marketplace plugins. Use when the user asks how to install work-kit, set up plugins globally, or leverage skills across all projects.",
       "argument_hint": "",
       "best_for": [],
+      "summary": "Install this personal Cursor plugin at user scope, copy skills for Cloud Agent sync, and recommend marketplace plugins.",
+      "best_use": "Use when the user asks how to install work-kit, set up plugins globally, or leverage skills across all projects.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-18",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -1915,7 +2262,8 @@
         "readme": 5
       },
       "rank_overall": 49,
-      "rank_in_category": 4
+      "rank_in_category": 4,
+      "tags": []
     }
   ]
 }
