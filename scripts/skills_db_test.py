@@ -287,10 +287,18 @@ class BuildTest(unittest.TestCase):
         html = skills_db.render_html(self.skills)
         # "Work Kit" eyebrow removed — straight into the title.
         self.assertNotIn('class="eyebrow"', html)
-        self.assertIn("<h1>Skills Field Guide</h1>", html)
+        self.assertIn("<h1>Library</h1>", html)
         # theme control moved into an admin/settings panel.
         self.assertIn('id="admin"', html)
         self.assertIn("Admin", html)
+
+    def test_library_kinds(self):
+        html = skills_db.render_html(self.skills)
+        self.assertIn('id="fkind"', html)      # kind filter
+        self.assertIn("kind-pill", html)        # kind badge
+        idx = skills_db.build_index(self.skills)
+        self.assertIn("kinds", idx)
+        self.assertIn("counts_by_kind", idx)
         # accessibility affordances
         self.assertIn("aria-sort", html)
         self.assertIn("th-sort", html)               # sort headers are buttons
@@ -340,20 +348,22 @@ class ServeTest(unittest.TestCase):
     def test_index_html(self):
         status, body = self._get("/")
         self.assertEqual(status, 200)
-        self.assertIn(b"Skills Field Guide", body)
+        self.assertIn(b"Library", body)
 
     def test_api_skills(self):
         status, body = self._get("/api/skills")
         self.assertEqual(status, 200)
         data = json.loads(body)
-        self.assertEqual(data["total"], _skill_md_count(ROOT))
+        # the served library includes skills + prompts + workflows
+        self.assertEqual(data["total"], len(skills_db.scan_library(ROOT)))
+        self.assertIn("counts_by_kind", data)
 
     def test_api_refresh(self):
         status, body = self._get("/api/refresh", method="POST")
         self.assertEqual(status, 200)
         data = json.loads(body)
         self.assertTrue(data.get("refreshed"))
-        self.assertEqual(data["total"], _skill_md_count(ROOT))
+        self.assertEqual(data["total"], len(skills_db.scan_library(ROOT)))
 
     def test_404(self):
         with self.assertRaises(urllib.error.HTTPError) as ctx:

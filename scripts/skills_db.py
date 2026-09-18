@@ -228,6 +228,7 @@ class Skill:
     score_breakdown: dict[str, int] = field(default_factory=dict)
     rank_overall: int = 0
     rank_in_category: int = 0
+    kind: str = "skill"   # skill | prompt | workflow
 
     @property
     def tags(self) -> list[str]:
@@ -548,6 +549,63 @@ def _assign_ranks(skills: list[Skill]) -> None:
             s.rank_in_category = i
 
 
+def _first_paragraph(text: str) -> str:
+    for line in text.splitlines():
+        s = line.strip()
+        if s and not s.startswith(("#", "---", "-", "|", "```", ">")) and ":" not in s[:14]:
+            return s
+    return ""
+
+
+def _doc_item(root: Path, path: Path, kind: str, source_root: str, command: str = "") -> Skill:
+    """Build a library item (prompt/workflow) from a single markdown doc."""
+    text = path.read_text(encoding="utf-8", errors="replace")
+    fm = parse_frontmatter(text)
+    description = str(fm.get("description", "") or "").strip() or _first_paragraph(text)
+    theme = str(fm.get("theme", "") or "")
+    name = path.stem
+    added, updated = _git_dates(root, path, path)
+    item = Skill(
+        name=name, source_root=source_root, category=categorize(name, theme, description),
+        type=str(fm.get("type", "") or kind), theme=theme, description=description,
+        argument_hint=str(fm.get("argument-hint", "") or ""), best_for=[],
+        summary=derive_summary(description), best_use=derive_best_use(description, []),
+        watch_outs=derive_watch_outs(description), date_added=added, date_updated=updated,
+        command=command, has_command=bool(command), has_rule=False, has_scripts=False,
+        has_tests=False, has_examples=False, has_docs=False, file_count=1,
+        skill_md_bytes=path.stat().st_size, in_catalog=False, in_readme=False, kind=kind,
+    )
+    item.score, item.score_breakdown = score_skill(item)
+    return item
+
+
+def scan_prompts(root: Path) -> list[Skill]:
+    base = root / "prompts" / "commands"
+    if not base.is_dir():
+        return []
+    return [_doc_item(root, p, "prompt", "prompts/commands", command=p.stem)
+            for p in sorted(base.glob("*.md"))]
+
+
+def scan_workflows(root: Path) -> list[Skill]:
+    base = root / "workflows"
+    if not base.is_dir():
+        return []
+    items: list[Skill] = []
+    for p in sorted(base.rglob("*.md")):
+        if p.name.upper() == "README.MD":
+            continue
+        items.append(_doc_item(root, p, "workflow", "workflows"))
+    return items
+
+
+def scan_library(root: Path) -> list[Skill]:
+    """All library items — skills + prompts + workflows — ranked together."""
+    items = scan_skills(root) + scan_prompts(root) + scan_workflows(root)
+    _assign_ranks(items)
+    return items
+
+
 # --- Find (search) --------------------------------------------------------
 
 def search(skills: list[Skill], query: str) -> list[tuple[Skill, int]]:
@@ -589,14 +647,20 @@ def build_index(skills: list[Skill]) -> dict:
         d = asdict(s)
         d["tags"] = s.tags  # computed property; asdict() omits it
         skills_out.append(d)
+    kinds = ["skill", "prompt", "workflow"]
     return {
         "generated_by": "scripts/skills_db.py",
         "categories": cats,
+        "kinds": [k for k in kinds if any(s.kind == k for s in skills)],
         "score_weights": SCORE_WEIGHTS,
         "score_max_raw": MAX_RAW,
         "total": len(skills),
         "counts_by_category": {
             c: sum(1 for s in skills if s.category == c) for c in cats
+        },
+        "counts_by_kind": {
+            k: sum(1 for s in skills if s.kind == k) for k in kinds
+            if any(s.kind == k for s in skills)
         },
         "skills": skills_out,
     }
@@ -812,6 +876,10 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   .catcell { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: 13px; }
   .dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
   .type-pill { font-size: 13px; color: var(--muted); text-transform: capitalize; }
+  .kind-pill { margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); vertical-align: middle; }
+  .kind-pill.k-prompt { color: var(--accent-ink); border-color: var(--accent); background: var(--accent-wash); }
+  .kind-pill.k-workflow { color: #7a4e07; border-color: #e6b566; background: #fdecc8; }
   .prose { color: var(--muted); font-size: 12.5px; max-width: 32ch;
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .prose.none { color: var(--faint); }
@@ -838,16 +906,17 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 </head>
 <body>
 <header><div class="wrap">
-  <h1>Skills Field Guide</h1>
-  <p class="lede">Every skill in the kit — what it does, where it fits, where it doesn't, how it's invoked, and how current it is. Filter and sort the table, or open any row for the full brief.</p>
-  <div class="counts"><span><b id="c-total">0</b> skills</span><span><b id="c-cats">0</b> categories</span><span>generated by <code>__GENERATED__</code></span></div>
+  <h1>Library</h1>
+  <p class="lede">Every capability in the kit — <strong>skills</strong>, <strong>prompts</strong>, and <strong>workflows</strong> — with what each does, where it fits, how it's invoked, and how current it is. Filter by kind or category, sort any column, or open a row for the full brief.</p>
+  <div class="counts"><span><b id="c-total">0</b> items</span><span id="c-kinds"></span><span><b id="c-cats">0</b> categories</span><span>generated by <code>__GENERATED__</code></span></div>
 </div></header>
 
 <div class="toolbar"><div class="wrap">
   <label class="field search">
     <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input id="q" name="q" type="search" aria-label="Search skills" placeholder="Search skills — name, what it does, best use…" autocomplete="off" spellcheck="false" autofocus />
+    <input id="q" name="q" type="search" aria-label="Search the library" placeholder="Search the library — name, what it does, best use…" autocomplete="off" spellcheck="false" autofocus />
   </label>
+  <div class="field sel"><select id="fkind" aria-label="Filter by kind"></select></div>
   <div class="field sel"><select id="fcat" aria-label="Filter by category"></select></div>
   <div class="field sel"><select id="ftype" aria-label="Filter by type"></select></div>
   <button id="refresh" class="btn" hidden><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span class="lbl">Refresh</span></button>
@@ -893,7 +962,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 let DB = __DATA__;
 const LIVE = location.protocol !== "file:";
 const CAT_COLORS = ["#0f766e","#7c3aed","#c2410c","#2563eb","#5f7a33","#a1348a","#0e7490","#9a6b00"];
-const state = { q:"", cat:"All", type:"All", sort:"score", dir:-1, theme:"field" };
+const state = { q:"", kind:"All", cat:"All", type:"All", sort:"score", dir:-1, theme:"field" };
 const $ = id => document.getElementById(id);
 function esc(s){ return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function catColor(cat){ const i = DB.categories.indexOf(cat); return CAT_COLORS[(i<0?DB.categories.length:i)%CAT_COLORS.length]; }
@@ -906,7 +975,12 @@ function relevance(sk, toks){
   return r;
 }
 function types(){ return Array.from(new Set(DB.skills.map(s=>s.type).filter(Boolean))).sort(); }
+function kinds(){ return (DB.kinds && DB.kinds.length) ? DB.kinds : ["skill"]; }
 function fillFilters(){
+  const kd = $("fkind");
+  kd.innerHTML = ['<option value="All">All kinds</option>']
+    .concat(kinds().map(k=>`<option value="${esc(k)}">${esc(k)}s (${(DB.counts_by_kind||{})[k]||0})</option>`)).join("");
+  kd.value = kinds().includes(state.kind) ? state.kind : "All";
   const cat = $("fcat");
   cat.innerHTML = ['<option value="All">All categories</option>']
     .concat(DB.categories.map(c=>`<option value="${esc(c)}">${esc(c)} (${DB.counts_by_category[c]||0})</option>`)).join("");
@@ -930,6 +1004,7 @@ function apply(){
   const toks = tokenize(state.q);
   let rows = DB.skills.map(sk=>({sk, rel:relevance(sk,toks)}));
   if(toks.length) rows = rows.filter(r=>r.rel>0);
+  if(state.kind!=="All") rows = rows.filter(r=>(r.sk.kind||"skill")===state.kind);
   if(state.cat!=="All") rows = rows.filter(r=>r.sk.category===state.cat);
   if(state.type!=="All") rows = rows.filter(r=>r.sk.type===state.type);
   rows.sort((a,b)=>{
@@ -946,7 +1021,7 @@ function proseCell(t){ return t ? `<div class="prose">${esc(t)}</div>` : `<div c
 function rowHTML(sk, idx){
   const color = catColor(sk.category);
   const main = `<tr class="row" data-idx="${idx}">
-    <td><button type="button" class="disclosure" aria-expanded="false" aria-controls="d-${idx}"><span class="chev" aria-hidden="true">▶</span><span class="skill-name">${esc(sk.name)}</span></button><div class="skill-sum">${esc(sk.summary)}</div></td>
+    <td><button type="button" class="disclosure" aria-expanded="false" aria-controls="d-${idx}"><span class="chev" aria-hidden="true">▶</span><span class="skill-name">${esc(sk.name)}</span><span class="kind-pill k-${esc(sk.kind||'skill')}">${esc(sk.kind||'skill')}</span></button><div class="skill-sum">${esc(sk.summary)}</div></td>
     <td><span class="catcell"><span class="dot" style="background:${color}"></span>${esc(sk.category)}</span></td>
     <td><span class="type-pill">${esc(sk.type||"—")}</span></td>
     <td>${proseCell(sk.best_use)}</td>
@@ -976,7 +1051,7 @@ function render(){
   const rows = apply();
   $("tbody").innerHTML = rows.map((sk,i)=>rowHTML(sk,i)).join("");
   $("empty").hidden = rows.length>0;
-  $("foot").textContent = `Showing ${rows.length} of ${DB.total} skills. Score (0–100) rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.`;
+  $("foot").textContent = `Showing ${rows.length} of ${DB.total} items. Score (0–100) rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.`;
   document.querySelectorAll("thead th").forEach(th=>{
     const btn = th.querySelector(".th-sort"); if(!btn) return;
     const active = btn.dataset.sort===state.sort;
@@ -1000,7 +1075,12 @@ function setSort(key){
   render();
 }
 function stamp(label){ $("updated").textContent = `${label} ${new Date().toLocaleTimeString()} · ${DB.total} skills`; }
-function counts(){ $("c-total").textContent = DB.total; $("c-cats").textContent = DB.categories.length; }
+function counts(){
+  $("c-total").textContent = DB.total;
+  $("c-cats").textContent = DB.categories.length;
+  const ck = DB.counts_by_kind || {};
+  $("c-kinds").textContent = kinds().map(k=>`${ck[k]||0} ${k}s`).join(" · ");
+}
 async function fetchData(path){
   const r = await fetch(path, { method: path.indexOf("refresh")>=0?"POST":"GET", cache:"no-store" });
   if(!r.ok) throw new Error("HTTP "+r.status); return await r.json();
@@ -1013,6 +1093,7 @@ async function refresh(){
   finally { btn.disabled = false; btn.classList.remove("spin"); lbl.textContent = "Refresh"; }
 }
 $("q").addEventListener("input", e=>{ state.q=e.target.value; render(); });
+$("fkind").addEventListener("change", e=>{ state.kind=e.target.value; render(); });
 $("fcat").addEventListener("change", e=>{ state.cat=e.target.value; render(); });
 $("ftype").addEventListener("change", e=>{ state.type=e.target.value; render(); });
 document.querySelector("thead").addEventListener("click", e=>{
@@ -1031,6 +1112,7 @@ function applyTheme(name){
 function syncURL(){
   const p = new URLSearchParams();
   if(state.q) p.set("q", state.q);
+  if(state.kind!=="All") p.set("kind", state.kind);
   if(state.cat!=="All") p.set("cat", state.cat);
   if(state.type!=="All") p.set("type", state.type);
   if(state.sort!=="score" || state.dir!==-1){ p.set("sort", state.sort); p.set("dir", state.dir<0?"desc":"asc"); }
@@ -1041,6 +1123,7 @@ function syncURL(){
 function readURL(){
   const p = new URLSearchParams(location.search);
   if(p.has("q")) state.q = p.get("q");
+  if(p.has("kind")) state.kind = p.get("kind");
   if(p.has("cat")) state.cat = p.get("cat");
   if(p.has("type")) state.type = p.get("type");
   if(p.has("sort")){ state.sort = p.get("sort"); state.dir = p.get("dir")==="asc" ? 1 : -1; }
@@ -1092,7 +1175,7 @@ class _DBHandler(BaseHTTPRequestHandler):
     _FONT_TYPES = {".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".otf": "font/otf"}
 
     def _rescan(self) -> list[Skill]:
-        return scan_skills(self.root)
+        return scan_library(self.root)
 
     def _serve_font(self, name: str) -> None:
         """Serve a licensed brand font from design-system/fonts (if present).
@@ -1212,7 +1295,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else Path(__file__).resolve().parent.parent
-    skills = scan_skills(root)
+    skills = scan_library(root)
 
     cmd = args.cmd or "stats"
 
