@@ -34,6 +34,7 @@
   "skills": [
     {
       "name": "frontend-slides-editable",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -47,7 +48,7 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": true,
-      "file_count": 160,
+      "file_count": 173,
       "skill_md_bytes": 38342,
       "in_catalog": true,
       "in_readme": true,
@@ -70,6 +71,7 @@
     },
     {
       "name": "html-ppt",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -106,6 +108,7 @@
     },
     {
       "name": "hyperframes-animation",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -142,6 +145,7 @@
     },
     {
       "name": "lark-slides",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -155,7 +159,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 52,
+      "file_count": 59,
       "skill_md_bytes": 28939,
       "in_catalog": false,
       "in_readme": true,
@@ -178,6 +182,7 @@
     },
     {
       "name": "product-strategy-session",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "workflow",
       "theme": "strategy-positioning",
@@ -218,6 +223,7 @@
     },
     {
       "name": "canvas-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -254,6 +260,7 @@
     },
     {
       "name": "find-animation-opportunities",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -290,6 +297,7 @@
     },
     {
       "name": "improve-animations",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -326,6 +334,7 @@
     },
     {
       "name": "review-animations",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -362,6 +371,7 @@
     },
     {
       "name": "remotion-best-practices",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -398,6 +408,7 @@
     },
     {
       "name": "high-end-visual-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -434,6 +445,7 @@
     },
     {
       "name": "taste-skill",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -470,6 +482,7 @@
     },
     {
       "name": "apple-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -506,6 +519,7 @@
     },
     {
       "name": "design-system",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -519,7 +533,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 29,
+      "file_count": 36,
       "skill_md_bytes": 8298,
       "in_catalog": false,
       "in_readme": true,
@@ -542,6 +556,7 @@
     },
     {
       "name": "frontend-design",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -578,6 +593,7 @@
     },
     {
       "name": "slides",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -614,6 +630,7 @@
     },
     {
       "name": "user-story",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -631,11 +648,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 7,
+      "file_count": 8,
       "skill_md_bytes": 11457,
       "in_catalog": false,
       "in_readme": false,
-      "score": 53,
+      "score": 54,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -644,7 +661,7 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 7,
+        "breadth": 8,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
@@ -654,6 +671,7 @@
     },
     {
       "name": "tam-sam-som-calculator",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "market-intelligence",
@@ -671,11 +689,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 6,
+      "file_count": 7,
       "skill_md_bytes": 19112,
       "in_catalog": false,
       "in_readme": false,
-      "score": 52,
+      "score": 53,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -684,7 +702,7 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 6,
+        "breadth": 7,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
@@ -694,6 +712,7 @@
     },
     {
       "name": "html-diagram",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -730,6 +749,7 @@
     },
     {
       "name": "pm-handoff",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -766,6 +786,7 @@
     },
     {
       "name": "hyperframes-core",
+      "source_root": "skills",
       "category": "Motion & Animation",
       "type": "",
       "theme": "",
@@ -802,6 +823,7 @@
     },
     {
       "name": "install-open-design",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -838,6 +860,7 @@
     },
     {
       "name": "epic-hypothesis",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -878,6 +901,7 @@
     },
     {
       "name": "jobs-to-be-done",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -918,6 +942,7 @@
     },
     {
       "name": "press-release",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "pm-artifacts",
@@ -958,6 +983,7 @@
     },
     {
       "name": "problem-statement",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -998,6 +1024,7 @@
     },
     {
       "name": "proto-persona",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "component",
       "theme": "discovery-research",
@@ -1038,6 +1065,7 @@
     },
     {
       "name": "react-bits",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1074,6 +1102,7 @@
     },
     {
       "name": "lean-ux-canvas",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "validation-experiments",
@@ -1114,6 +1143,7 @@
     },
     {
       "name": "opportunity-solution-tree",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1154,6 +1184,7 @@
     },
     {
       "name": "problem-framing-canvas",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1194,6 +1225,7 @@
     },
     {
       "name": "web-design-guidelines",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1230,6 +1262,7 @@
     },
     {
       "name": "design-artifact",
+      "source_root": "skills",
       "category": "Design & Frontend",
       "type": "",
       "theme": "",
@@ -1266,6 +1299,7 @@
     },
     {
       "name": "install-github-skills",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -1302,6 +1336,7 @@
     },
     {
       "name": "user-story-mapping-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1342,6 +1377,7 @@
     },
     {
       "name": "customer-journey-mapping-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1382,6 +1418,7 @@
     },
     {
       "name": "discovery-interview-prep",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "discovery-research",
@@ -1422,6 +1459,7 @@
     },
     {
       "name": "epic-breakdown-advisor",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "pm-artifacts",
@@ -1462,6 +1500,7 @@
     },
     {
       "name": "positioning-workshop",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1502,6 +1541,7 @@
     },
     {
       "name": "prioritization-advisor",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "strategy-positioning",
@@ -1542,6 +1582,7 @@
     },
     {
       "name": "workshop-facilitation",
+      "source_root": "skills",
       "category": "Product & Discovery",
       "type": "interactive",
       "theme": "workshops-facilitation",
@@ -1582,6 +1623,7 @@
     },
     {
       "name": "install-impeccable",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
@@ -1618,6 +1660,7 @@
     },
     {
       "name": "capture-a-skill",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1654,6 +1697,7 @@
     },
     {
       "name": "debug-from-evidence",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1690,6 +1734,7 @@
     },
     {
       "name": "plan-the-work",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1726,6 +1771,7 @@
     },
     {
       "name": "review-the-diff",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1762,6 +1808,7 @@
     },
     {
       "name": "ship-the-change",
+      "source_root": "skills",
       "category": "Engineering Workflow",
       "type": "",
       "theme": "",
@@ -1798,6 +1845,7 @@
     },
     {
       "name": "lark-shared",
+      "source_root": "skills",
       "category": "Presentations & Diagrams",
       "type": "",
       "theme": "",
@@ -1834,6 +1882,7 @@
     },
     {
       "name": "install-work-kit",
+      "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",

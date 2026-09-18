@@ -68,33 +68,46 @@ That installs design-system, visual QA, motion, presentation, copy, and product-
 
 ## Skills database (find a skill)
 
-Every `skills/*/SKILL.md` is indexed into a searchable, categorized, and ranked
-database. Find the right skill from the terminal:
+Every skill under `skills/` is indexed into a searchable, categorized, and
+ranked database.
+
+**Interactive app (recommended).** Run the local server and open the page — it
+has live search, category filters, rank sorting, and a **Refresh** button that
+rescans your skills so newly added ones show up instantly:
+
+```bash
+./scripts/skills-db.sh serve        # http://127.0.0.1:8765
+```
+
+The app talks to a small JSON API: `GET /api/skills` (live index) and
+`POST /api/refresh` (rescan + rewrite the committed `SKILLS.md`,
+`skills-database.html`, and `catalog/skills-index.json`). Click **Refresh**
+after adding a skill and it appears — no restart, no rebuild step.
+
+**Terminal.** Find or browse without the server:
 
 ```bash
 ./scripts/skills-db.sh find animation      # ranked matches for a topic
 ./scripts/skills-db.sh find "user story"   # multi-word query
 ./scripts/skills-db.sh list                # categorized + ranked listing
 ./scripts/skills-db.sh stats               # category counts + top skills
+./scripts/skills-db.sh build               # regenerate the committed artifacts
 ```
 
-Or open **`skills-database.html`** for a self-contained UI with live search,
-category filters, and rank sorting (no server needed). In chat, `/find-a-skill`
-routes to the same finder.
+In chat, `/find-a-skill` routes to the finder. The static
+`skills-database.html` also opens straight from disk (no server) as a snapshot —
+the Refresh button only appears when served.
 
 Skills fall into six categories — Product & Discovery, Design & Frontend,
 Motion & Animation, Presentations & Diagrams, Engineering Workflow, and Setup &
-Install. Each skill gets a 0–100 score that rewards invocability (a `/command`
-or auto-applying rule), bundled tooling (`scripts/`, tests, `examples/`,
-`docs/`), doc depth, metadata completeness, and catalog/README integration. See
-[SKILLS.md](SKILLS.md) for the full ranked catalog.
+Install (new categories appear automatically if a skill needs one). Each skill
+gets a 0–100 score that rewards invocability (a `/command` or auto-applying
+rule), bundled tooling (`scripts/`, tests, `examples/`, `docs/`), doc depth,
+metadata completeness, and catalog/README integration. See [SKILLS.md](SKILLS.md)
+for the full ranked catalog.
 
-Regenerate the committed artifacts (`SKILLS.md`, `skills-database.html`,
-`catalog/skills-index.json`) after adding or editing skills:
-
-```bash
-./scripts/skills-db.sh build
-```
+Adding a skill category or root? Edit `SKILL_ROOTS` / the taxonomy maps at the
+top of `scripts/skills_db.py`.
 
 ## Cloud Agents
 

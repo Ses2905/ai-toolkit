@@ -19,12 +19,19 @@ import json
 import re
 import sys
 from dataclasses import dataclass, field, asdict
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 try:
     import yaml  # optional; a minimal fallback parser is used when absent
 except ImportError:  # pragma: no cover - exercised only without PyYAML
     yaml = None
+
+
+# Directories (repo-relative) scanned for `*/SKILL.md`. The kit vendors its
+# skills under skills/; `.agents/` is a `npx skills add` dump and is gitignored,
+# so it is intentionally not scanned. Add new first-class roots here as needed.
+SKILL_ROOTS: list[str] = ["skills"]
 
 
 # --- Taxonomy -------------------------------------------------------------
@@ -77,6 +84,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "html-diagram": "Presentations & Diagrams",
     "lark-slides": "Presentations & Diagrams",
     "lark-shared": "Presentations & Diagrams",
+    "gpt-taste": "Design & Frontend",
     # Engineering Workflow
     "plan-the-work": "Engineering Workflow",
     "debug-from-evidence": "Engineering Workflow",
@@ -104,7 +112,11 @@ KEYWORD_RULES: list[tuple[str, str]] = [
         r"jobs.to.be.done|opportunity|workshop|hypothesis|prioriti|press release|"
         r"canvas|interview|market",
     ),
-    ("Engineering Workflow", r"debug|plan|review|ship|commit|diff|test|refactor"),
+    (
+        "Engineering Workflow",
+        r"debug|plan|review|ship|commit|diff|test|refactor|handoff|hand-off|"
+        r"pickup|pick-up|session|workflow",
+    ),
 ]
 
 # Category → short blurb for the catalog / HTML headers.
@@ -137,9 +149,22 @@ SCORE_WEIGHTS: dict[str, int] = {
 MAX_RAW = sum(SCORE_WEIGHTS.values())
 
 
+def present_categories(skills: list["Skill"]) -> list[str]:
+    """Categories that actually occur, in canonical order with extras appended.
+
+    Keeps the display robust when a new skill lands in an unexpected category
+    (e.g. Uncategorized) so it is never silently dropped from the UI/catalog.
+    """
+    have = {s.category for s in skills}
+    ordered = [c for c in CATEGORIES if c in have]
+    extras = sorted(c for c in have if c not in CATEGORIES)
+    return ordered + extras
+
+
 @dataclass
 class Skill:
     name: str
+    source_root: str
     category: str
     type: str
     theme: str
@@ -305,7 +330,7 @@ def _command_by_skill(root: Path) -> dict[str, str]:
     commands_dir = root / "commands"
     if not commands_dir.is_dir():
         return {}
-    skill_names = {p.name for p in (root / "skills").glob("*") if (p / "SKILL.md").is_file()}
+    skill_names = {md.parent.name for _, md in _iter_skill_dirs(root)}
     mapping: dict[str, str] = {}
     for cmd in sorted(commands_dir.glob("*.md")):
         body = cmd.read_text(encoding="utf-8", errors="replace")
@@ -317,10 +342,22 @@ def _command_by_skill(root: Path) -> dict[str, str]:
     return mapping
 
 
+def _iter_skill_dirs(root: Path) -> list[tuple[str, Path]]:
+    """Return (source_root, skill_md_path) for every SKILL.md across roots."""
+    found: list[tuple[str, Path]] = []
+    for rel in SKILL_ROOTS:
+        base = root / rel
+        if not base.is_dir():
+            continue
+        for skill_md in sorted(base.glob("*/SKILL.md")):
+            found.append((rel, skill_md))
+    return found
+
+
 def scan_skills(root: Path) -> list[Skill]:
-    skills_dir = root / "skills"
-    if not skills_dir.is_dir():
-        raise SystemExit(f"No skills/ directory at {skills_dir}")
+    skill_dirs = _iter_skill_dirs(root)
+    if not skill_dirs:
+        raise SystemExit(f"No SKILL.md found under {', '.join(SKILL_ROOTS)} in {root}")
 
     command_by_skill = _command_by_skill(root)
     rules = {p.stem for p in (root / "rules").glob("*.mdc")} if (root / "rules").is_dir() else set()
@@ -328,7 +365,7 @@ def scan_skills(root: Path) -> list[Skill]:
     readme_text = (root / "README.md").read_text() if (root / "README.md").is_file() else ""
 
     skills: list[Skill] = []
-    for skill_md in sorted(skills_dir.glob("*/SKILL.md")):
+    for source_root, skill_md in skill_dirs:
         d = skill_md.parent
         name = d.name
         fm = parse_frontmatter(skill_md.read_text(encoding="utf-8", errors="replace"))
@@ -342,6 +379,7 @@ def scan_skills(root: Path) -> list[Skill]:
         files = [p for p in d.rglob("*") if p.is_file()]
         skill = Skill(
             name=name,
+            source_root=source_root,
             category=categorize(name, theme, description),
             type=str(fm.get("type", "") or ""),
             theme=theme,
@@ -413,30 +451,33 @@ def search(skills: list[Skill], query: str) -> list[tuple[Skill, int]]:
 # --- Output generators ----------------------------------------------------
 
 def build_index(skills: list[Skill]) -> dict:
+    cats = present_categories(skills)
     return {
         "generated_by": "scripts/skills_db.py",
-        "categories": CATEGORIES,
+        "categories": cats,
         "score_weights": SCORE_WEIGHTS,
         "score_max_raw": MAX_RAW,
         "total": len(skills),
         "counts_by_category": {
-            c: sum(1 for s in skills if s.category == c) for c in CATEGORIES
+            c: sum(1 for s in skills if s.category == c) for c in cats
         },
         "skills": [asdict(s) for s in sorted(skills, key=lambda s: s.rank_overall)],
     }
 
 
 def render_markdown(skills: list[Skill]) -> str:
+    cats = present_categories(skills)
     lines: list[str] = []
     lines.append("# Work Kit Skills Database")
     lines.append("")
     lines.append(
         "Auto-generated by `scripts/skills_db.py build`. Do not edit by hand — "
-        "run the builder to refresh. Search from the terminal with "
-        "`./scripts/skills-db.sh find <query>` or open `skills-database.html`."
+        "run the builder to refresh, or use the live app "
+        "(`./scripts/skills-db.sh serve`) and its Refresh button. Search from the "
+        "terminal with `./scripts/skills-db.sh find <query>`."
     )
     lines.append("")
-    lines.append(f"**{len(skills)} skills** across **{len(CATEGORIES)} categories**. "
+    lines.append(f"**{len(skills)} skills** across **{len(cats)} categories**. "
                  "Score (0-100) rewards invocability (command/rule), bundled tooling "
                  "(scripts/tests/examples/docs), doc depth, metadata completeness, and "
                  "catalog/README integration.")
@@ -446,7 +487,7 @@ def render_markdown(skills: list[Skill]) -> str:
     lines.append("")
     lines.append("| Category | Skills | Blurb |")
     lines.append("| --- | --- | --- |")
-    for c in CATEGORIES:
+    for c in cats:
         n = sum(1 for s in skills if s.category == c)
         lines.append(f"| {c} | {n} | {CATEGORY_BLURB.get(c, '')} |")
     lines.append("")
@@ -459,7 +500,7 @@ def render_markdown(skills: list[Skill]) -> str:
         lines.append(f"| {s.rank_overall} | `{s.name}` | {s.category} | {s.score} |")
     lines.append("")
 
-    for c in CATEGORIES:
+    for c in cats:
         group = sorted(
             [s for s in skills if s.category == c], key=lambda s: s.rank_in_category
         )
@@ -496,7 +537,7 @@ def render_html(skills: list[Skill]) -> str:
     # The JSON is embedded; escape the closing script sequence defensively.
     data_json = data_json.replace("</", "<\\/")
     total = len(skills)
-    ncats = len([c for c in CATEGORIES if any(s.category == c for s in skills)])
+    ncats = len(present_categories(skills))
     return _HTML_TEMPLATE.replace("__DATA__", data_json).replace(
         "__TOTAL__", str(total)
     ).replace("__NCATS__", str(ncats)).replace(
@@ -530,6 +571,11 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   .search input { flex: 1; background: transparent; border: 0; outline: 0; color: var(--ink); font-size: 15px; }
   .search svg { flex: none; opacity: 0.6; }
   select { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 14px; }
+  button.refresh { cursor: pointer; border: 1px solid transparent; border-radius: 10px; padding: 9px 14px; font-size: 14px; font-weight: 600;
+    color: #0b0d12; background: linear-gradient(135deg, var(--good), #22c55e); transition: 0.15s; }
+  button.refresh:hover { filter: brightness(1.08); }
+  button.refresh:disabled { opacity: 0.6; cursor: default; }
+  .updated { color: var(--muted); font-size: 12px; margin-left: 2px; }
   .chips { max-width: 1180px; margin: 0 auto; padding: 14px 24px 0; display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { cursor: pointer; user-select: none; border: 1px solid var(--line); background: var(--chip);
     color: var(--muted); padding: 7px 13px; border-radius: 999px; font-size: 13px; transition: 0.15s; }
@@ -573,6 +619,8 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
       <option value="name">Sort: Name (A–Z)</option>
       <option value="category">Sort: Category</option>
     </select>
+    <button id="refresh" class="refresh" hidden>&#8635; Refresh</button>
+    <span id="updated" class="updated"></span>
   </div>
   <div class="chips" id="chips"></div>
 </div>
@@ -580,11 +628,14 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 <main><div class="grid" id="grid"></div><div class="empty" id="empty" hidden>No skills match your search.</div></main>
 <footer>Regenerate with <code>./scripts/skills-db.sh build</code>. Score rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.</footer>
 <script>
-const DB = __DATA__;
+let DB = __DATA__;
+const LIVE = location.protocol !== "file:";
 const state = { q: "", cat: "All", sort: "rank" };
 const grid = document.getElementById("grid");
 const empty = document.getElementById("empty");
 const countEl = document.getElementById("count");
+const updatedEl = document.getElementById("updated");
+const refreshBtn = document.getElementById("refresh");
 
 function tokenize(s){ return s.toLowerCase().split(/\s+/).filter(Boolean); }
 function relevance(sk, toks){
@@ -651,16 +702,135 @@ function buildChips(){
     el.classList.add("active"); render();
   });
 }
+function stamp(label){
+  const t = new Date().toLocaleTimeString();
+  updatedEl.textContent = `${label} ${t} · ${DB.total} skills`;
+}
+async function fetchData(path){
+  const r = await fetch(path, { method: path.indexOf("refresh") >= 0 ? "POST" : "GET", cache: "no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  return await r.json();
+}
+async function refresh(){
+  refreshBtn.disabled = true;
+  const original = refreshBtn.innerHTML;
+  refreshBtn.textContent = "Refreshing…";
+  try {
+    DB = await fetchData("/api/refresh");
+    if(!DB.categories.includes(state.cat)) state.cat = "All";
+    buildChips(); render(); stamp("Refreshed");
+  } catch(e) {
+    stamp("Refresh failed —");
+  } finally {
+    refreshBtn.disabled = false;
+    refreshBtn.innerHTML = original;
+  }
+}
 document.getElementById("q").addEventListener("input", e => { state.q = e.target.value; render(); });
 document.getElementById("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
-buildChips(); render();
+
+async function init(){
+  if(LIVE){
+    refreshBtn.hidden = false;
+    refreshBtn.addEventListener("click", refresh);
+    try { DB = await fetchData("/api/skills"); } catch(e) { /* fall back to embedded data */ }
+  }
+  buildChips(); render();
+  stamp(LIVE ? "Loaded" : "Snapshot");
+}
+init();
 </script>
 </body>
 </html>
 """
 
 
+# --- Live server ----------------------------------------------------------
+
+class _DBHandler(BaseHTTPRequestHandler):
+    """Serves the interactive page plus a live/rescanning JSON API.
+
+    ``root`` and ``build_paths`` are bound per-server via functools.partial.
+    """
+
+    root: Path = Path(".")
+    build_paths: dict[str, str] = {}
+
+    def log_message(self, *args) -> None:  # quiet by default
+        pass
+
+    def _send(self, code: int, body: bytes, ctype: str) -> None:
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
+    def _json(self, payload: dict) -> None:
+        self._send(200, json.dumps(payload).encode("utf-8"), "application/json; charset=utf-8")
+
+    def _rescan(self) -> list[Skill]:
+        return scan_skills(self.root)
+
+    def _handle(self) -> None:
+        path = self.path.split("?", 1)[0].rstrip("/") or "/"
+        if path == "/":
+            html_doc = render_html(self._rescan())
+            self._send(200, html_doc.encode("utf-8"), "text/html; charset=utf-8")
+        elif path == "/api/skills":
+            self._json(build_index(self._rescan()))
+        elif path == "/api/refresh":
+            # Rescan AND rewrite the committed artifacts so disk stays current.
+            skills = self._rescan()
+            _write_artifacts(self.root, skills, self.build_paths)
+            payload = build_index(skills)
+            payload["refreshed"] = True
+            self._json(payload)
+        else:
+            self._send(404, b"Not found", "text/plain; charset=utf-8")
+
+    def do_GET(self) -> None:
+        self._handle()
+
+    def do_HEAD(self) -> None:
+        self._handle()
+
+    def do_POST(self) -> None:
+        self._handle()
+
+
+def serve(root: Path, host: str, port: int, build_paths: dict[str, str]) -> None:
+    class Bound(_DBHandler):
+        pass
+
+    Bound.root = root
+    Bound.build_paths = build_paths
+    httpd = ThreadingHTTPServer((host, port), Bound)
+    actual = httpd.server_address[1]
+    print(f"Skills database live at http://{host or 'localhost'}:{actual}/")
+    print("  GET  /               interactive page (rescans on load)")
+    print("  GET  /api/skills     live JSON index")
+    print("  POST /api/refresh    rescan + rewrite SKILLS.md/html/json, return index")
+    print("Press Ctrl+C to stop.")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
+    finally:
+        httpd.server_close()
+
+
 # --- CLI ------------------------------------------------------------------
+
+def _write_artifacts(root: Path, skills: list[Skill], paths: dict[str, str]) -> None:
+    json_path = root / paths.get("json", "catalog/skills-index.json")
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(json.dumps(build_index(skills), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (root / paths.get("md", "SKILLS.md")).write_text(render_markdown(skills), encoding="utf-8")
+    (root / paths.get("html", "skills-database.html")).write_text(render_html(skills), encoding="utf-8")
+
 
 def _fmt_find(results: list[tuple[Skill, int]], limit: int) -> str:
     if not results:
@@ -697,6 +867,10 @@ def main(argv: list[str] | None = None) -> int:
     p_build.add_argument("--json", default="catalog/skills-index.json", help="JSON index output path (repo-relative)")
     p_build.add_argument("--md", default="SKILLS.md", help="Markdown catalog output path (repo-relative)")
     p_build.add_argument("--html", default="skills-database.html", help="HTML output path (repo-relative)")
+
+    p_serve = sub.add_parser("serve", help="Run the interactive skills database app with a live Refresh")
+    p_serve.add_argument("--host", default="127.0.0.1", help="bind host (default 127.0.0.1)")
+    p_serve.add_argument("--port", type=int, default=8765, help="bind port (default 8765; 0 = pick a free port)")
 
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else Path(__file__).resolve().parent.parent
@@ -736,13 +910,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if cmd == "build":
-        index = build_index(skills)
-        json_path = root / args.json
-        json_path.parent.mkdir(parents=True, exist_ok=True)
-        json_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        (root / args.md).write_text(render_markdown(skills), encoding="utf-8")
-        (root / args.html).write_text(render_html(skills), encoding="utf-8")
+        paths = {"json": args.json, "md": args.md, "html": args.html}
+        _write_artifacts(root, skills, paths)
         print(f"Wrote {args.json}, {args.md}, {args.html} ({len(skills)} skills).")
+        return 0
+
+    if cmd == "serve":
+        serve(root, args.host, args.port, {})
         return 0
 
     parser.print_help()

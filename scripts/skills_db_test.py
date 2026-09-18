@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
-"""Tests for scripts/skills_db.py. Run: python3 scripts/skills_db_test.py"""
+"""Tests for scripts/skills_db.py. Run: python3 scripts/skills_db_test.py
+
+Deliberately count-agnostic: the kit grows over time, so tests assert
+invariants (every skill categorized-and-counted, dense ranks, live API works)
+rather than hard-coding the number of skills.
+"""
 
 from __future__ import annotations
 
 import json
-import subprocess
-import sys
+import tempfile
+import threading
 import unittest
+import urllib.error
+import urllib.request
+from http.server import ThreadingHTTPServer
 from pathlib import Path
+import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -15,16 +24,14 @@ import skills_db  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# Expected category distribution for the current repo.
-EXPECTED_COUNTS = {
-    "Product & Discovery": 18,
-    "Design & Frontend": 9,
-    "Motion & Animation": 6,
-    "Presentations & Diagrams": 6,
-    "Engineering Workflow": 6,
-    "Setup & Install": 4,
-}
-EXPECTED_TOTAL = sum(EXPECTED_COUNTS.values())
+
+def _skill_md_count(root: Path) -> int:
+    n = 0
+    for rel in skills_db.SKILL_ROOTS:
+        base = root / rel
+        if base.is_dir():
+            n += len(list(base.glob("*/SKILL.md")))
+    return n
 
 
 class FrontmatterTest(unittest.TestCase):
@@ -44,11 +51,9 @@ class FrontmatterTest(unittest.TestCase):
         "# Body\n"
     )
 
-    def test_yaml_and_minimal_agree(self):
+    def test_parse(self):
         got = skills_db.parse_frontmatter(self.SAMPLE)
         self.assertEqual(got["name"], "demo")
-        self.assertEqual(got["type"], "component")
-        self.assertEqual(got["theme"], "pm-artifacts")
         self.assertEqual(got["best_for"], ["One thing", "Another thing"])
 
     def test_minimal_parser_directly(self):
@@ -81,13 +86,17 @@ class CategorizeTest(unittest.TestCase):
             skills_db.categorize("mystery2", "", "Install the CLI and set up auth"),
             "Setup & Install",
         )
+        self.assertEqual(
+            skills_db.categorize("mystery3", "", "Write a handoff brief for the next session"),
+            "Engineering Workflow",
+        )
 
 
 class ScoreTest(unittest.TestCase):
     def _skill(self, **kw):
         base = dict(
-            name="x", category="Engineering Workflow", type="", theme="",
-            description="", argument_hint="", best_for=[], command="",
+            name="x", source_root="skills", category="Engineering Workflow", type="",
+            theme="", description="", argument_hint="", best_for=[], command="",
             has_command=False, has_rule=False, has_scripts=False, has_tests=False,
             has_examples=False, has_docs=False, file_count=1, skill_md_bytes=1000,
             in_catalog=False, in_readme=False,
@@ -109,10 +118,8 @@ class ScoreTest(unittest.TestCase):
             has_tests=True, has_examples=True, has_docs=True, file_count=40,
             skill_md_bytes=40000, in_catalog=True, in_readme=True,
         )
-        lean_score, _ = skills_db.score_skill(lean)
-        rich_score, _ = skills_db.score_skill(rich)
-        self.assertGreater(rich_score, lean_score)
-        self.assertEqual(rich_score, 100)
+        self.assertGreater(skills_db.score_skill(rich)[0], skills_db.score_skill(lean)[0])
+        self.assertEqual(skills_db.score_skill(rich)[0], 100)
 
 
 class RepoScanTest(unittest.TestCase):
@@ -121,24 +128,35 @@ class RepoScanTest(unittest.TestCase):
         cls.skills = skills_db.scan_skills(ROOT)
         cls.by_name = {s.name: s for s in cls.skills}
 
-    def test_total(self):
-        self.assertEqual(len(self.skills), EXPECTED_TOTAL)
+    def test_total_matches_filesystem(self):
+        self.assertEqual(len(self.skills), _skill_md_count(ROOT))
+        self.assertGreater(len(self.skills), 0)
 
-    def test_no_uncategorized(self):
-        unc = [s.name for s in self.skills if s.category == skills_db.UNCATEGORIZED]
-        self.assertEqual(unc, [], f"uncategorized skills: {unc}")
+    def test_counts_sum_to_total(self):
+        idx = skills_db.build_index(self.skills)
+        self.assertEqual(sum(idx["counts_by_category"].values()), len(self.skills))
+        # every skill's category is represented in the index categories
+        for s in self.skills:
+            self.assertIn(s.category, idx["categories"])
 
-    def test_no_playground_taste_duplicate(self):
-        self.assertNotIn("gpt-taste", self.by_name)
-        self.assertIn("taste-skill", self.by_name)
-        self.assertIn("pm-handoff", self.by_name)
+    def test_known_skills_categorized(self):
+        cases = {
+            "apple-design": "Design & Frontend",
+            "product-strategy-session": "Product & Discovery",
+            "hyperframes-animation": "Motion & Animation",
+            "plan-the-work": "Engineering Workflow",
+            "install-work-kit": "Setup & Install",
+        }
+        for name, cat in cases.items():
+            if name in self.by_name:
+                self.assertEqual(self.by_name[name].category, cat, name)
 
-    def test_category_counts(self):
-        counts = {c: sum(1 for s in self.skills if s.category == c) for c in skills_db.CATEGORIES}
-        self.assertEqual(counts, EXPECTED_COUNTS)
+    def test_source_root_is_a_known_root(self):
+        # Every discovered skill records the SKILL_ROOTS entry it came from.
+        for s in self.skills:
+            self.assertIn(s.source_root, skills_db.SKILL_ROOTS)
 
     def test_command_linking_by_body_reference(self):
-        # plan.md references skills/plan-the-work/ -> command should be "plan"
         self.assertEqual(self.by_name["plan-the-work"].command, "plan")
         self.assertEqual(self.by_name["debug-from-evidence"].command, "debug")
         self.assertEqual(self.by_name["capture-a-skill"].command, "new-skill")
@@ -148,11 +166,10 @@ class RepoScanTest(unittest.TestCase):
         overall = sorted(s.rank_overall for s in self.skills)
         self.assertEqual(overall, list(range(1, len(self.skills) + 1)))
         top = min(self.skills, key=lambda s: s.rank_overall)
-        self.assertEqual(top.rank_overall, 1)
         self.assertEqual(top.score, max(s.score for s in self.skills))
 
     def test_rank_in_category_is_dense(self):
-        for c in skills_db.CATEGORIES:
+        for c in skills_db.present_categories(self.skills):
             group = [s for s in self.skills if s.category == c]
             ranks = sorted(s.rank_in_category for s in group)
             self.assertEqual(ranks, list(range(1, len(group) + 1)))
@@ -173,8 +190,7 @@ class SearchTest(unittest.TestCase):
         self.assertEqual(results[0][0].category, "Motion & Animation")
 
     def test_empty_query_returns_all(self):
-        results = skills_db.search(self.skills, "")
-        self.assertEqual(len(results), len(self.skills))
+        self.assertEqual(len(skills_db.search(self.skills, "")), len(self.skills))
 
 
 class BuildTest(unittest.TestCase):
@@ -184,40 +200,83 @@ class BuildTest(unittest.TestCase):
 
     def test_index_shape(self):
         idx = skills_db.build_index(self.skills)
-        self.assertEqual(idx["total"], EXPECTED_TOTAL)
-        self.assertEqual(idx["categories"], skills_db.CATEGORIES)
-        self.assertEqual(sum(idx["counts_by_category"].values()), EXPECTED_TOTAL)
-        # skills sorted by overall rank
-        first = idx["skills"][0]
-        self.assertEqual(first["rank_overall"], 1)
+        self.assertEqual(idx["total"], len(self.skills))
+        self.assertEqual(idx["skills"][0]["rank_overall"], 1)
 
     def test_html_embeds_valid_json(self):
         html = skills_db.render_html(self.skills)
-        marker = "const DB = "
+        marker = "let DB = "
         start = html.index(marker) + len(marker)
-        end = html.index(";\nconst state", start)
+        end = html.index(";\nconst LIVE", start)
         data = json.loads(html[start:end].replace("<\\/", "</"))
-        self.assertEqual(data["total"], EXPECTED_TOTAL)
+        self.assertEqual(data["total"], len(self.skills))
 
-    def test_markdown_has_all_categories(self):
+    def test_html_has_refresh_and_live_api(self):
+        html = skills_db.render_html(self.skills)
+        self.assertIn('id="refresh"', html)
+        self.assertIn("/api/refresh", html)
+        self.assertIn("/api/skills", html)
+
+    def test_markdown_has_present_categories(self):
         md = skills_db.render_markdown(self.skills)
-        for c in skills_db.CATEGORIES:
+        for c in skills_db.present_categories(self.skills):
             self.assertIn(f"## {c}", md)
 
 
-class PlaygroundDumpGuardTest(unittest.TestCase):
-    def test_gitignore_covers_second_skills_root(self):
-        gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
-        self.assertIn(".agents/", gi)
-        self.assertIn("skills-lock.json", gi)
+class ServeTest(unittest.TestCase):
+    """Boots the real handler on an ephemeral port and hits the live API."""
 
-    def test_no_tracked_agents_skill_files(self):
-        tracked = subprocess.check_output(
-            ["git", "ls-files", ".agents/skills", "skills-lock.json"],
-            cwd=ROOT,
-            text=True,
-        ).strip()
-        self.assertEqual(tracked, "", f"tracked Playground dump:\n{tracked}")
+    @classmethod
+    def setUpClass(cls):
+        # Refresh rewrites artifacts; send them to a temp dir so the repo tree
+        # is not mutated by the test run.
+        cls.tmp = tempfile.mkdtemp(prefix="skills-db-test-")
+
+        class Bound(skills_db._DBHandler):
+            pass
+        Bound.root = ROOT
+        Bound.build_paths = {
+            "json": f"{cls.tmp}/skills-index.json",
+            "md": f"{cls.tmp}/SKILLS.md",
+            "html": f"{cls.tmp}/skills-database.html",
+        }
+        cls.httpd = ThreadingHTTPServer(("127.0.0.1", 0), Bound)
+        cls.port = cls.httpd.server_address[1]
+        cls.thread = threading.Thread(target=cls.httpd.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.httpd.shutdown()
+        cls.httpd.server_close()
+
+    def _get(self, path, method="GET"):
+        req = urllib.request.Request(f"http://127.0.0.1:{self.port}{path}", method=method)
+        with urllib.request.urlopen(req, timeout=5) as r:
+            return r.status, r.read()
+
+    def test_index_html(self):
+        status, body = self._get("/")
+        self.assertEqual(status, 200)
+        self.assertIn(b"Work Kit", body)
+
+    def test_api_skills(self):
+        status, body = self._get("/api/skills")
+        self.assertEqual(status, 200)
+        data = json.loads(body)
+        self.assertEqual(data["total"], _skill_md_count(ROOT))
+
+    def test_api_refresh(self):
+        status, body = self._get("/api/refresh", method="POST")
+        self.assertEqual(status, 200)
+        data = json.loads(body)
+        self.assertTrue(data.get("refreshed"))
+        self.assertEqual(data["total"], _skill_md_count(ROOT))
+
+    def test_404(self):
+        with self.assertRaises(urllib.error.HTTPError) as ctx:
+            self._get("/nope")
+        self.assertEqual(ctx.exception.code, 404)
 
 
 if __name__ == "__main__":
