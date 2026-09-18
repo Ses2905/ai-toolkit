@@ -13,12 +13,16 @@ if command -v rsync >/dev/null 2>&1; then
     --exclude '.git/' \
     --exclude 'agent-tools/' \
     --exclude '.DS_Store' \
+    --exclude '.agents/' \
+    --exclude 'skills-lock.json' \
     "$ROOT/" "$DEST/"
 else
   tar -C "$ROOT" \
     --exclude '.git' \
     --exclude 'agent-tools' \
     --exclude '.DS_Store' \
+    --exclude '.agents' \
+    --exclude 'skills-lock.json' \
     -cf - . | tar -C "$DEST" -xf -
 fi
 

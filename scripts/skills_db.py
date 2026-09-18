@@ -83,6 +83,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "review-the-diff": "Engineering Workflow",
     "ship-the-change": "Engineering Workflow",
     "capture-a-skill": "Engineering Workflow",
+    "pm-handoff": "Engineering Workflow",
     # Setup & Install
     "install-github-skills": "Setup & Install",
     "install-impeccable": "Setup & Install",
@@ -112,7 +113,7 @@ CATEGORY_BLURB: dict[str, str] = {
     "Design & Frontend": "Distinctive UI, design systems, typography, and visual direction.",
     "Motion & Animation": "Add, audit, and review motion with a craft bar for animation.",
     "Presentations & Diagrams": "Build editable decks, HTML presentations, and self-contained diagrams.",
-    "Engineering Workflow": "Plan, debug from evidence, review the diff, and ship clean changes.",
+    "Engineering Workflow": "Plan, debug from evidence, review the diff, ship a clean commit, and hand off a session.",
     "Setup & Install": "Install this kit and pull in external skill catalogs and tools.",
 }
 

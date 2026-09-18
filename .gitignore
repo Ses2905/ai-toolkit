@@ -3,3 +3,8 @@ agent-tools/
 *.log
 __pycache__/
 *.pyc
+
+# AI UX Playground / `npx skills add` writes a second local skills root.
+# Work Kit vendors chosen skills under skills/. Do not commit the dump.
+.agents/
+skills-lock.json
