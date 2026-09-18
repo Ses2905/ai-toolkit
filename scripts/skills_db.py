@@ -658,30 +658,51 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   /* Design tokens — a "field guide / catalog" register: cool paper, pine accent,
      serif display + humanist UI sans. Deliberately avoids the cream+serif and
      near-black+neon AI-default looks; one accent, structure carries meaning. */
+  /* Semantic tokens (design-system: the semantic layer enables theming).
+     --pine* alias --accent* so the many component rules stay theme-agnostic. */
   :root {
+    color-scheme: light;
     --paper: #f3f5f2; --surface: #ffffff; --surface-2: #f7faf8;
     --ink: #14232a; --muted: #57666c; --faint: #8a979c;
     --line: #e3e8e4; --line-strong: #ccd4cf;
-    --pine: #0f766e; --pine-ink: #0b5a54; --pine-wash: #e6f1ef; --amber: #b4691a;
+    --accent: #0f766e; --accent-ink: #0b5a54; --accent-wash: #e6f1ef; --on-accent: #ffffff;
+    --pine: var(--accent); --pine-ink: var(--accent-ink); --pine-wash: var(--accent-wash);
     --shadow: 0 1px 2px rgba(20,35,42,.04), 0 10px 30px rgba(20,35,42,.06);
     --display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
     --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     --ease: cubic-bezier(.32,.72,0,1);
   }
+  [data-theme="slate"] {
+    --paper: #eef1f5; --surface: #ffffff; --surface-2: #f5f7fa;
+    --ink: #1b2430; --muted: #59657a; --faint: #8b96a8;
+    --line: #e4e8ee; --line-strong: #cdd5e1;
+    --accent: #4f46e5; --accent-ink: #4338ca; --accent-wash: #ecebfc;
+    --display: var(--ui);
+  }
+  [data-theme="nocturne"] {
+    color-scheme: dark;
+    --paper: #0f1518; --surface: #151d21; --surface-2: #1a242a;
+    --ink: #e7edea; --muted: #a2b2af; --faint: #71827e;
+    --line: #233036; --line-strong: #32434b;
+    --accent: #46c2a4; --accent-ink: #6fd6bd; --accent-wash: #12302a; --on-accent: #06231d;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px rgba(0,0,0,.4);
+  }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--ui);
     font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+  button, select, input, .th-sort, .disclosure { touch-action: manipulation; }
   code { font-size: .85em; background: var(--surface); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
   header { padding: 46px 0 20px; }
   .eyebrow { font-family: var(--display); font-style: italic; color: var(--pine-ink); font-size: 17px; margin: 0 0 4px; }
-  h1 { font-family: var(--display); font-weight: 600; font-size: 41px; line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 12px; }
-  .lede { color: var(--muted); font-size: 16px; max-width: 64ch; margin: 0; }
+  h1 { font-family: var(--display); font-weight: 600; font-size: 41px; line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 12px; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 16px; max-width: 64ch; margin: 0; text-wrap: pretty; }
   .counts { margin-top: 16px; display: flex; gap: 22px; flex-wrap: wrap; color: var(--faint); font-size: 13px; }
   .counts b { color: var(--ink); font-weight: 600; }
 
-  .toolbar { position: sticky; top: 0; z-index: 20; background: rgba(243,245,242,.9);
+  .toolbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 90%, transparent);
     backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .toolbar .wrap { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding-top: 13px; padding-bottom: 13px; }
   .field { display: flex; align-items: center; gap: 9px; background: var(--surface);
@@ -691,8 +712,8 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   .field input { flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; }
   .field.sel { padding: 0; }
   select { font: inherit; color: var(--ink); background: var(--surface); border: 0; border-radius: 10px; padding: 10px 12px; cursor: pointer; outline: 0; }
-  .btn { font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 9px 15px; border: 1px solid var(--pine-ink);
-    background: var(--pine); color: #fff; display: inline-flex; align-items: center; gap: 8px; transition: background .2s var(--ease); }
+  .btn { font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 9px 15px; border: 1px solid var(--accent-ink);
+    background: var(--accent); color: var(--on-accent); display: inline-flex; align-items: center; gap: 8px; transition: background .2s var(--ease); }
   .btn:hover { background: var(--pine-ink); }
   .btn:disabled { opacity: .55; cursor: default; }
   .btn svg { transition: transform .5s var(--ease); }
@@ -704,13 +725,16 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   table { width: 100%; border-collapse: collapse; min-width: 1040px; }
   thead th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); text-align: left; font-weight: 600; font-size: 12px;
     color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
-  th.sortable { cursor: pointer; user-select: none; }
-  th.sortable:hover { color: var(--ink); }
-  th .arrow { color: var(--pine); font-size: 11px; }
+  .th-sort { font: inherit; font-weight: 600; color: var(--muted); background: none; border: 0; padding: 0;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .th-sort:hover { color: var(--ink); }
+  th[aria-sort="ascending"] .th-sort, th[aria-sort="descending"] .th-sort { color: var(--ink); }
+  th .arrow { color: var(--accent); font-size: 11px; }
   tbody td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  tbody tr.row { cursor: pointer; }
   tbody tr.row:hover td { background: var(--surface-2); }
-  .skill-name { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 8px; }
+  .disclosure { font: inherit; text-align: left; background: none; border: 0; padding: 0; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  .skill-name { font-weight: 600; font-size: 14.5px; }
   .chev { color: var(--faint); transition: transform .18s var(--ease); font-size: 10px; }
   tr.row.open .chev { transform: rotate(90deg); }
   .skill-sum { color: var(--muted); font-size: 12.5px; margin-top: 3px; max-width: 44ch;
@@ -752,28 +776,33 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 <div class="toolbar"><div class="wrap">
   <label class="field search">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input id="q" type="search" placeholder="Search skills — name, what it does, best use…" autofocus />
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="q" name="q" type="search" aria-label="Search skills" placeholder="Search skills — name, what it does, best use…" autocomplete="off" spellcheck="false" autofocus />
   </label>
   <div class="field sel"><select id="fcat" aria-label="Filter by category"></select></div>
   <div class="field sel"><select id="ftype" aria-label="Filter by type"></select></div>
-  <button id="refresh" class="btn" hidden><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span class="lbl">Refresh</span></button>
-  <span id="updated" class="updated"></span>
+  <div class="field sel"><select id="ftheme" aria-label="Color theme">
+    <option value="field">Theme: Field Guide</option>
+    <option value="slate">Theme: Slate</option>
+    <option value="nocturne">Theme: Nocturne</option>
+  </select></div>
+  <button id="refresh" class="btn" hidden><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span class="lbl">Refresh</span></button>
+  <span id="updated" class="updated" role="status" aria-live="polite"></span>
 </div></div>
 
 <main class="board"><div class="wrap">
   <div class="tablewrap">
     <table>
       <thead><tr>
-        <th class="sortable" data-sort="name">Skill <span class="arrow"></span></th>
-        <th class="sortable" data-sort="category">Category <span class="arrow"></span></th>
-        <th class="sortable" data-sort="type">Type <span class="arrow"></span></th>
-        <th>Best for</th>
-        <th>Watch-outs</th>
-        <th class="sortable" data-sort="score">Score <span class="arrow"></span></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="name">Skill <span class="arrow" aria-hidden="true"></span></button></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="category">Category <span class="arrow" aria-hidden="true"></span></button></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="type">Type <span class="arrow" aria-hidden="true"></span></button></th>
+        <th>Best For</th>
+        <th>Watch-Outs</th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="score">Score <span class="arrow" aria-hidden="true"></span></button></th>
         <th>Invoke</th>
-        <th class="sortable" data-sort="date_added">Added <span class="arrow"></span></th>
-        <th class="sortable" data-sort="date_updated">Updated <span class="arrow"></span></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="date_added">Added <span class="arrow" aria-hidden="true"></span></button></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="date_updated">Updated <span class="arrow" aria-hidden="true"></span></button></th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -786,7 +815,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 let DB = __DATA__;
 const LIVE = location.protocol !== "file:";
 const CAT_COLORS = ["#0f766e","#7c3aed","#c2410c","#2563eb","#5f7a33","#a1348a","#0e7490","#9a6b00"];
-const state = { q:"", cat:"All", type:"All", sort:"score", dir:-1 };
+const state = { q:"", cat:"All", type:"All", sort:"score", dir:-1, theme:"field" };
 const $ = id => document.getElementById(id);
 function esc(s){ return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function catColor(cat){ const i = DB.categories.indexOf(cat); return CAT_COLORS[(i<0?DB.categories.length:i)%CAT_COLORS.length]; }
@@ -839,7 +868,7 @@ function proseCell(t){ return t ? `<div class="prose">${esc(t)}</div>` : `<div c
 function rowHTML(sk, idx){
   const color = catColor(sk.category);
   const main = `<tr class="row" data-idx="${idx}">
-    <td><div class="skill-name"><span class="chev">▶</span>${esc(sk.name)}</div><div class="skill-sum">${esc(sk.summary)}</div></td>
+    <td><button type="button" class="disclosure" aria-expanded="false" aria-controls="d-${idx}"><span class="chev" aria-hidden="true">▶</span><span class="skill-name">${esc(sk.name)}</span></button><div class="skill-sum">${esc(sk.summary)}</div></td>
     <td><span class="catcell"><span class="dot" style="background:${color}"></span>${esc(sk.category)}</span></td>
     <td><span class="type-pill">${esc(sk.type||"—")}</span></td>
     <td>${proseCell(sk.best_use)}</td>
@@ -854,7 +883,7 @@ function rowHTML(sk, idx){
   badges.push(`<span class="badge${sk.has_rule?" on":""}">rule</span>`);
   ["scripts","tests","examples","docs"].forEach(k=>{ if(sk["has_"+k]) badges.push(`<span class="badge on">${k}</span>`); });
   if(sk.theme) badges.push(`<span class="badge">${esc(sk.theme)}</span>`);
-  const detail = `<tr class="detail" data-for="${idx}" hidden><td colspan="9"><div class="inner">
+  const detail = `<tr class="detail" id="d-${idx}" data-for="${idx}" hidden><td colspan="9"><div class="inner">
     <div class="fb" style="grid-column:1/-1"><h4>WHAT IT IS</h4><p>${esc(sk.description)}</p></div>
     <div class="fb"><h4>BEST USED FOR</h4><p>${sk.best_use?esc(sk.best_use):"—"}</p></div>
     <div class="fb"><h4>WATCH-OUTS</h4><p>${sk.watch_outs?esc(sk.watch_outs):"No limits stated in the skill — check its SKILL.md."}</p></div>
@@ -870,16 +899,22 @@ function render(){
   $("tbody").innerHTML = rows.map((sk,i)=>rowHTML(sk,i)).join("");
   $("empty").hidden = rows.length>0;
   $("foot").textContent = `Showing ${rows.length} of ${DB.total} skills. Score (0–100) rewards invocability, bundled tooling, doc depth, metadata, and catalog/README integration.`;
-  document.querySelectorAll("thead th.sortable").forEach(th=>{
-    th.querySelector(".arrow").textContent = th.dataset.sort===state.sort ? (state.dir<0?"▼":"▲") : "";
+  document.querySelectorAll("thead th").forEach(th=>{
+    const btn = th.querySelector(".th-sort"); if(!btn) return;
+    const active = btn.dataset.sort===state.sort;
+    th.setAttribute("aria-sort", active ? (state.dir<0?"descending":"ascending") : "none");
+    btn.querySelector(".arrow").textContent = active ? (state.dir<0?"▼":"▲") : "";
   });
-  document.querySelectorAll("tbody tr.row").forEach(tr=>{
-    tr.addEventListener("click", ()=>{
-      const d = document.querySelector(`tr.detail[data-for="${tr.dataset.idx}"]`);
-      if(d.hasAttribute("hidden")){ d.removeAttribute("hidden"); tr.classList.add("open"); }
-      else { d.setAttribute("hidden",""); tr.classList.remove("open"); }
-    });
-  });
+  syncURL();
+}
+function toggleRow(tr){
+  if(!tr) return;
+  const d = document.getElementById("d-"+tr.dataset.idx);
+  const open = d.hasAttribute("hidden");
+  if(open){ d.removeAttribute("hidden"); tr.classList.add("open"); }
+  else { d.setAttribute("hidden",""); tr.classList.remove("open"); }
+  const btn = tr.querySelector(".disclosure");
+  if(btn) btn.setAttribute("aria-expanded", String(open));
 }
 function setSort(key){
   if(state.sort===key) state.dir *= -1;
@@ -902,10 +937,46 @@ async function refresh(){
 $("q").addEventListener("input", e=>{ state.q=e.target.value; render(); });
 $("fcat").addEventListener("change", e=>{ state.cat=e.target.value; render(); });
 $("ftype").addEventListener("change", e=>{ state.type=e.target.value; render(); });
-document.querySelectorAll("thead th.sortable").forEach(th=> th.addEventListener("click", ()=>setSort(th.dataset.sort)));
+document.querySelector("thead").addEventListener("click", e=>{
+  const btn = e.target.closest(".th-sort"); if(btn) setSort(btn.dataset.sort);
+});
+$("tbody").addEventListener("click", e=> toggleRow(e.target.closest("tr.row")));
+$("ftheme").addEventListener("change", e=> applyTheme(e.target.value));
+
+function applyTheme(name){
+  state.theme = name;
+  document.documentElement.setAttribute("data-theme", name);
+  $("ftheme").value = name;
+  try { localStorage.setItem("skdb-theme", name); } catch(e) {}
+  syncURL();
+}
+function syncURL(){
+  const p = new URLSearchParams();
+  if(state.q) p.set("q", state.q);
+  if(state.cat!=="All") p.set("cat", state.cat);
+  if(state.type!=="All") p.set("type", state.type);
+  if(state.sort!=="score" || state.dir!==-1){ p.set("sort", state.sort); p.set("dir", state.dir<0?"desc":"asc"); }
+  if(state.theme!=="field") p.set("theme", state.theme);
+  const qs = p.toString();
+  history.replaceState(null, "", qs ? "?"+qs : location.pathname);
+}
+function readURL(){
+  const p = new URLSearchParams(location.search);
+  if(p.has("q")) state.q = p.get("q");
+  if(p.has("cat")) state.cat = p.get("cat");
+  if(p.has("type")) state.type = p.get("type");
+  if(p.has("sort")){ state.sort = p.get("sort"); state.dir = p.get("dir")==="asc" ? 1 : -1; }
+  let theme = p.get("theme");
+  if(!theme){ try { theme = localStorage.getItem("skdb-theme"); } catch(e) {} }
+  if(theme) state.theme = theme;
+}
 async function init(){
+  readURL();
+  applyTheme(state.theme);
   if(LIVE){ const b=$("refresh"); b.hidden=false; b.addEventListener("click", refresh); try { DB = await fetchData("/api/skills"); } catch(e) {} }
-  fillFilters(); counts(); render(); stamp(LIVE ? "Loaded" : "Snapshot");
+  fillFilters();
+  $("q").value = state.q;
+  counts(); render(); stamp(LIVE ? "Loaded" : "Snapshot");
 }
 init();
 </script>

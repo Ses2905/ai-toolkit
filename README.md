@@ -83,7 +83,14 @@ Each row shows what the skill is (a sentence or two), its best use case,
 watch-outs (where it doesn't fit, pulled from the skill's own stated
 boundaries), category, type, score, how to invoke it, and the dates it was
 added and last updated (from git history). Search across everything, filter by
-category or type, sort any column, and click a row for the full brief. The app
+category or type, sort any column, and click a row for the full brief.
+
+The page ships a small **design system**: three token-based themes — **Field
+Guide** (default; paper + pine, editorial serif), **Slate** (cool neutral +
+indigo), and **Nocturne** (dark) — switchable from the toolbar and remembered
+across visits. Filters, sort, and theme are reflected in the URL so a view is
+shareable. Sort headers and row toggles are real buttons (keyboard accessible),
+with visible focus rings, `aria-sort`/`aria-live`, and reduced-motion support. The app
 talks to a small JSON API: `GET /api/skills` (live index) and `POST /api/refresh`
 (rescan + rewrite the committed `SKILLS.md`, `skills-database.html`, and
 `catalog/skills-index.json`). Click **Refresh** after adding a skill and it
