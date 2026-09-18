@@ -4,6 +4,7 @@
 **Feature:** Install once at user scope, then run the Plan → Debug → Review → Ship loop
 **Job to be done:** “When I start work in Cursor, I want a consistent plan-first, evidence-based, review-then-ship path so the change lands cleanly without copying kit files into every repo.”
 **Source prompt:** [User Flow Mapping](https://aiuxplayground.com/prompts/user-flow-mapping) (AI UX Playground)
+**Related:** [User stories](work-kit-first-delivery-stories.md), [Scope](../launches/q4-2026-first-delivery-scope.md)
 
 ---
 
