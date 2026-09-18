@@ -8,3 +8,8 @@ __pycache__/
 # Work Kit vendors chosen skills under skills/. Do not commit the dump.
 .agents/
 skills-lock.json
+
+# Verdant design system uses purchased commercial fonts (Juturu, Lenia Sans,
+# Virtus Verona, Bombshell). Do not redistribute the binaries in this public
+# repo — drop your licensed files into design-system/fonts/ locally.
+design-system/fonts/
