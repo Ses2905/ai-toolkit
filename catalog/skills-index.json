@@ -22,12 +22,12 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 49,
+  "total": 56,
   "counts_by_category": {
-    "Product & Discovery": 18,
-    "Design & Frontend": 9,
+    "Product & Discovery": 19,
+    "Design & Frontend": 12,
     "Motion & Animation": 6,
-    "Presentations & Diagrams": 6,
+    "Presentations & Diagrams": 9,
     "Engineering Workflow": 6,
     "Setup & Install": 4
   },
@@ -53,7 +53,7 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": true,
-      "file_count": 173,
+      "file_count": 160,
       "skill_md_bytes": 38342,
       "in_catalog": true,
       "in_readme": true,
@@ -119,6 +119,135 @@
       "tags": []
     },
     {
+      "name": "ppt-master",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "AI-driven presentation workflow for generating editable PPTX decks and slides, reconstructing page visuals, creating reusable Brand/Style/Layout/Deck workspaces, filling native PPTX templates, and enhancing finished PPTX files. Use when the user asks to create, generate, reconstruct, regenerate, beautify, redesign, template, fill, or enhance a presentation, PPT, PPTX, slide deck, or courseware — including adding narration or animation to one — requests a presentation-authored narrated/self-running video, or mentions ppt-master.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "AI-driven presentation workflow for generating editable PPTX decks and slides, reconstructing page visuals, creating reusable Brand/Style/Layout/Deck workspaces, filling native PPTX templates, and enhancing finished PPTX files.",
+      "best_use": "Use when the user asks to create, generate, reconstruct, regenerate, beautify, redesign, template, fill, or enhance a presentation, PPT, PPTX, slide deck, or courseware — including adding narration or animation to one — requests a presentation-authored narrated/self-running video, or mentions ppt-master.",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "ppt-master",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": true,
+      "has_tests": true,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 12730,
+      "skill_md_bytes": 10043,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 87,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 8,
+        "tests": 6,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 3,
+      "rank_in_category": 3,
+      "tags": []
+    },
+    {
+      "name": "codex-ppt",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "Generate visually unified image-based PPT/PPTX decks from articles, reports, papers, notes, or outlines.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Generate visually unified image-based PPT/PPTX decks from articles, reports, papers, notes, or outlines.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "codex-ppt",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": true,
+      "file_count": 41,
+      "skill_md_bytes": 10383,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 84,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 0,
+        "docs": 3,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 4,
+      "rank_in_category": 4,
+      "tags": []
+    },
+    {
+      "name": "guizang-ppt-skill",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。提供两种风格：① \"电子杂志 × 电子墨水\"（衬线 + 流体背景 + 暖色） ② \"瑞士国际主义\"（无衬线 + 网格点阵 + IKB/柠檬黄/柠檬绿/安全橙高亮）。当用户需要制作分享 / 演讲 / 发布会风格的网页 PPT，或提到\"杂志风 PPT\"、\"瑞士风 PPT\"、\"Swiss Style\"、\"horizontal swipe deck\"时使用。",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。提供两种风格：① \"电子杂志 × 电子墨水\"（衬线 + 流体背景 + 暖色） ② \"瑞士国际主义\"（无衬线 + 网格点阵 + IKB/柠檬黄/柠檬绿/安全橙高亮）。当用户需要制作分享 / 演讲 / 发布会风格的网页 PPT，或提到\"杂志风 PPT\"、\"瑞士风 PPT\"、\"Swiss Style\"、\"horizontal swipe deck\"时使用。",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "guizang-ppt-skill",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": true,
+      "file_count": 35,
+      "skill_md_bytes": 43125,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 84,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 0,
+        "docs": 3,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 5,
+      "rank_in_category": 5,
+      "tags": []
+    },
+    {
       "name": "hyperframes-animation",
       "source_root": "skills",
       "category": "Motion & Animation",
@@ -157,7 +286,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 3,
+      "rank_overall": 6,
       "rank_in_category": 1,
       "tags": []
     },
@@ -182,7 +311,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 59,
+      "file_count": 52,
       "skill_md_bytes": 28939,
       "in_catalog": false,
       "in_readme": true,
@@ -200,8 +329,94 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 4,
-      "rank_in_category": 3,
+      "rank_overall": 7,
+      "rank_in_category": 6,
+      "tags": []
+    },
+    {
+      "name": "huashu-design",
+      "source_root": "skills",
+      "category": "Design & Frontend",
+      "type": "",
+      "theme": "",
+      "description": "花叔Design——用HTML做高保真原型、幻灯片、动画、可视化与专家评审。任何新设计100%先出三个方向初稿给用户选（指定风格/品牌也不豁免），选定后才执行。触发词：做原型、PPT、幻灯片、动画、设计风格、评审、做个HTML页面、UI mockup、导出MP4/GIF、做个好看的。生产级Web App/需后端的系统不适用。",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "花叔Design——用HTML做高保真原型、幻灯片、动画、可视化与专家评审。任何新设计100%先出三个方向初稿给用户选（指定风格/品牌也不豁免），选定后才执行。触发词：做原型、PPT、幻灯片、动画、设计风格、评审、做个HTML页面、UI mockup、导出MP4/GIF、做个好看的。生产级Web App/需后端的系统不适用。",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "huashu-design",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 144,
+      "skill_md_bytes": 65262,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 81,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 8,
+      "rank_in_category": 1,
+      "tags": []
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "source_root": "skills",
+      "category": "Design & Frontend",
+      "type": "",
+      "theme": "",
+      "description": "UI/UX design intelligence. 50 styles, 21 palettes, 50 font pairings, 20 charts, 9 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, mobile app, .html, .tsx, .vue, .svelte. Elements: button, modal, navbar, sidebar, card, table, form, chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, flat design. Topics: color palette, accessibility, animation, layout, typography, font pairing, spacing, hover, shadow, gradient. Integrations: shadcn/ui MCP for component search and examples.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "UI/UX design intelligence. 50 styles, 21 palettes, 50 font pairings, 20 charts, 9 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, mobile app, .html, .tsx, .vue, .svelte. Elements: button, modal, navbar, sidebar, card, table, form, chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, flat design. Topics: color palette, accessibility, animation, layout, typography, font pairing, spacing, hover, shadow, gradient. Integrations: shadcn/ui MCP for component search and examples.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "ui-ux-pro-max",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 28,
+      "skill_md_bytes": 13493,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 81,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 9,
+      "rank_in_category": 2,
       "tags": []
     },
     {
@@ -247,7 +462,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 5,
+      "rank_overall": 10,
       "rank_in_category": 1,
       "tags": [
         "workflow",
@@ -293,8 +508,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 6,
-      "rank_in_category": 1,
+      "rank_overall": 11,
+      "rank_in_category": 3,
       "tags": []
     },
     {
@@ -336,7 +551,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 7,
+      "rank_overall": 12,
       "rank_in_category": 2,
       "tags": []
     },
@@ -379,7 +594,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 8,
+      "rank_overall": 13,
       "rank_in_category": 3,
       "tags": []
     },
@@ -422,7 +637,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 9,
+      "rank_overall": 14,
       "rank_in_category": 4,
       "tags": []
     },
@@ -465,7 +680,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 10,
+      "rank_overall": 15,
       "rank_in_category": 5,
       "tags": []
     },
@@ -508,8 +723,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 11,
-      "rank_in_category": 2,
+      "rank_overall": 16,
+      "rank_in_category": 4,
       "tags": []
     },
     {
@@ -551,8 +766,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 12,
-      "rank_in_category": 3,
+      "rank_overall": 17,
+      "rank_in_category": 5,
       "tags": []
     },
     {
@@ -594,8 +809,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 13,
-      "rank_in_category": 4,
+      "rank_overall": 18,
+      "rank_in_category": 6,
       "tags": []
     },
     {
@@ -619,7 +834,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 36,
+      "file_count": 29,
       "skill_md_bytes": 8298,
       "in_catalog": false,
       "in_readme": true,
@@ -637,8 +852,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 14,
-      "rank_in_category": 5,
+      "rank_overall": 19,
+      "rank_in_category": 7,
       "tags": []
     },
     {
@@ -680,8 +895,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 15,
-      "rank_in_category": 6,
+      "rank_overall": 20,
+      "rank_in_category": 8,
       "tags": []
     },
     {
@@ -723,8 +938,8 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 16,
-      "rank_in_category": 4,
+      "rank_overall": 21,
+      "rank_in_category": 7,
       "tags": []
     },
     {
@@ -752,11 +967,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 8,
+      "file_count": 7,
       "skill_md_bytes": 11457,
       "in_catalog": false,
       "in_readme": false,
-      "score": 54,
+      "score": 53,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -765,12 +980,12 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 8,
+        "breadth": 7,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 17,
+      "rank_overall": 22,
       "rank_in_category": 2,
       "tags": [
         "component",
@@ -802,11 +1017,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 7,
+      "file_count": 6,
       "skill_md_bytes": 19112,
       "in_catalog": false,
       "in_readme": false,
-      "score": 53,
+      "score": 52,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -815,17 +1030,60 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 7,
+        "breadth": 6,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 18,
+      "rank_overall": 23,
       "rank_in_category": 3,
       "tags": [
         "interactive",
         "market-intelligence"
       ]
+    },
+    {
+      "name": "walmart-ads-terminology",
+      "source_root": "skills",
+      "category": "Product & Discovery",
+      "type": "",
+      "theme": "",
+      "description": "The canonical terminology, naming rules, and platform map for Walmart Global Ads advertiser-facing work. Use this skill whenever writing, reviewing, or editing anything an advertiser or an internal stakeholder will read — PRDs, specs, UI copy, error messages, help content, release notes, roadmap slides, exec decks, research findings, metric definitions — and whenever naming a feature, surface, metric, audience, or capability. Also use it when auditing existing material for terminology drift, when two documents disagree about what something is called, or when someone asks what we call X. Trigger even when the user does not mention terminology, naming, or glossary — if the output contains a Walmart Ads product, surface, or metric name, this skill applies.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "The canonical terminology, naming rules, and platform map for Walmart Global Ads advertiser-facing work.",
+      "best_use": "Use this skill whenever writing, reviewing, or editing anything an advertiser or an internal stakeholder will read — PRDs, specs, UI copy, error messages, help content, release notes, roadmap slides, exec decks, research findings, metric definitions — and whenever naming a feature, surface, metric, audience, or capability. Also use it when auditing existing material for terminology drift, when two documents disagree about what something is called, or when someone asks what we call X. Trigger even when the user does not mention terminology, naming, or glossary — if the output contains a Walmart Ads product, surface, or metric name, this skill applies.",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "walmart-ads-terminology",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 5,
+      "skill_md_bytes": 6728,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 52,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 13,
+        "breadth": 5,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 24,
+      "rank_in_category": 4,
+      "tags": []
     },
     {
       "name": "html-diagram",
@@ -866,8 +1124,8 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 19,
-      "rank_in_category": 5,
+      "rank_overall": 25,
+      "rank_in_category": 8,
       "tags": []
     },
     {
@@ -909,7 +1167,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 20,
+      "rank_overall": 26,
       "rank_in_category": 1,
       "tags": []
     },
@@ -952,8 +1210,51 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 21,
+      "rank_overall": 27,
       "rank_in_category": 6,
+      "tags": []
+    },
+    {
+      "name": "rad-spacing",
+      "source_root": "skills",
+      "category": "Design & Frontend",
+      "type": "",
+      "theme": "",
+      "description": "Use for Figma layout work when creating new screens, refactoring spacing, standardizing hierarchy, or spacing nested components. Apply hierarchical spacing using the Gestalt principle of proximity so outer containers get proportionally more spacing than inner elements, using 8px/4px increments from the file's library variables.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Use for Figma layout work when creating new screens, refactoring spacing, standardizing hierarchy, or spacing nested components.",
+      "best_use": "Use for Figma layout work when creating new screens, refactoring spacing, standardizing hierarchy, or spacing nested components. Apply hierarchical spacing using the Gestalt principle of proximity so outer containers get proportionally more spacing than inner elements, using 8px/4px increments from the file's library variables.",
+      "watch_outs": "",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "rad-spacing",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 2,
+      "skill_md_bytes": 5160,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 45,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 10,
+        "breadth": 2,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 28,
+      "rank_in_category": 9,
       "tags": []
     },
     {
@@ -995,7 +1296,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 22,
+      "rank_overall": 29,
       "rank_in_category": 1,
       "tags": []
     },
@@ -1042,8 +1343,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 23,
-      "rank_in_category": 4,
+      "rank_overall": 30,
+      "rank_in_category": 5,
       "tags": [
         "component",
         "pm-artifacts"
@@ -1092,8 +1393,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 24,
-      "rank_in_category": 5,
+      "rank_overall": 31,
+      "rank_in_category": 6,
       "tags": [
         "component",
         "discovery-research"
@@ -1142,8 +1443,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 25,
-      "rank_in_category": 6,
+      "rank_overall": 32,
+      "rank_in_category": 7,
       "tags": [
         "component",
         "pm-artifacts"
@@ -1192,8 +1493,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 26,
-      "rank_in_category": 7,
+      "rank_overall": 33,
+      "rank_in_category": 8,
       "tags": [
         "component",
         "discovery-research"
@@ -1242,8 +1543,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 27,
-      "rank_in_category": 8,
+      "rank_overall": 34,
+      "rank_in_category": 9,
       "tags": [
         "component",
         "discovery-research"
@@ -1288,8 +1589,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 28,
-      "rank_in_category": 7,
+      "rank_overall": 35,
+      "rank_in_category": 10,
       "tags": []
     },
     {
@@ -1335,8 +1636,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 29,
-      "rank_in_category": 9,
+      "rank_overall": 36,
+      "rank_in_category": 10,
       "tags": [
         "interactive",
         "validation-experiments"
@@ -1385,8 +1686,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 30,
-      "rank_in_category": 10,
+      "rank_overall": 37,
+      "rank_in_category": 11,
       "tags": [
         "interactive",
         "discovery-research"
@@ -1435,8 +1736,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 31,
-      "rank_in_category": 11,
+      "rank_overall": 38,
+      "rank_in_category": 12,
       "tags": [
         "interactive",
         "discovery-research"
@@ -1481,8 +1782,51 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 32,
-      "rank_in_category": 8,
+      "rank_overall": 39,
+      "rank_in_category": 11,
+      "tags": []
+    },
+    {
+      "name": "install-github-skills",
+      "source_root": "skills",
+      "category": "Setup & Install",
+      "type": "",
+      "theme": "",
+      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills.",
+      "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "watch_outs": "",
+      "date_added": "2026-09-16",
+      "date_updated": "2026-09-18",
+      "command": "install-github-skills",
+      "has_command": true,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 6026,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 38,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 12,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 40,
+      "rank_in_category": 2,
       "tags": []
     },
     {
@@ -1524,51 +1868,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 33,
-      "rank_in_category": 9,
-      "tags": []
-    },
-    {
-      "name": "install-github-skills",
-      "source_root": "skills",
-      "category": "Setup & Install",
-      "type": "",
-      "theme": "",
-      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills.",
-      "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-18",
-      "command": "install-github-skills",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 5439,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 37,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 11,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
-      "rank_overall": 34,
-      "rank_in_category": 2,
+      "rank_overall": 41,
+      "rank_in_category": 12,
       "tags": []
     },
     {
@@ -1614,8 +1915,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
-      "rank_in_category": 12,
+      "rank_overall": 42,
+      "rank_in_category": 13,
       "tags": [
         "interactive",
         "workshops-facilitation"
@@ -1664,8 +1965,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
-      "rank_in_category": 13,
+      "rank_overall": 43,
+      "rank_in_category": 14,
       "tags": [
         "interactive",
         "workshops-facilitation"
@@ -1714,8 +2015,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 37,
-      "rank_in_category": 14,
+      "rank_overall": 44,
+      "rank_in_category": 15,
       "tags": [
         "interactive",
         "discovery-research"
@@ -1764,8 +2065,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 38,
-      "rank_in_category": 15,
+      "rank_overall": 45,
+      "rank_in_category": 16,
       "tags": [
         "interactive",
         "pm-artifacts"
@@ -1814,8 +2115,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 39,
-      "rank_in_category": 16,
+      "rank_overall": 46,
+      "rank_in_category": 17,
       "tags": [
         "interactive",
         "workshops-facilitation"
@@ -1864,8 +2165,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 40,
-      "rank_in_category": 17,
+      "rank_overall": 47,
+      "rank_in_category": 18,
       "tags": [
         "interactive",
         "strategy-positioning"
@@ -1914,8 +2215,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 41,
-      "rank_in_category": 18,
+      "rank_overall": 48,
+      "rank_in_category": 19,
       "tags": [
         "interactive",
         "workshops-facilitation"
@@ -1960,7 +2261,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 42,
+      "rank_overall": 49,
       "rank_in_category": 3,
       "tags": []
     },
@@ -2003,7 +2304,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 43,
+      "rank_overall": 50,
       "rank_in_category": 2,
       "tags": []
     },
@@ -2046,7 +2347,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 44,
+      "rank_overall": 51,
       "rank_in_category": 3,
       "tags": []
     },
@@ -2089,7 +2390,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 45,
+      "rank_overall": 52,
       "rank_in_category": 4,
       "tags": []
     },
@@ -2132,7 +2433,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 46,
+      "rank_overall": 53,
       "rank_in_category": 5,
       "tags": []
     },
@@ -2175,7 +2476,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 47,
+      "rank_overall": 54,
       "rank_in_category": 6,
       "tags": []
     },
@@ -2218,8 +2519,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 48,
-      "rank_in_category": 6,
+      "rank_overall": 55,
+      "rank_in_category": 9,
       "tags": []
     },
     {
@@ -2261,7 +2562,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 49,
+      "rank_overall": 56,
       "rank_in_category": 4,
       "tags": []
     }

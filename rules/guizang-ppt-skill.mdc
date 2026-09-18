@@ -1,0 +1,6 @@
+---
+description: Single-file horizontal HTML PPT in magazine e-ink or Swiss International style, with presenter view. Use for 归藏 PPT, magazine decks, or Swiss-style web slides.
+alwaysApply: false
+---
+
+guizang-ppt-skill: Follow `skills/guizang-ppt-skill/SKILL.md`. Distinct from `html-ppt`, `frontend-slides-editable`, and `slides`. AGPL-3.0. Do not put sponsor provenance in the generated deck.

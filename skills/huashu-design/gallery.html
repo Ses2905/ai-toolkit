@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Huashu Design — style library</title>
+  <style>
+    :root {
+      --ink: #141413;
+      --muted: #5c5a54;
+      --line: #ddd8ce;
+      --paper: #f5f0eb;
+      --card: #fffdf8;
+      --sage: #6b8f71;
+      --gold: #d4a574;
+      --red: #e63946;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 96px; }
+    .kicker {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--sage); font-weight: 600; margin: 0 0 10px;
+    }
+    h1 { font-weight: 500; font-size: 34px; letter-spacing: -0.04em; margin: 0 0 8px; }
+    .lede { color: var(--muted); max-width: 58em; line-height: 1.5; margin: 0 0 28px; }
+    .note {
+      border: 1px solid var(--line); background: var(--card); padding: 14px 16px;
+      margin: 0 0 32px; font-size: 14px; line-height: 1.45; color: var(--muted);
+    }
+    .note strong { color: var(--ink); font-weight: 600; }
+    h2 {
+      font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin: 40px 0 14px;
+    }
+    .studios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
+    .studio {
+      background: var(--card); border: 1px solid var(--line); text-decoration: none; color: inherit;
+      display: block;
+    }
+    .studio img { width: 100%; aspect-ratio: 1200 / 510; object-fit: cover; display: block; background: #eee; }
+    .studio .cap { padding: 12px 14px 14px; }
+    .studio h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
+    .studio p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
+    .swatches { display: flex; gap: 6px; margin-top: 10px; }
+    .swatches i { width: 14px; height: 14px; display: block; border: 1px solid rgba(0,0,0,.08); }
+    .scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .scene { background: var(--card); border: 1px solid var(--line); }
+    .scene img { width: 100%; display: block; background: #ece8e0; }
+    .scene.wide img { aspect-ratio: 16 / 9; object-fit: cover; }
+    .scene.tall img { aspect-ratio: 9 / 16; object-fit: cover; max-height: 280px; object-position: top; }
+    .scene .cap { padding: 10px 12px 12px; font-size: 13px; }
+    .scene .cap b { display: block; margin-bottom: 2px; }
+    .scene .cap span { color: var(--muted); }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .row3 a { display: block; }
+    .row3 img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; border: 1px solid var(--line); }
+    .demos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .demo {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+      background: var(--card); border: 1px solid var(--line); padding: 14px 16px;
+      text-decoration: none; color: inherit;
+    }
+    .demo b { font-size: 14px; }
+    .demo span { font-size: 13px; color: var(--muted); }
+    .demo i { font-style: normal; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sage); }
+    .styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .style {
+      background: var(--card); border: 1px solid var(--line); padding: 12px 14px;
+    }
+    .style .meta { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .style b { font-size: 14px; font-weight: 600; display: block; letter-spacing: -0.02em; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+    .tabs a {
+      font-size: 13px; border: 1px solid var(--line); background: #fff; color: inherit;
+      padding: 7px 12px; border-radius: 999px; text-decoration: none;
+    }
+    footer { margin-top: 48px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    footer code { font-size: 12px; }
+    @media (max-width: 860px) {
+      .studios, .scenes, .styles, .demos { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="kicker">花叔Design · generator skill</p>
+    <h1>Huashu Design</h1>
+    <p class="lede">
+      This is not template #10 in the 34-cover beautiful-html-decks gallery.
+      Huashu is a <strong>style generator</strong>: 20 web + 20 PPT + 20 infographic directions,
+      plus 24 rendered showcases in three studio voices (Pentagram, Build, Takram).
+    </p>
+    <div class="note">
+      Installed as the Cursor user skill <strong>huashu-design</strong>.
+      Skills picker needs <strong>Reload Window</strong> once. The pictures below work now.
+    </div>
+
+    <h2>Three studio voices — same cover, three looks</h2>
+    <div class="studios">
+      <a class="studio" href="assets/showcases/cover/cover-pentagram.html">
+        <img src="assets/showcases/cover/cover-pentagram.png" alt="Pentagram cover" />
+        <div class="cap">
+          <h3>Pentagram</h3>
+          <p>Swiss grid, giant type, one red. Information architecture.</p>
+          <div class="swatches"><i style="background:#fff"></i><i style="background:#111"></i><i style="background:#e63946"></i></div>
+        </div>
+      </a>
+      <a class="studio" href="assets/showcases/cover/cover-build.html">
+        <img src="assets/showcases/cover/cover-build.png" alt="Build Studio cover" />
+        <div class="cap">
+          <h3>Build</h3>
+          <p>70% whitespace, Inter 200, one warm gold. Luxury quiet.</p>
+          <div class="swatches"><i style="background:#fafaf8"></i><i style="background:#1a1a18"></i><i style="background:#d4a574"></i></div>
+        </div>
+      </a>
+      <a class="studio" href="assets/showcases/cover/cover-takram.html">
+        <img src="assets/showcases/cover/cover-takram.png" alt="Takram cover" />
+        <div class="cap">
+          <h3>Takram</h3>
+          <p>Rice paper, sage, concentric rings. Soft-tech leave-behind.</p>
+          <div class="swatches"><i style="background:#f5f0eb"></i><i style="background:#2d3436"></i><i style="background:#6b8f71"></i></div>
+        </div>
+      </a>
+    </div>
+
+    <h2>Eight scenes × three studios</h2>
+    <div class="scenes">
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/ppt/ppt-pentagram.html"><img src="assets/showcases/ppt/ppt-pentagram.png" alt="PPT Pentagram"></a>
+          <a href="assets/showcases/ppt/ppt-build.html"><img src="assets/showcases/ppt/ppt-build.png" alt="PPT Build"></a>
+          <a href="assets/showcases/ppt/ppt-takram.html"><img src="assets/showcases/ppt/ppt-takram.png" alt="PPT Takram"></a>
+        </div>
+        <div class="cap"><b>PPT data page</b><span>1920×1080 · Pentagram / Build / Takram</span></div>
+      </div>
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/website-homepage/homepage-pentagram.html"><img src="assets/showcases/website-homepage/homepage-pentagram.png" alt="Homepage Pentagram"></a>
+          <a href="assets/showcases/website-homepage/homepage-build.html"><img src="assets/showcases/website-homepage/homepage-build.png" alt="Homepage Build"></a>
+          <a href="assets/showcases/website-homepage/homepage-takram.html"><img src="assets/showcases/website-homepage/homepage-takram.png" alt="Homepage Takram"></a>
+        </div>
+        <div class="cap"><b>Personal homepage</b><span>1440×900</span></div>
+      </div>
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/website-saas/saas-pentagram.html"><img src="assets/showcases/website-saas/saas-pentagram.png" alt="SaaS Pentagram"></a>
+          <a href="assets/showcases/website-saas/saas-build.html"><img src="assets/showcases/website-saas/saas-build.png" alt="SaaS Build"></a>
+          <a href="assets/showcases/website-saas/saas-takram.html"><img src="assets/showcases/website-saas/saas-takram.png" alt="SaaS Takram"></a>
+        </div>
+        <div class="cap"><b>SaaS landing</b><span>1440×900</span></div>
+      </div>
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/website-ai-nav/ainav-pentagram.html"><img src="assets/showcases/website-ai-nav/ainav-pentagram.png" alt="AI nav Pentagram"></a>
+          <a href="assets/showcases/website-ai-nav/ainav-build.html"><img src="assets/showcases/website-ai-nav/ainav-build.png" alt="AI nav Build"></a>
+          <a href="assets/showcases/website-ai-nav/ainav-takram.html"><img src="assets/showcases/website-ai-nav/ainav-takram.png" alt="AI nav Takram"></a>
+        </div>
+        <div class="cap"><b>AI nav directory</b><span>1440×900</span></div>
+      </div>
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/website-ai-writing/aiwriting-pentagram.html"><img src="assets/showcases/website-ai-writing/aiwriting-pentagram.png" alt="Writing Pentagram"></a>
+          <a href="assets/showcases/website-ai-writing/aiwriting-build.html"><img src="assets/showcases/website-ai-writing/aiwriting-build.png" alt="Writing Build"></a>
+          <a href="assets/showcases/website-ai-writing/aiwriting-takram.html"><img src="assets/showcases/website-ai-writing/aiwriting-takram.png" alt="Writing Takram"></a>
+        </div>
+        <div class="cap"><b>AI writing tool</b><span>1440×900</span></div>
+      </div>
+      <div class="scene wide">
+        <div class="row3">
+          <a href="assets/showcases/website-devdocs/devdocs-pentagram.html"><img src="assets/showcases/website-devdocs/devdocs-pentagram.png" alt="Docs Pentagram"></a>
+          <a href="assets/showcases/website-devdocs/devdocs-build.html"><img src="assets/showcases/website-devdocs/devdocs-build.png" alt="Docs Build"></a>
+          <a href="assets/showcases/website-devdocs/devdocs-takram.html"><img src="assets/showcases/website-devdocs/devdocs-takram.png" alt="Docs Takram"></a>
+        </div>
+        <div class="cap"><b>Developer docs</b><span>1440×900</span></div>
+      </div>
+      <div class="scene tall">
+        <div class="row3">
+          <a href="assets/showcases/infographic/infographic-pentagram.html"><img src="assets/showcases/infographic/infographic-pentagram.png" alt="Infographic Pentagram"></a>
+          <a href="assets/showcases/infographic/infographic-build.html"><img src="assets/showcases/infographic/infographic-build.png" alt="Infographic Build"></a>
+          <a href="assets/showcases/infographic/infographic-takram.html"><img src="assets/showcases/infographic/infographic-takram.png" alt="Infographic Takram"></a>
+        </div>
+        <div class="cap"><b>Vertical infographic</b><span>1080×1920</span></div>
+      </div>
+    </div>
+
+    <h2>Live demos</h2>
+    <div class="demos">
+      <a class="demo" href="demos/c2-slides-pptx-en.html"><span><b>Slides / PPTX</b><br><span>Deck with export path</span></span><i>c2</i></a>
+      <a class="demo" href="demos/c1-ios-prototype-en.html"><span><b>iOS prototype</b><br><span>High-fidelity phone mock</span></span><i>c1</i></a>
+      <a class="demo" href="demos/c3-motion-design-en.html"><span><b>Motion design</b><br><span>Timeline-driven animation</span></span><i>c3</i></a>
+      <a class="demo" href="demos/c5-infographic-en.html"><span><b>Infographic</b><br><span>Print-grade data page</span></span><i>c5</i></a>
+      <a class="demo" href="demos/c4-tweaks-en.html"><span><b>Tweaks</b><br><span>Live parameter exploration</span></span><i>c4</i></a>
+      <a class="demo" href="demos/c6-expert-review-en.html"><span><b>Expert review</b><br><span>Critique / scoring</span></span><i>c6</i></a>
+      <a class="demo" href="demos/hero-animation-v10-en.html"><span><b>Hero animation</b><br><span>Flagship motion case</span></span><i>hero</i></a>
+      <a class="demo" href="demos/w3-fallback-advisor-en.html"><span><b>Three-direction advisor</b><br><span>How Huashu picks a look</span></span><i>w3</i></a>
+    </div>
+
+    <h2>60 generator styles</h2>
+    <p class="lede" style="margin-bottom:16px">Ammunition for new work — not a template picker. Click a studio cover above to see what Huashu actually looks like.</p>
+    <div class="tabs">
+      <a href="#web">Web 20</a>
+      <a href="#ppt">PPT 20</a>
+      <a href="#info">Infographic 20</a>
+    </div>
+
+    <h2 id="web">Web</h2>
+    <div class="styles">
+      <div class="style"><div class="meta">Bold · 98%</div><b>Editorial Brutalism</b></div>
+      <div class="style"><div class="meta">Bold · 95%</div><b>Neo-Brutalism</b></div>
+      <div class="style"><div class="meta">Bold · 72%</div><b>Memphis Maximalism</b></div>
+      <div class="style"><div class="meta">Bold · 85%</div><b>Friendly Geometric Candy</b></div>
+      <div class="style"><div class="meta">Bold · 80%</div><b>Pure-CSS Art</b></div>
+      <div class="style"><div class="meta">Bold · 88%</div><b>Bold Big-Type Editorial</b></div>
+      <div class="style"><div class="meta">Bold · 75%</div><b>Cosmic Retro-Futurism</b></div>
+      <div class="style"><div class="meta">Bold · 72%</div><b>Cinematic Sound-Viz Dark</b></div>
+      <div class="style"><div class="meta">Bold · 70%</div><b>Pixel-Game Side-Scroller</b></div>
+      <div class="style"><div class="meta">Neutral · 90%</div><b>Bauhaus Geometric</b></div>
+      <div class="style"><div class="meta">Neutral · 96%</div><b>Dark Editorial</b></div>
+      <div class="style"><div class="meta">Neutral · 97%</div><b>Warm Editorial</b></div>
+      <div class="style"><div class="meta">Neutral · 85%</div><b>Glassmorphism Bento</b></div>
+      <div class="style"><div class="meta">Neutral · 92%</div><b>Angled Fluid Gradient</b></div>
+      <div class="style"><div class="meta">Neutral · 98%</div><b>Utility-First Colorful Docs</b></div>
+      <div class="style"><div class="meta">Neutral · 80%</div><b>Terminal-Core Soft-Futurism</b></div>
+      <div class="style"><div class="meta">Quiet · 98%</div><b>Functional Brutalism</b></div>
+      <div class="style"><div class="meta">Quiet · 75%</div><b>Gallery Dark</b></div>
+      <div class="style"><div class="meta">Quiet · 98%</div><b>Swiss Monochrome</b></div>
+      <div class="style"><div class="meta">Quiet · 80%</div><b>Kenya Hara White Gallery</b></div>
+    </div>
+
+    <h2 id="ppt">PPT</h2>
+    <div class="styles">
+      <div class="style"><div class="meta">Bold · 98%</div><b>Neo-Swiss Billboard</b></div>
+      <div class="style"><div class="meta">Bold · 97%</div><b>Black Big-Number Stage</b></div>
+      <div class="style"><div class="meta">Bold · 96%</div><b>Mono-Brand Type-as-Hero</b></div>
+      <div class="style"><div class="meta">Bold · 82%</div><b>Full-Bleed Gradient Manifesto</b></div>
+      <div class="style"><div class="meta">Bold · 94%</div><b>Candy-Color Lecture Stage</b></div>
+      <div class="style"><div class="meta">Bold · 75%</div><b>Playful Maximalist Editorial</b></div>
+      <div class="style"><div class="meta">Bold · 80%</div><b>Irreverent Pop</b></div>
+      <div class="style"><div class="meta">Bold · 78%</div><b>Maximalist 3D-Type</b></div>
+      <div class="style"><div class="meta">Neutral · 95%</div><b>Bento Grid</b></div>
+      <div class="style"><div class="meta">Neutral · 94%</div><b>Dark Hairline Terminal</b></div>
+      <div class="style"><div class="meta">Neutral · 90%</div><b>Two-Font Consulting</b></div>
+      <div class="style"><div class="meta">Neutral · 88%</div><b>Diagram-Driven Isotype</b></div>
+      <div class="style"><div class="meta">Neutral · 95%</div><b>Diagrammatic Minimalism</b></div>
+      <div class="style"><div class="meta">Neutral · 91%</div><b>Narrative Sparkline</b></div>
+      <div class="style"><div class="meta">Quiet · 93%</div><b>Tufte Claim–Evidence</b></div>
+      <div class="style"><div class="meta">Quiet · 96%</div><b>Institutional Swiss Minimal</b></div>
+      <div class="style"><div class="meta">Quiet · 95%</div><b>Editorial Longform</b></div>
+      <div class="style"><div class="meta">Quiet · 80%</div><b>Humanist Rounded Cards</b></div>
+      <div class="style"><div class="meta">Quiet · 92%</div><b>Dense Research Report</b></div>
+      <div class="style"><div class="meta">Quiet · 97%</div><b>All-Text Manifesto</b></div>
+    </div>
+
+    <h2 id="info">Infographic</h2>
+    <div class="styles">
+      <div class="style"><div class="meta">Bold · 94%</div><b>Personal Annual Report</b></div>
+      <div class="style"><div class="meta">Bold · 76%</div><b>Explanation Graphics</b></div>
+      <div class="style"><div class="meta">Bold · 55%</div><b>Cross-Section Epic</b></div>
+      <div class="style"><div class="meta">Bold · 90%</div><b>Magazine Pop Data</b></div>
+      <div class="style"><div class="meta">Bold · 88%</div><b>ISOTYPE / Neurath–Arntz</b></div>
+      <div class="style"><div class="meta">Bold · 80%</div><b>Data Humanism</b></div>
+      <div class="style"><div class="meta">Bold · 85%</div><b>Scrollytelling</b></div>
+      <div class="style"><div class="meta">Bold · 65%</div><b>Cartographic Lead</b></div>
+      <div class="style"><div class="meta">Neutral · 96%</div><b>Newsroom Chart System</b></div>
+      <div class="style"><div class="meta">Neutral · 78%</div><b>Computational Portrait</b></div>
+      <div class="style"><div class="meta">Neutral · 90%</div><b>Beautiful Information</b></div>
+      <div class="style"><div class="meta">Neutral · 94%</div><b>Open Research Data</b></div>
+      <div class="style"><div class="meta">Neutral · 84%</div><b>Speculative Tech Diagram</b></div>
+      <div class="style"><div class="meta">Neutral · 92%</div><b>Pictogram System</b></div>
+      <div class="style"><div class="meta">Quiet · 95%</div><b>Small Multiples</b></div>
+      <div class="style"><div class="meta">Quiet · 86%</div><b>Topological Transit Map</b></div>
+      <div class="style"><div class="meta">Quiet · 82%</div><b>Ma &amp; Emptiness</b></div>
+      <div class="style"><div class="meta">Quiet · 80%</div><b>Bookcraft Data</b></div>
+      <div class="style"><div class="meta">Quiet · 96%</div><b>Scientific Figure Plate</b></div>
+      <div class="style"><div class="meta">Quiet · 97%</div><b>Swiss Grid Report</b></div>
+    </div>
+
+    <footer>
+      Skill: <code>/Users/sarahscherer/.cursor/skills/huashu-design/</code><br>
+      The 34-template gallery on port 8790 is a different library (beautiful-html-decks). Huashu will never appear there.
+    </footer>
+  </div>
+</body>
+</html>

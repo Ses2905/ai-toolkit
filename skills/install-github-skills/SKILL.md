@@ -80,6 +80,21 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Matt Pocock conversation handoff (upstream skill name: handoff)
 ./scripts/install-catalog-skills.sh --preset pm-handoff
+
+# Image-based PPTX (ningzimu/codex-ppt-skill)
+./scripts/install-catalog-skills.sh --preset codex-ppt
+
+# Native editable PPTX (hugohe3/ppt-master)
+./scripts/install-catalog-skills.sh --preset ppt-master
+
+# Magazine / Swiss HTML PPT (op7418/guizang-ppt-skill, AGPL-3.0)
+./scripts/install-catalog-skills.sh --preset guizang-ppt-skill
+
+# HTML design studio (alchaincyf/huashu-design)
+./scripts/install-catalog-skills.sh --preset huashu-design
+
+# UI/UX intelligence database (nextlevelbuilder ui-ux-pro-max, not the slides sibling)
+./scripts/install-catalog-skills.sh --preset ui-ux-pro-max
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.

@@ -1,0 +1,6 @@
+---
+description: Hierarchical Figma spacing using Gestalt proximity and 8px/4px increments. Use for new screens, spacing refactors, or nested auto-layout in Figma.
+alwaysApply: false
+---
+
+rad-spacing: Follow `skills/rad-spacing/SKILL.md`. Bind padding and gap to library variables. Distinct from `design-system`. Requires Figma tools.

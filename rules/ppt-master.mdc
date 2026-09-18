@@ -1,0 +1,6 @@
+---
+description: Native editable PPTX generation, reconstruction, templating, and enhancement. Use for ppt-master, PowerPoint files that must stay editable as shapes, or PPTX beautify/fill-template workflows.
+alwaysApply: false
+---
+
+ppt-master: Follow `skills/ppt-master/SKILL.md`. Load only the routed workflow. Distinct from `codex-ppt` and HTML deck skills. Vendored copy omits comparison PNGs and sound binaries.
