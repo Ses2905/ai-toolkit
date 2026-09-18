@@ -167,6 +167,7 @@ class RepoScanTest(unittest.TestCase):
     def test_known_skills_categorized(self):
         cases = {
             "apple-design": "Design & Frontend",
+            "emil-design-eng": "Design & Frontend",
             "product-strategy-session": "Product & Discovery",
             "board-room-strategy": "Product & Discovery",
             "walmart-ads-terminology": "Product & Discovery",
