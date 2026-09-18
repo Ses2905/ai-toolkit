@@ -168,6 +168,8 @@ class RepoScanTest(unittest.TestCase):
         cases = {
             "apple-design": "Design & Frontend",
             "product-strategy-session": "Product & Discovery",
+            "board-room-strategy": "Product & Discovery",
+            "executive-summary-slide": "Presentations & Diagrams",
             "hyperframes-animation": "Motion & Animation",
             "plan-the-work": "Engineering Workflow",
             "install-work-kit": "Setup & Install",
