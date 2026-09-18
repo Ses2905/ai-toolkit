@@ -24,7 +24,7 @@ That preset installs:
 
 | Area | Skills |
 | --- | --- |
-| Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind`, `taste-skill`, `high-end-visual-design` |
+| Design system & UI | `using-ui-stack`, `frontend-design`, `web-design-guidelines`, `converting-css-to-tailwind`, `taste-skill`, `high-end-visual-design`, `emil-design-eng` |
 | Visual QA | `visual-qa-testing`, `verifying-in-browser`, `responsive-testing`, `dark-mode-testing`, `accessibility-auditing`, `screenshotting-changelog`, `comparing-branches-visually` |
 | Motion | `react-view-transitions`, `hyperframes-animation`, `remotion-best-practices`, `review-animations`, `improve-animations`, `find-animation-opportunities` |
 | Images & art | `generating-images`, `exporting-to-png`, `canvas-design`, `theme-factory`, `brand-guidelines`, `html-diagram` |
@@ -68,6 +68,9 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # Remotion React video best-practices router
 ./scripts/install-catalog-skills.sh --preset remotion-best-practices
+
+# Emil Kowalski design engineering (UI polish, components, motion)
+./scripts/install-catalog-skills.sh --preset emil-design-eng
 
 # Emil Kowalski animation review
 ./scripts/install-catalog-skills.sh --preset review-animations

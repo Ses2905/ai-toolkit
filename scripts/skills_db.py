@@ -64,6 +64,7 @@ CATEGORY_BY_THEME: dict[str, str] = {
 CATEGORY_BY_NAME: dict[str, str] = {
     # Design & Frontend
     "apple-design": "Design & Frontend",
+    "emil-design-eng": "Design & Frontend",
     "canvas-design": "Design & Frontend",
     "design-artifact": "Design & Frontend",
     "design-system": "Design & Frontend",

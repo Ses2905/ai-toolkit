@@ -7,7 +7,7 @@ description: Search a codebase or UI for places that don't animate but should, a
 
 Pinned from [emilkowalski/skills `find-animation-opportunities`](https://github.com/emilkowalski/skills/tree/85e8e2363b713506e1d5b6e07a0eb2da66be1bc3/skills/find-animation-opportunities) at `85e8e2363b713506e1d5b6e07a0eb2da66be1bc3` (MIT). Listing: [skills.sh](https://www.skills.sh/emilkowalski/skills/find-animation-opportunities). Official CLI: `npx skills add https://github.com/emilkowalski/skills --skill find-animation-opportunities`. Provenance: `SOURCE.txt`.
 
-**In this repo:** `skills/find-animation-opportunities/SKILL.md`. Scoped rule: `rules/find-animation-opportunities.mdc` (`alwaysApply: false`). User install: `~/.cursor/skills/find-animation-opportunities/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/find-animation-opportunities`. Distinct from `/improve-animations` (fix existing motion) and `/review-animations` (diff review). Read-only — report opportunities; do not implement.
+**In this repo:** `skills/find-animation-opportunities/SKILL.md`. Scoped rule: `rules/find-animation-opportunities.mdc` (`alwaysApply: false`). User install: `~/.cursor/skills/find-animation-opportunities/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/find-animation-opportunities`. Distinct from `/emil-design-eng` (authoring), `/improve-animations` (fix existing motion) and `/review-animations` (diff review). Read-only — report opportunities; do not implement.
 
 ## Initial Response
 
