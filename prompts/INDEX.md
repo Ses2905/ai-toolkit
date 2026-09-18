@@ -1,15 +1,11 @@
 # Prompt catalog
 
-Slash commands in this kit. Kit commands manage the library; the rest are prompts you invoke.
+Slash commands in this kit — prompts you invoke for a specific deliverable.
 
-Add a prompt by pasting it in chat and saying "add this to the prompt library", or `/new-prompt`.
-
-## Kit
-
-| Command | Theme | What it does |
-| --- | --- | --- |
-| `/new-prompt` | meta | Save pasted text as a prompt (or bounce it to Work Kit) |
-| `/sort-skill-or-prompt` | meta | Classify a dump without saving it |
+Add a prompt by pasting it in chat and running **`/add-to-library`** (or
+`./scripts/library-add.py`). It classifies and routes the content — prompts land
+here in Prompt Kit, skills land in Work Kit. (This replaces the old
+`/new-prompt` and `/sort-skill-or-prompt` commands.)
 
 ## Product
 

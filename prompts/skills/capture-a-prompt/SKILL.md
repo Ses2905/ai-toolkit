@@ -41,5 +41,5 @@ Treat any text after the slash command as the input. If none was given, ask for 
 - One prompt = one `commands/<name>.md`. No `SKILL.md`, no `references/`, no scripts.
 - Do not copy the prompt into `~/.cursor/skills/`.
 - Do not add it to Work Kit.
-- Kit commands (`new-prompt`, `sort-skill-or-prompt`) stay in the Kit section of `INDEX.md`, not a theme table.
+- Adding is centralized in `/add-to-library` (`scripts/library-add.py`), which routes prompts here and skills to Work Kit.
 - If a command with that name exists, ask before overwriting.
