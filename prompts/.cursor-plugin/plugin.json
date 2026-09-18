@@ -1,0 +1,24 @@
+{
+  "name": "prompt-kit",
+  "displayName": "Prompt Kit",
+  "version": "1.0.0",
+  "description": "A companion library of one-off, input-driven prompts as slash commands (product, research, strategy, content). Pairs with Work Kit's skills; add new items with /add-to-library.",
+  "author": {
+    "name": "Sarah Scherer"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "prompts",
+    "product",
+    "research",
+    "strategy",
+    "content"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "personal",
+    "prompts",
+    "prompt-kit"
+  ]
+}

@@ -15,6 +15,7 @@ if command -v rsync >/dev/null 2>&1; then
     --exclude '.DS_Store' \
     --exclude '.agents/' \
     --exclude 'skills-lock.json' \
+    --exclude 'prompts/' \
     "$ROOT/" "$DEST/"
 else
   tar -C "$ROOT" \
@@ -23,6 +24,7 @@ else
     --exclude '.DS_Store' \
     --exclude '.agents' \
     --exclude 'skills-lock.json' \
+    --exclude 'prompts' \
     -cf - . | tar -C "$DEST" -xf -
 fi
 
@@ -31,4 +33,5 @@ echo
 echo "Next:"
 echo "  1. Command Palette → Developer: Reload Window"
 echo "  2. Customize → filter User → confirm Work Kit"
-echo "  3. Optional for Cloud Agents: ./scripts/sync-user-skills.sh"
+echo "  3. Prompt Kit is a separate plugin: ./prompts/scripts/install-local.sh"
+echo "  4. Optional for Cloud Agents: ./scripts/sync-user-skills.sh"
