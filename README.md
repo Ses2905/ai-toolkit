@@ -71,18 +71,23 @@ That installs design-system, visual QA, motion, presentation, copy, and product-
 Every skill under `skills/` is indexed into a searchable, categorized, and
 ranked database.
 
-**Interactive app (recommended).** Run the local server and open the page — it
-has live search, category filters, rank sorting, and a **Refresh** button that
-rescans your skills so newly added ones show up instantly:
+**Interactive app (recommended).** Run the local server and open the page — a
+sortable, filterable **table** ("Skills Field Guide") with a **Refresh** button
+that rescans your skills so newly added ones show up instantly:
 
 ```bash
 ./scripts/skills-db.sh serve        # http://127.0.0.1:8765
 ```
 
-The app talks to a small JSON API: `GET /api/skills` (live index) and
-`POST /api/refresh` (rescan + rewrite the committed `SKILLS.md`,
-`skills-database.html`, and `catalog/skills-index.json`). Click **Refresh**
-after adding a skill and it appears — no restart, no rebuild step.
+Each row shows what the skill is (a sentence or two), its best use case,
+watch-outs (where it doesn't fit, pulled from the skill's own stated
+boundaries), category, type, score, how to invoke it, and the dates it was
+added and last updated (from git history). Search across everything, filter by
+category or type, sort any column, and click a row for the full brief. The app
+talks to a small JSON API: `GET /api/skills` (live index) and `POST /api/refresh`
+(rescan + rewrite the committed `SKILLS.md`, `skills-database.html`, and
+`catalog/skills-index.json`). Click **Refresh** after adding a skill and it
+appears — no restart, no rebuild step.
 
 **Terminal.** Find or browse without the server:
 
