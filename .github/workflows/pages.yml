@@ -1,0 +1,63 @@
+name: Deploy site to GitHub Pages
+
+# Publishes a small static site: a landing page linking to the Verdant design
+# system and the Skills Field Guide app. Licensed fonts are NOT in the repo, so
+# the published site renders with the fallback type stacks (by design).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; don't cancel an in-progress one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Assemble site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          # Landing page at the site root.
+          cp site/index.html _site/index.html
+          # Verdant design system (self-contained; tokens.css sits beside it).
+          mkdir -p _site/design-system
+          cp design-system/index.html design-system/tokens.css _site/design-system/
+          [ -f design-system/README.md ] && cp design-system/README.md _site/design-system/ || true
+          # Skills Field Guide app (static build; search + themes work, Refresh
+          # needs the local server so it's a no-op here).
+          mkdir -p _site/app
+          cp skills-database.html _site/app/index.html
+          echo "Assembled:" && find _site -maxdepth 2 -type f | sort
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

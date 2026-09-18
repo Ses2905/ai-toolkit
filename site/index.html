@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Work Kit — Verdant</title>
+<meta name="description" content="The Verdant design system and the Skills Field Guide app." />
+<style>
+  :root {
+    --prussian:#083344; --teal:#0e7490; --teal2:#38a3a5; --emerald:#34d399;
+    --mint:#c7f9cc; --ice:#ecfeff; --flame:#fe5d26;
+    --paper:#f4faf8; --surface:#fff; --ink:#0c2a30; --muted:#54696d; --line:#e2eae8;
+    --display: ui-sans-serif, "Space Grotesk", system-ui, sans-serif;
+    --body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(.32,.72,0,1);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:var(--body); color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased; line-height:1.55; }
+  a { color:inherit; }
+  .hero { color:#eafcff; background:
+      radial-gradient(120% 140% at 85% -20%, rgba(52,211,153,.30), transparent 55%),
+      radial-gradient(120% 140% at 0% 0%, rgba(56,163,165,.32), transparent 50%),
+      var(--prussian); }
+  .wrap { max-width:1000px; margin:0 auto; padding:0 24px; }
+  .hero .wrap { padding:64px 24px 72px; }
+  .brand { font-family:var(--display); font-weight:800; letter-spacing:-.02em; font-size:20px; }
+  .brand .dot { color:var(--emerald); }
+  h1 { font-family:var(--display); font-weight:800; letter-spacing:-.02em; font-size:clamp(34px,6vw,60px);
+    line-height:1.03; margin:20px 0 12px; color:#fff; text-wrap:balance; }
+  .lede { max-width:60ch; color:#bfe9ea; font-size:18px; text-wrap:pretty; }
+  .swatches { display:flex; gap:8px; margin-top:26px; flex-wrap:wrap; }
+  .swatches span { width:64px; height:44px; border-radius:10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  main .wrap { padding:44px 24px 60px; }
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:760px){ .cards { grid-template-columns:1fr; } }
+  .card { display:flex; flex-direction:column; gap:12px; text-decoration:none; color:var(--ink);
+    background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px;
+    box-shadow:0 1px 2px rgba(8,51,68,.05); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+  .card:hover { transform:translateY(-3px); box-shadow:0 10px 34px rgba(8,51,68,.12); }
+  .card .badge { align-self:flex-start; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--teal); background:#d7eef0; padding:4px 10px; border-radius:999px; }
+  .card h2 { font-family:var(--display); font-weight:800; font-size:24px; margin:4px 0 0; }
+  .card p { margin:0; color:var(--muted); font-size:15px; }
+  .card .go { margin-top:auto; font-weight:700; color:var(--teal); }
+  .preview { height:120px; border-radius:12px; margin-top:4px; }
+  .p-ds { background:linear-gradient(135deg,var(--prussian),var(--teal2) 60%,var(--emerald)); }
+  .p-app { background:
+      linear-gradient(0deg, #fff 0 34px, transparent 34px),
+      repeating-linear-gradient(#fff 0 26px, var(--ice) 26px 27px),
+      linear-gradient(90deg, #fff, #eef7f4); border:1px solid var(--line); }
+  footer { border-top:1px solid var(--line); }
+  footer .wrap { padding:22px 24px 44px; color:var(--muted); font-size:13px; display:flex;
+    justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+  <header class="hero"><div class="wrap">
+    <span class="brand">Work&nbsp;Kit — Verdant<span class="dot">.</span></span>
+    <h1>A botanical design system, applied.</h1>
+    <p class="lede">Built from the uploaded palettes and type — deep teal ink, emerald signal, mint air. Explore the system, then see it powering the Skills Field Guide.</p>
+    <div class="swatches" aria-hidden="true">
+      <span style="background:#083344"></span><span style="background:#0e7490"></span>
+      <span style="background:#38a3a5"></span><span style="background:#34d399"></span>
+      <span style="background:#80ed99"></span><span style="background:#c7f9cc"></span>
+      <span style="background:#ecfeff"></span><span style="background:#fe5d26"></span>
+    </div>
+  </div></header>
+
+  <main><div class="wrap">
+    <div class="cards">
+      <a class="card" href="./design-system/">
+        <span class="badge">Design System</span>
+        <div class="preview p-ds"></div>
+        <h2>Verdant</h2>
+        <p>Color, type roles, scale &amp; space, a component gallery, and a composed dashboard — all wired to tokens.</p>
+        <span class="go">Open the system →</span>
+      </a>
+      <a class="card" href="./app/">
+        <span class="badge">Live App</span>
+        <div class="preview p-app"></div>
+        <h2>Skills Field Guide</h2>
+        <p>The sortable, filterable skills catalog. Pick the Verdant theme in the toolbar. (Search &amp; themes work here; Refresh needs the local server.)</p>
+        <span class="go">Open the app →</span>
+      </a>
+    </div>
+  </div></main>
+
+  <footer><div class="wrap">
+    <span>Work Kit · Verdant design system</span>
+    <span>Type: Juturu · Lenia Sans · Virtus Verona — licensed, not published; fallbacks shown here.</span>
+  </div></footer>
+</body>
+</html>
