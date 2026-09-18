@@ -1,0 +1,7 @@
+---
+description: Emil Kowalski's design engineering philosophy for UI polish, component patterns, animation decisions, and the invisible details that make software feel great. Use when building or reviewing interfaces that should feel right.
+alwaysApply: false
+globs: "**/*.{css,scss,sass,less,tsx,jsx,vue,svelte}"
+---
+
+emil-design-eng: Follow `skills/emil-design-eng/SKILL.md`. If invoked with no question, reply only with the Initial Response quote. Reviews of UI code must use a Before / After / Why markdown table. Distinct from `review-animations` (motion diffs), `improve-animations` (audit/plans), `find-animation-opportunities` (missing motion), `apple-design` (Apple-style fluid UI), and `frontend-design` (visual identity). Do not apply this to backend-only, CLI, or infra work.

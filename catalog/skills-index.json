@@ -22,10 +22,10 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 82,
+  "total": 83,
   "counts_by_category": {
     "Product & Discovery": 41,
-    "Design & Frontend": 12,
+    "Design & Frontend": 13,
     "Motion & Animation": 6,
     "Presentations & Diagrams": 13,
     "Engineering Workflow": 6,
@@ -53,7 +53,7 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": true,
-      "file_count": 173,
+      "file_count": 160,
       "skill_md_bytes": 38342,
       "in_catalog": true,
       "in_readme": true,
@@ -311,7 +311,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 59,
+      "file_count": 52,
       "skill_md_bytes": 28939,
       "in_catalog": false,
       "in_readme": true,
@@ -513,6 +513,49 @@
       "tags": []
     },
     {
+      "name": "emil-design-eng",
+      "source_root": "skills",
+      "category": "Design & Frontend",
+      "type": "",
+      "theme": "",
+      "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great. Use when building or reviewing UI that should feel right — easing, duration, transform origin, gestures, performance, and component patterns. Distinct from review-animations (diff review), improve-animations (audit/plans), and find-animation-opportunities (missing motion).",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
+      "best_use": "Use when building or reviewing UI that should feel right — easing, duration, transform origin, gestures, performance, and component patterns. Distinct from review-animations (diff review), improve-animations (audit/plans), and find-animation-opportunities (missing motion).",
+      "watch_outs": "Distinct from review-animations (diff review), improve-animations (audit/plans), and find-animation-opportunities (missing motion)",
+      "date_added": "2026-09-18",
+      "date_updated": "2026-09-18",
+      "command": "emil-design-eng",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 3,
+      "skill_md_bytes": 28504,
+      "in_catalog": true,
+      "in_readme": true,
+      "score": 62,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 3,
+        "metadata": 5,
+        "catalog": 5,
+        "readme": 5
+      },
+      "rank_overall": 12,
+      "rank_in_category": 4,
+      "tags": []
+    },
+    {
       "name": "find-animation-opportunities",
       "source_root": "skills",
       "category": "Motion & Animation",
@@ -534,7 +577,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 3,
-      "skill_md_bytes": 10753,
+      "skill_md_bytes": 10785,
       "in_catalog": true,
       "in_readme": true,
       "score": 62,
@@ -551,7 +594,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 12,
+      "rank_overall": 13,
       "rank_in_category": 2,
       "tags": []
     },
@@ -577,7 +620,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 5,
-      "skill_md_bytes": 9293,
+      "skill_md_bytes": 9325,
       "in_catalog": true,
       "in_readme": true,
       "score": 62,
@@ -594,7 +637,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 13,
+      "rank_overall": 14,
       "rank_in_category": 3,
       "tags": []
     },
@@ -620,7 +663,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 4,
-      "skill_md_bytes": 9415,
+      "skill_md_bytes": 9467,
       "in_catalog": true,
       "in_readme": true,
       "score": 61,
@@ -637,7 +680,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 14,
+      "rank_overall": 15,
       "rank_in_category": 4,
       "tags": []
     },
@@ -680,7 +723,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 15,
+      "rank_overall": 16,
       "rank_in_category": 5,
       "tags": []
     },
@@ -723,8 +766,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 16,
-      "rank_in_category": 4,
+      "rank_overall": 17,
+      "rank_in_category": 5,
       "tags": []
     },
     {
@@ -766,8 +809,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 17,
-      "rank_in_category": 5,
+      "rank_overall": 18,
+      "rank_in_category": 6,
       "tags": []
     },
     {
@@ -809,8 +852,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 18,
-      "rank_in_category": 6,
+      "rank_overall": 19,
+      "rank_in_category": 7,
       "tags": []
     },
     {
@@ -834,7 +877,7 @@
       "has_tests": true,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 36,
+      "file_count": 29,
       "skill_md_bytes": 8298,
       "in_catalog": false,
       "in_readme": true,
@@ -852,8 +895,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 19,
-      "rank_in_category": 7,
+      "rank_overall": 20,
+      "rank_in_category": 8,
       "tags": []
     },
     {
@@ -899,7 +942,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 20,
+      "rank_overall": 21,
       "rank_in_category": 2,
       "tags": [
         "workflow",
@@ -945,8 +988,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 21,
-      "rank_in_category": 8,
+      "rank_overall": 22,
+      "rank_in_category": 9,
       "tags": []
     },
     {
@@ -988,7 +1031,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 22,
+      "rank_overall": 23,
       "rank_in_category": 7,
       "tags": []
     },
@@ -1017,11 +1060,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 8,
+      "file_count": 7,
       "skill_md_bytes": 11457,
       "in_catalog": false,
       "in_readme": false,
-      "score": 54,
+      "score": 53,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -1030,12 +1073,12 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 8,
+        "breadth": 7,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 23,
+      "rank_overall": 24,
       "rank_in_category": 3,
       "tags": [
         "component",
@@ -1067,11 +1110,11 @@
       "has_tests": false,
       "has_examples": true,
       "has_docs": false,
-      "file_count": 7,
+      "file_count": 6,
       "skill_md_bytes": 19112,
       "in_catalog": false,
       "in_readme": false,
-      "score": 53,
+      "score": 52,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -1080,12 +1123,12 @@
         "examples": 4,
         "docs": 0,
         "doc_depth": 20,
-        "breadth": 7,
+        "breadth": 6,
         "metadata": 10,
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 24,
+      "rank_overall": 25,
       "rank_in_category": 4,
       "tags": [
         "interactive",
@@ -1131,7 +1174,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 25,
+      "rank_overall": 26,
       "rank_in_category": 5,
       "tags": []
     },
@@ -1174,7 +1217,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 26,
+      "rank_overall": 27,
       "rank_in_category": 8,
       "tags": []
     },
@@ -1217,7 +1260,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 27,
+      "rank_overall": 28,
       "rank_in_category": 1,
       "tags": []
     },
@@ -1260,7 +1303,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 28,
+      "rank_overall": 29,
       "rank_in_category": 6,
       "tags": []
     },
@@ -1303,8 +1346,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 29,
-      "rank_in_category": 9,
+      "rank_overall": 30,
+      "rank_in_category": 10,
       "tags": []
     },
     {
@@ -1346,7 +1389,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 30,
+      "rank_overall": 31,
       "rank_in_category": 1,
       "tags": []
     },
@@ -1393,7 +1436,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 31,
+      "rank_overall": 32,
       "rank_in_category": 6,
       "tags": [
         "component",
@@ -1443,7 +1486,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 32,
+      "rank_overall": 33,
       "rank_in_category": 7,
       "tags": [
         "component",
@@ -1493,7 +1536,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 33,
+      "rank_overall": 34,
       "rank_in_category": 8,
       "tags": [
         "component",
@@ -1543,7 +1586,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 34,
+      "rank_overall": 35,
       "rank_in_category": 9,
       "tags": [
         "component",
@@ -1593,7 +1636,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 36,
       "rank_in_category": 10,
       "tags": [
         "component",
@@ -1639,8 +1682,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 36,
-      "rank_in_category": 10,
+      "rank_overall": 37,
+      "rank_in_category": 11,
       "tags": []
     },
     {
@@ -1686,7 +1729,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 37,
+      "rank_overall": 38,
       "rank_in_category": 11,
       "tags": [
         "interactive",
@@ -1736,7 +1779,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 38,
+      "rank_overall": 39,
       "rank_in_category": 12,
       "tags": [
         "interactive",
@@ -1786,7 +1829,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 39,
+      "rank_overall": 40,
       "rank_in_category": 13,
       "tags": [
         "interactive",
@@ -1832,8 +1875,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 40,
-      "rank_in_category": 11,
+      "rank_overall": 41,
+      "rank_in_category": 12,
       "tags": []
     },
     {
@@ -1858,7 +1901,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 6026,
+      "skill_md_bytes": 6174,
       "in_catalog": false,
       "in_readme": true,
       "score": 38,
@@ -1875,7 +1918,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 41,
+      "rank_overall": 42,
       "rank_in_category": 2,
       "tags": []
     },
@@ -1918,8 +1961,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 42,
-      "rank_in_category": 12,
+      "rank_overall": 43,
+      "rank_in_category": 13,
       "tags": []
     },
     {
@@ -1965,7 +2008,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 43,
+      "rank_overall": 44,
       "rank_in_category": 14,
       "tags": [
         "interactive",
@@ -2015,7 +2058,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 44,
+      "rank_overall": 45,
       "rank_in_category": 15,
       "tags": [
         "interactive",
@@ -2065,7 +2108,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 45,
+      "rank_overall": 46,
       "rank_in_category": 16,
       "tags": [
         "interactive",
@@ -2115,7 +2158,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 46,
+      "rank_overall": 47,
       "rank_in_category": 17,
       "tags": [
         "interactive",
@@ -2165,7 +2208,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 18,
       "tags": [
         "interactive",
@@ -2215,7 +2258,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 48,
+      "rank_overall": 49,
       "rank_in_category": 19,
       "tags": [
         "interactive",
@@ -2265,7 +2308,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 49,
+      "rank_overall": 50,
       "rank_in_category": 20,
       "tags": [
         "interactive",
@@ -2311,7 +2354,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 50,
+      "rank_overall": 51,
       "rank_in_category": 3,
       "tags": []
     },
@@ -2354,7 +2397,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 51,
+      "rank_overall": 52,
       "rank_in_category": 2,
       "tags": []
     },
@@ -2397,7 +2440,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 52,
+      "rank_overall": 53,
       "rank_in_category": 3,
       "tags": []
     },
@@ -2440,7 +2483,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 53,
+      "rank_overall": 54,
       "rank_in_category": 4,
       "tags": []
     },
@@ -2483,7 +2526,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 54,
+      "rank_overall": 55,
       "rank_in_category": 5,
       "tags": []
     },
@@ -2526,7 +2569,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 55,
+      "rank_overall": 56,
       "rank_in_category": 6,
       "tags": []
     },
@@ -2569,7 +2612,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 56,
+      "rank_overall": 57,
       "rank_in_category": 9,
       "tags": []
     },
@@ -2612,7 +2655,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 57,
+      "rank_overall": 58,
       "rank_in_category": 21,
       "tags": []
     },
@@ -2655,7 +2698,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 58,
+      "rank_overall": 59,
       "rank_in_category": 22,
       "tags": []
     },
@@ -2698,7 +2741,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 59,
+      "rank_overall": 60,
       "rank_in_category": 23,
       "tags": []
     },
@@ -2741,7 +2784,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 60,
+      "rank_overall": 61,
       "rank_in_category": 24,
       "tags": []
     },
@@ -2784,7 +2827,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 61,
+      "rank_overall": 62,
       "rank_in_category": 25,
       "tags": []
     },
@@ -2827,7 +2870,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 62,
+      "rank_overall": 63,
       "rank_in_category": 26,
       "tags": []
     },
@@ -2870,7 +2913,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 63,
+      "rank_overall": 64,
       "rank_in_category": 27,
       "tags": []
     },
@@ -2913,7 +2956,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 64,
+      "rank_overall": 65,
       "rank_in_category": 28,
       "tags": []
     },
@@ -2956,7 +2999,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 65,
+      "rank_overall": 66,
       "rank_in_category": 10,
       "tags": []
     },
@@ -2999,7 +3042,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 66,
+      "rank_overall": 67,
       "rank_in_category": 29,
       "tags": []
     },
@@ -3042,7 +3085,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 67,
+      "rank_overall": 68,
       "rank_in_category": 11,
       "tags": []
     },
@@ -3085,7 +3128,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 68,
+      "rank_overall": 69,
       "rank_in_category": 12,
       "tags": []
     },
@@ -3128,7 +3171,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 69,
+      "rank_overall": 70,
       "rank_in_category": 30,
       "tags": []
     },
@@ -3171,7 +3214,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 70,
+      "rank_overall": 71,
       "rank_in_category": 31,
       "tags": []
     },
@@ -3214,7 +3257,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 71,
+      "rank_overall": 72,
       "rank_in_category": 32,
       "tags": []
     },
@@ -3257,7 +3300,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 72,
+      "rank_overall": 73,
       "rank_in_category": 33,
       "tags": []
     },
@@ -3300,7 +3343,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 73,
+      "rank_overall": 74,
       "rank_in_category": 34,
       "tags": []
     },
@@ -3343,7 +3386,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 74,
+      "rank_overall": 75,
       "rank_in_category": 35,
       "tags": []
     },
@@ -3386,7 +3429,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 75,
+      "rank_overall": 76,
       "rank_in_category": 36,
       "tags": []
     },
@@ -3429,7 +3472,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 76,
+      "rank_overall": 77,
       "rank_in_category": 37,
       "tags": []
     },
@@ -3472,7 +3515,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 77,
+      "rank_overall": 78,
       "rank_in_category": 38,
       "tags": []
     },
@@ -3515,7 +3558,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 78,
+      "rank_overall": 79,
       "rank_in_category": 39,
       "tags": []
     },
@@ -3558,7 +3601,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 79,
+      "rank_overall": 80,
       "rank_in_category": 40,
       "tags": []
     },
@@ -3601,7 +3644,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 80,
+      "rank_overall": 81,
       "rank_in_category": 41,
       "tags": []
     },
@@ -3644,7 +3687,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 81,
+      "rank_overall": 82,
       "rank_in_category": 13,
       "tags": []
     },
@@ -3670,7 +3713,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2694,
+      "skill_md_bytes": 2714,
       "in_catalog": false,
       "in_readme": true,
       "score": 17,
@@ -3687,7 +3730,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 82,
+      "rank_overall": 83,
       "rank_in_category": 4,
       "tags": []
     }

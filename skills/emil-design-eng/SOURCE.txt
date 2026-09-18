@@ -1,0 +1,9 @@
+Source: https://aiuxplayground.com/skills/emil-design-eng
+Repo: https://github.com/emilkowalski/skills
+Upstream folder: skills/emil-design-eng
+Install name: emil-design-eng
+Official CLI: npx skills add github.com/emilkowalski/skill/blob/main/skills/emil-design-eng/SKILL.md --skill emil-design-eng
+Also: npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng
+Pinned: 85e8e2363b713506e1d5b6e07a0eb2da66be1bc3
+License: MIT (Emil Kowalski)
+Related: skills/review-animations (diff review), skills/improve-animations (audit/plans), skills/find-animation-opportunities (missing motion), skills/apple-design (Apple-style fluid UI)
