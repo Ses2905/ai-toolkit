@@ -1,0 +1,6 @@
+---
+description: Run the Board Room Strategy pack from an executive ask to a decision-ready board deck. Use when the user needs a board or exec strategy presentation, governing question, options, or recommendation. Do not auto-apply.
+alwaysApply: false
+---
+
+board-room-strategy: Follow `skills/board-room-strategy/SKILL.md`. Run framing before diagnostics, diagnostics before options, recommendation before execution, narrative last. Use invocation text as answers already given. Distinct from `product-strategy-session` (PM discovery/roadmap) and `plan-the-work` (engineering). Do not invent benchmarks or payback. Do not build slide files unless asked.

@@ -1,8 +1,8 @@
 {
   "name": "work-kit",
   "displayName": "Work Kit",
-  "version": "1.22.0",
-  "description": "Personal engineering kit for every Cursor project: plan, debug, review, ship, and install GitHub skill catalogs (design, motion, presentation, product).",
+  "version": "1.23.0",
+  "description": "Personal engineering kit for every Cursor project: plan, debug, review, ship, board-room strategy decks, and install GitHub skill catalogs (design, motion, presentation, product).",
   "author": {
     "name": "Sarah Scherer"
   },

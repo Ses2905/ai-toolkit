@@ -46,6 +46,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.
 
+[Board Room Strategy](skills/board-room-strategy/SKILL.md) orchestrates 25 skills from a messy executive ask to a decision-ready board deck (framing, diagnostics, choices, execution, narrative). Invoke `/board-room-strategy` or a sibling such as `/define-governing-question`. Distinct from `/product-strategy-session`. Details: `skills/board-room-strategy/SKILL.md`.
+
 [HTML Diagram](https://www.skills.sh/plannotator/effective-html/html-diagram) builds a self-contained HTML diagram (topology, sequence, state, hierarchy). Invoke `/html-diagram`. Visual register lives in `skills/design-artifact`. Details: `skills/html-diagram/SKILL.md`.
 
 [HyperFrames Animation](https://www.skills.sh/heygen-com/hyperframes/hyperframes-animation) is HeyGen motion knowledge (GSAP rules, blueprints, adapters). Invoke `/hyperframes-animation`. Contract lives in `skills/hyperframes-core`. Apache-2.0. Details: `skills/hyperframes-animation/SKILL.md`.

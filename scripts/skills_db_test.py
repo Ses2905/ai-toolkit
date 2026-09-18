@@ -168,6 +168,11 @@ class RepoScanTest(unittest.TestCase):
         cases = {
             "apple-design": "Design & Frontend",
             "product-strategy-session": "Product & Discovery",
+            "board-room-strategy": "Product & Discovery",
+            "walmart-ads-terminology": "Product & Discovery",
+            "executive-summary-slide": "Presentations & Diagrams",
+            "codex-ppt": "Presentations & Diagrams",
+            "ui-ux-pro-max": "Design & Frontend",
             "hyperframes-animation": "Motion & Animation",
             "plan-the-work": "Engineering Workflow",
             "install-work-kit": "Setup & Install",
@@ -267,9 +272,13 @@ class BuildTest(unittest.TestCase):
 
     def test_html_theming_and_accessibility(self):
         html = skills_db.render_html(self.skills)
-        # three-theme token system + switcher
+        # multi-theme token system + switcher (incl. the applied Verdant theme)
         self.assertIn('[data-theme="slate"]', html)
         self.assertIn('[data-theme="nocturne"]', html)
+        self.assertIn('[data-theme="verdant"]', html)
+        self.assertIn('value="verdant"', html)
+        self.assertIn("@font-face", html)
+        self.assertIn("Juturu", html)
         self.assertIn('id="ftheme"', html)
         # accessibility affordances
         self.assertIn("aria-sort", html)
@@ -339,6 +348,19 @@ class ServeTest(unittest.TestCase):
         with self.assertRaises(urllib.error.HTTPError) as ctx:
             self._get("/nope")
         self.assertEqual(ctx.exception.code, 404)
+
+    def test_font_route(self):
+        # A real brand font either serves (200, when licensed files are present)
+        # or 404s gracefully (fallbacks take over). Bad names must 404.
+        try:
+            status, _ = self._get("/fonts/Juturu-Regular.woff2")
+            self.assertEqual(status, 200)
+        except urllib.error.HTTPError as e:
+            self.assertEqual(e.code, 404)
+        for bad in ("/fonts/evil.exe", "/fonts/passwd"):
+            with self.assertRaises(urllib.error.HTTPError) as ctx:
+                self._get(bad)
+            self.assertEqual(ctx.exception.code, 404)
 
 
 if __name__ == "__main__":

@@ -94,6 +94,33 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "ppt-master": "Presentations & Diagrams",
     "guizang-ppt-skill": "Presentations & Diagrams",
     "gpt-taste": "Design & Frontend",
+    "action-title-writing": "Presentations & Diagrams",
+    "data-callout-design": "Presentations & Diagrams",
+    "executive-summary-slide": "Presentations & Diagrams",
+    "visual-hierarchy-cleanup": "Presentations & Diagrams",
+    # Product & Discovery — Board Room Strategy pack
+    "board-room-strategy": "Product & Discovery",
+    "define-governing-question": "Product & Discovery",
+    "audience-stakeholder-map": "Product & Discovery",
+    "scqa-situation-frame": "Product & Discovery",
+    "working-hypothesis-answer": "Product & Discovery",
+    "storyline-skeleton-map": "Product & Discovery",
+    "issue-tree-decomposition": "Product & Discovery",
+    "root-cause-driver-tree": "Product & Discovery",
+    "quantify-the-gap": "Product & Discovery",
+    "benchmark-and-compare": "Product & Discovery",
+    "synthesize-so-whats": "Product & Discovery",
+    "generate-strategic-options": "Product & Discovery",
+    "prioritization-matrix": "Product & Discovery",
+    "scenario-stress-test": "Product & Discovery",
+    "tradeoff-analysis": "Product & Discovery",
+    "recommendation-statement": "Product & Discovery",
+    "implementation-roadmap": "Product & Discovery",
+    "resource-and-investment-plan": "Product & Discovery",
+    "risk-and-mitigation-register": "Product & Discovery",
+    "operating-model-and-owners": "Product & Discovery",
+    "metrics-and-milestones": "Product & Discovery",
+    "objection-and-qa-prep": "Product & Discovery",
     # Engineering Workflow
     "plan-the-work": "Engineering Workflow",
     "debug-from-evidence": "Engineering Workflow",
@@ -665,6 +692,17 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   /* Design tokens — a "field guide / catalog" register: cool paper, pine accent,
      serif display + humanist UI sans. Deliberately avoids the cream+serif and
      near-black+neon AI-default looks; one accent, structure carries meaning. */
+  /* Verdant brand faces (licensed, self-hosted). In serve mode they load from
+     /fonts/*; the static file and unlicensed setups fall back to the stacks. */
+  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
+  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Semibold.woff2") format("woff2"); font-weight:600; font-display:swap; }
+  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
+  @font-face { font-family:"Juturu"; src:url("fonts/Juturu-Black.woff2") format("woff2"); font-weight:900; font-display:swap; }
+  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Regular.ttf") format("truetype"); font-weight:400; font-display:swap; }
+  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Medium.ttf") format("truetype"); font-weight:500; font-display:swap; }
+  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-SemiBold.ttf") format("truetype"); font-weight:600; font-display:swap; }
+  @font-face { font-family:"Lenia Sans"; src:url("fonts/LeniaSans-Bold.ttf") format("truetype"); font-weight:700; font-display:swap; }
+
   /* Semantic tokens (design-system: the semantic layer enables theming).
      --pine* alias --accent* so the many component rules stay theme-agnostic. */
   :root {
@@ -693,6 +731,17 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
     --line: #233036; --line-strong: #32434b;
     --accent: #46c2a4; --accent-ink: #6fd6bd; --accent-wash: #12302a; --on-accent: #06231d;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px rgba(0,0,0,.4);
+  }
+  /* Verdant — the botanical design system applied as a theme (teal/emerald/mint
+     + Juturu display / Lenia Sans body). Fonts load in serve mode; else fall back. */
+  [data-theme="verdant"] {
+    --paper: #f4faf8; --surface: #ffffff; --surface-2: #ecfbf4;
+    --ink: #083344; --muted: #3f6b6b; --faint: #7fa3a3;
+    --line: #d7ebe6; --line-strong: #bfe0d8;
+    --accent: #0e7490; --accent-ink: #06323d; --accent-wash: #d7eef0; --on-accent: #ffffff;
+    --shadow: 0 1px 2px rgba(8,51,68,.05), 0 10px 30px rgba(8,51,68,.08);
+    --display: "Juturu", "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Lenia Sans", "Century Gothic", "URW Geometric", ui-sans-serif, system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -790,6 +839,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   <div class="field sel"><select id="ftype" aria-label="Filter by type"></select></div>
   <div class="field sel"><select id="ftheme" aria-label="Color theme">
     <option value="field">Theme: Field Guide</option>
+    <option value="verdant">Theme: Verdant</option>
     <option value="slate">Theme: Slate</option>
     <option value="nocturne">Theme: Nocturne</option>
   </select></div>
@@ -1018,14 +1068,34 @@ class _DBHandler(BaseHTTPRequestHandler):
     def _json(self, payload: dict) -> None:
         self._send(200, json.dumps(payload).encode("utf-8"), "application/json; charset=utf-8")
 
+    _FONT_TYPES = {".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".otf": "font/otf"}
+
     def _rescan(self) -> list[Skill]:
         return scan_skills(self.root)
+
+    def _serve_font(self, name: str) -> None:
+        """Serve a licensed brand font from design-system/fonts (if present).
+
+        Returns 404 when the file is absent (unlicensed setups) so the CSS
+        fallback stacks take over. Only bare filenames are allowed.
+        """
+        ext = Path(name).suffix.lower()
+        if "/" in name or ".." in name or ext not in self._FONT_TYPES:
+            self._send(404, b"Not found", "text/plain; charset=utf-8")
+            return
+        font_path = self.root / "design-system" / "fonts" / name
+        if not font_path.is_file():
+            self._send(404, b"font not installed", "text/plain; charset=utf-8")
+            return
+        self._send(200, font_path.read_bytes(), self._FONT_TYPES[ext])
 
     def _handle(self) -> None:
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
         if path == "/":
             html_doc = render_html(self._rescan())
             self._send(200, html_doc.encode("utf-8"), "text/html; charset=utf-8")
+        elif path.startswith("/fonts/"):
+            self._serve_font(path[len("/fonts/"):])
         elif path == "/api/skills":
             self._json(build_index(self._rescan()))
         elif path == "/api/refresh":
