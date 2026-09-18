@@ -1,0 +1,113 @@
+/* ============================================================================
+   Verdant — design tokens
+   A botanical / aqua system distilled from the uploaded inspiration:
+   Cool Waters + Botanical Breeze + Minty Fresh palettes (teal → emerald → mint)
+   with a Summer Sorbet warm accent, and the Juturu / Lenia Sans / Virtus Verona
+   type families. Three layers: primitive → semantic → component.
+   ============================================================================ */
+
+/* --- Fonts (licensed, self-hosted; binaries are git-ignored) -------------- */
+@font-face { font-family: "Juturu"; src: url("fonts/Juturu-Regular.woff2") format("woff2");  font-weight: 400; font-display: swap; }
+@font-face { font-family: "Juturu"; src: url("fonts/Juturu-Medium.woff2") format("woff2");   font-weight: 500; font-display: swap; }
+@font-face { font-family: "Juturu"; src: url("fonts/Juturu-Semibold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Juturu"; src: url("fonts/Juturu-Bold.woff2") format("woff2");     font-weight: 700; font-display: swap; }
+@font-face { font-family: "Juturu"; src: url("fonts/Juturu-Black.woff2") format("woff2");    font-weight: 900; font-display: swap; }
+@font-face { font-family: "Lenia Sans"; src: url("fonts/LeniaSans-Regular.ttf") format("truetype");  font-weight: 400; font-display: swap; }
+@font-face { font-family: "Lenia Sans"; src: url("fonts/LeniaSans-Medium.ttf") format("truetype");   font-weight: 500; font-display: swap; }
+@font-face { font-family: "Lenia Sans"; src: url("fonts/LeniaSans-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Lenia Sans"; src: url("fonts/LeniaSans-Bold.ttf") format("truetype");     font-weight: 700; font-display: swap; }
+@font-face { font-family: "Virtus Verona"; src: url("fonts/VirtusVerona-Serif.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Bombshell Script"; src: url("fonts/Bombshell-Script.woff") format("woff"); font-weight: 400; font-display: swap; }
+
+:root {
+  /* ---- Primitive: raw palette (from the inspo) ---- */
+  --prussian-900: #083344;
+  --baltic-800:   #0f4c5c;
+  --baltic-700:   #22577a;
+  --teal-800:     #0e7490;
+  --teal-500:     #38a3a5;
+  --emerald-500:  #34d399;
+  --emerald-400:  #57cc99;
+  --green-300:    #80ed99;
+  --green-200:    #bbf7d0;
+  --mint-100:     #c7f9cc;
+  --ice-50:       #ecfeff;
+  --flame-500:    #fe5d26;   /* Summer Sorbet — energy/danger */
+  --clay-300:     #f2c078;   /* Summer Sorbet — warning/pending */
+
+  /* Cool neutrals (teal-tinted) for text, surfaces, borders */
+  --ink-900: #0c2a30;
+  --ink-800: #143138;
+  --gray-600: #566a6f;
+  --gray-500: #7a8c90;
+  --gray-400: #9fb0b2;
+  --gray-300: #c6d3d3;
+  --gray-200: #e2eae8;
+  --gray-100: #eef4f2;
+  --paper:    #f4faf8;
+  --white:    #ffffff;
+
+  /* ---- Semantic aliases ---- */
+  --bg: var(--paper);
+  --surface: var(--white);
+  --surface-sunken: var(--gray-100);
+  --text: var(--ink-900);
+  --text-muted: var(--gray-600);
+  --text-faint: var(--gray-500);
+  --border: var(--gray-200);
+  --border-strong: var(--gray-300);
+
+  --brand: var(--teal-800);
+  --brand-hover: var(--baltic-800);
+  --brand-soft: #d7eef0;
+  --brand-ink: #06323d;
+  --on-brand: #ffffff;
+
+  --success: #0f9d6b;  --success-soft: var(--mint-100);  --success-ink: #075e40;
+  --warning: #b5730d;  --warning-soft: #fdecc8;          --warning-ink: #7a4e07;
+  --danger:  #e0451f;  --danger-soft:  #ffe0d5;          --danger-ink:  #8f2810;
+  --info:    var(--teal-500); --info-soft: var(--ice-50); --info-ink: #0b5563;
+  --accent:  var(--emerald-500);
+
+  --focus: 0 0 0 3px color-mix(in srgb, var(--teal-500) 45%, transparent);
+
+  /* ---- Type ---- */
+  --font-display: "Juturu", "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Lenia Sans", "Century Gothic", "URW Geometric", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Virtus Verona", "Iowan Old Style", Georgia, serif;
+  --font-script: "Bombshell Script", "Snell Roundhand", cursive;
+
+  --text-xs: 12px;  --text-sm: 13px;  --text-base: 15px; --text-md: 17px;
+  --text-lg: 20px;  --text-xl: 26px;  --text-2xl: 34px;  --text-3xl: 46px; --text-4xl: 62px;
+  --leading-tight: 1.08; --leading-snug: 1.3; --leading-normal: 1.55;
+
+  /* ---- Space (4px base) ---- */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+
+  /* ---- Radius ---- */
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 22px; --radius-pill: 999px;
+
+  /* ---- Elevation ---- */
+  --shadow-sm: 0 1px 2px rgba(8,51,68,.06);
+  --shadow-md: 0 2px 6px rgba(8,51,68,.06), 0 10px 24px rgba(8,51,68,.07);
+  --shadow-lg: 0 8px 40px rgba(8,51,68,.12);
+
+  --ease: cubic-bezier(.32,.72,0,1);
+  color-scheme: light;
+}
+
+/* Dark surface for the deep-teal sections (hero rail, footer). */
+[data-surface="deep"] {
+  --bg: var(--prussian-900);
+  --surface: #0d3b48;
+  --surface-sunken: #0a3340;
+  --text: #eafcff;
+  --text-muted: #a9d2d8;
+  --text-faint: #6fa3ab;
+  --border: #17515f;
+  --border-strong: #1f6675;
+  --brand: var(--emerald-400);
+  --on-brand: #06323d;
+  --brand-soft: #0f4a4a;
+}
