@@ -141,6 +141,7 @@
     document.querySelectorAll("[data-nav]").forEach(b => b.onclick = () => { location.hash = "#/" + b.dataset.nav; });
     document.querySelectorAll("[data-add]").forEach(b => b.onclick = openAdd);
     document.querySelectorAll("[data-create]").forEach(b => b.onclick = openCreate);
+    document.querySelectorAll("[data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
   }
   function rerenderLibrary() { document.getElementById("view").innerHTML = viewLibrary(state.kind); wireView(); }
   function rerenderList() { const host = document.getElementById("libresults"); if (host) { host.outerHTML = libResults(); wireView(); } }
@@ -275,7 +276,7 @@
         ${kindTag(i.kind)}
         <h2>${esc(i.title)}</h2>
         <p class="muted">${esc(i.summary || i.description)}</p>
-        <div class="dactions"><button class="btn primary">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn">Edit</button><button class="btn" id="drclose">Close</button></div>
+        <div class="dactions"><button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button><button class="btn" id="drclose">Close</button></div>
       </div>
       <div class="dtabs">
         <button data-dt="ov" class="active">Overview</button>
@@ -291,6 +292,7 @@
       document.getElementById("dbody").innerHTML = panes[b.dataset.dt];
     });
     document.getElementById("drclose").onclick = () => history.length > 1 ? history.back() : (location.hash = "#/library");
+    dr.querySelectorAll("[data-action]").forEach(b => b.onclick = () => handleAction(b.dataset.action, b.dataset));
   }
   function pathOf(i) {
     if (i.kind === "skill") return `skills/${i.name}/SKILL.md`;
@@ -330,10 +332,10 @@
   }
   function viewProject(id) {
     const p = (D.projects || []).find(x => x.id === id); if (!p) return viewProjects();
-    const caps = p.skills.map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><span class="btn sm">Disable</span></div>`; }).join("");
+    const caps = p.skills.map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><button class="btn sm" data-action="disable-cap" data-proj="${esc(p.id)}" data-name="${esc(n)}">Disable</button></div>`; }).join("");
     const wfs = p.workflows.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
     const refs = p.references.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
     return `<div class="page">
       <div class="crumb" style="margin-bottom:8px"><a href="#/projects">Projects</a> / ${esc(p.name)}</div>
       <div class="page-head"><h1>${esc(p.name)}</h1><p>${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references enabled.</p></div>
@@ -347,14 +349,14 @@
     const rows = (D.integrations || []).map(x => `<div class="row"><span class="kind"><span class="g">⇄</span></span>
       <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${x.count} skills available · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
-      <span>${x.status === "connected" ? '<button class="btn sm">Sync</button>' : '<button class="btn sm primary">Set up</button>'}</span></div>`).join("");
+      <span>${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`).join("");
     return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your global library across AI coding environments. The library is the source of truth; each tool syncs from it.</p></div><div class="list">${rows}</div>
       <details class="advanced" style="margin-top:16px"><summary>Advanced · how syncing works</summary><div class="adv-body">Each integration maps the global library into that tool's expected structure (generated indexes / links). You don't manage symlinks by hand.</div></details></div>`;
   }
   function viewInbox() {
     const rows = (D.inbox || []).map(x => `<div class="row"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span>
       <span><div class="nm">${esc(x.name)}</div><div class="sub">Suggested: ${esc(x.detected)} · ${esc(x.category)} — ${esc(x.reason)}</div></span>
-      <span class="sub">${esc(x.source)}</span><button class="btn sm">Review</button></div>`).join("");
+      <span class="sub">${esc(x.source)}</span><button class="btn sm" data-action="review-inbox" data-name="${esc(x.name)}">Review</button></div>`).join("");
     if (!(D.inbox || []).length) return `<div class="page"><div class="page-head"><h1>Inbox</h1></div><div class="empty"><h3>Inbox is clear</h3><p>Items the router can't confidently classify land here for a quick decision.</p></div></div>`;
     return `<div class="page"><div class="page-head"><h1>Inbox</h1><p>${D.inbox.length} items need review. This is a staging area — not a second library.</p></div><div class="list">${rows}</div></div>`;
   }
@@ -364,7 +366,7 @@
   }
   function viewHealth() {
     const ok = (D.health.ok || []).map(t => `<div class="att info"><span class="dot"></span><span>${esc(t)}</span></div>`).join("");
-    const iss = (D.health.issues || []).map(i => `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><button class="btn sm go">Review</button></div>`).join("");
+    const iss = (D.health.issues || []).map((i, ix) => `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><button class="btn sm go" data-action="review-issue" data-i="${ix}">Review</button></div>`).join("");
     return `<div class="page"><div class="page-head"><h1>Library health</h1><p>Is everything wired up correctly?</p></div>
       <div class="section"><h2>Healthy</h2><div class="attention">${ok}</div></div>
       ${iss ? `<div class="section"><h2>${D.health.issues.length} need attention</h2><div class="attention">${iss}</div></div>` : ""}
@@ -372,7 +374,7 @@
   }
   function viewSettings() {
     return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Library location and defaults.</p></div>
-      <div class="section"><h2>Global library</h2><div class="list"><div class="row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm">Change</button></div></div></div>
+      <div class="section"><h2>Global library</h2><div class="list"><div class="row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div></div></div>
       <div class="section"><h2>Appearance</h2><div class="list"><div class="row"><span class="kind"><span class="g">◐</span></span><span><div class="nm">Theme</div><div class="sub">Neutral (wireframe)</div></span><span></span><span class="faint">later</span></div></div></div></div>`;
   }
 
@@ -480,6 +482,103 @@
     draw(); inp.focus();
   }
   function toast(msg) { const t = h(`<div class="toast">${esc(msg)}</div>`); document.body.appendChild(t); setTimeout(() => t.remove(), 1600); }
+
+  /* ---------- Actions (optimistic; this is a front-end prototype) ---------- */
+  function addActivity(action, target) { (D.activity = D.activity || []).unshift({ action, target, when: "just now" }); }
+  function currentRoute() { return location.hash.replace(/^#\/?/, "").split("?")[0]; }
+  function rerenderView() { const y = window.scrollY; router(); window.scrollTo(0, y); }
+  function rebuildAll() { const y = window.scrollY; shell(); router(); window.scrollTo(0, y); }
+
+  function handleAction(action, ds) {
+    switch (action) {
+      case "sync-integration": return syncIntegration(ds.name);
+      case "setup-integration": return setupIntegration(ds.name);
+      case "review-inbox": return openInboxReview(ds.name);
+      case "review-issue": return openIssueReview(+ds.i);
+      case "disable-cap": return disableCap(ds.proj, ds.name);
+      case "sync-project-integration": return syncProjectIntegration(ds.proj, ds.name);
+      case "enable-item": return enableItem(ds.id);
+      case "edit-item": return openCreate();
+      case "change-home": return toast("Choose a library folder…");
+      default: return undefined;
+    }
+  }
+
+  function syncIntegration(name) {
+    const it = (D.integrations || []).find(x => x.name === name); if (!it) return;
+    toast("Syncing " + name + "…");
+    setTimeout(() => {
+      it.last_synced = "just now"; addActivity("Synced", name);
+      toast(name + " synced");
+      if (currentRoute().startsWith("integrations")) rerenderView();
+    }, 700);
+  }
+  function setupIntegration(name) {
+    const it = (D.integrations || []).find(x => x.name === name); if (!it) return;
+    it.status = "connected"; it.count = ITEMS.filter(x => x.kind === "skill").length; it.last_synced = "just now";
+    addActivity("Connected", name); toast(name + " connected"); rerenderView();
+  }
+  function disableCap(projId, name) {
+    const p = (D.projects || []).find(x => x.id === projId); if (!p) return;
+    p.skills = p.skills.filter(s => s !== name);
+    const it = byId["skill:" + name]; if (it && it.enabled_in) it.enabled_in = it.enabled_in.filter(x => x !== p.name);
+    addActivity("Disabled", name + " · " + p.name); toast("Disabled " + name); rerenderView();
+  }
+  function syncProjectIntegration(projId, name) {
+    const p = (D.projects || []).find(x => x.id === projId); if (!p) return;
+    p.integrations[name] = "synced"; addActivity("Synced", name + " · " + p.name); toast(name + " synced"); rerenderView();
+  }
+  function enableItem(id) {
+    const it = byId[id]; if (!it) return;
+    const proj = (D.projects || [])[0];
+    if (it.kind === "skill" && proj) {
+      if (!proj.skills.includes(it.name)) proj.skills.push(it.name);
+      it.enabled_in = it.enabled_in || []; if (!it.enabled_in.includes(proj.name)) it.enabled_in.push(proj.name);
+      addActivity("Enabled", it.title + " · " + proj.name); toast("Enabled " + it.title + " in " + proj.name);
+      openItem(id); // refresh the drawer so "Enabled in" reflects the change
+    } else {
+      addActivity("Used", it.title); toast(it.title + " ready to use");
+    }
+  }
+
+  function openInboxReview(name) {
+    const it = (D.inbox || []).find(x => x.name === name); if (!it) return;
+    const opts = ["skill", "prompt", "workflow", "reference", "template"]
+      .map(k => `<button class="chip ${k === it.detected ? "active" : ""}" data-k="${k}">${KIND[k] ? KIND[k].label : k}</button>`).join("");
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Review · ${esc(it.name)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">Suggested: <strong>${esc(it.detected)}</strong> · ${esc(it.category)} — ${esc(it.reason)}</p>
+      <div class="field"><h4>File as</h4><div class="chips" id="ib-kinds">${opts}</div></div>
+      <div class="field"><h4>Source</h4><p class="mono">${esc(it.source)}</p></div>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" data-file>File item</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    let chosen = it.detected;
+    ov.querySelectorAll("#ib-kinds .chip").forEach(c => c.onclick = () => { ov.querySelectorAll("#ib-kinds .chip").forEach(x => x.classList.remove("active")); c.classList.add("active"); chosen = c.dataset.k; });
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("[data-file]").onclick = () => {
+      D.inbox = (D.inbox || []).filter(x => x.name !== name);
+      addActivity("Filed", name + " → " + chosen); closeOverlay(); toast("Filed " + name + " as " + chosen); rebuildAll();
+    };
+  }
+
+  function suggestFix(type) {
+    if (/reference/i.test(type)) return "Repoint the reference to an existing item, or remove it.";
+    if (/duplicate/i.test(type)) return "Compare the two items, then merge unique content or keep them separate.";
+    return "Review the details and update the affected item.";
+  }
+  function openIssueReview(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>${esc(iss.type)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">${esc(iss.detail)}</p>
+      <div class="field"><h4>Suggested fix</h4><p>${esc(suggestFix(iss.type))}</p></div>
+    </div><div class="mfoot"><button class="btn" data-x>Dismiss</button><button class="btn primary" data-resolve>Mark resolved</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("[data-resolve]").onclick = () => {
+      D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+      (D.health.ok = D.health.ok || []).push(iss.type + " resolved");
+      addActivity("Resolved", iss.type); closeOverlay(); toast("Marked resolved"); rerenderView();
+    };
+  }
 
   /* ---------- Boot ---------- */
   window.addEventListener("keydown", e => {
