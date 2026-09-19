@@ -1,12 +1,44 @@
-/* Library UI — functional wireframe. Data-driven from window.LIBRARY_DATA
-   (real skills + prompts from the catalog, plus synthesized workflows/projects/
-   integrations/inbox). Focus: information architecture, navigation, flows. */
+/* Library UI — functional wireframe. Reads the live catalog at runtime via
+   buildLibraryData() (data-live.js), falling back to the bundled window.LIBRARY_DATA
+   snapshot (data.js) when the catalog isn't reachable. Real skills + prompts come
+   from the catalog; workflows/references/tools/projects/integrations/inbox are
+   synthesized. Focus: information architecture, navigation, flows. */
 (function () {
   "use strict";
-  const D = window.LIBRARY_DATA || { items: [], counts: {}, collections: [], projects: [], integrations: [], inbox: [], updates: [], health: { ok: [], issues: [] }, activity: [] };
-  const ITEMS = D.items;
-  const byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
-  const byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+  const EMPTY = { items: [], counts: {}, collections: [], projects: [], integrations: [], inbox: [], updates: [], health: { ok: [], issues: [] }, activity: [] };
+  let D = window.LIBRARY_DATA || EMPTY;
+  let ITEMS = D.items;
+  let byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+  let byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+  let dataSource = "snapshot"; // "live" once the real catalog is loaded
+
+  function setData(data, source) {
+    D = data || EMPTY;
+    ITEMS = D.items || [];
+    byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+    byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+    dataSource = source;
+  }
+
+  // Load the canonical catalog at runtime so the Library never drifts from the
+  // real skills/prompts index. Falls back to the committed snapshot (data.js)
+  // when the catalog isn't reachable (file://, offline, or served from within
+  // library-ui/). Candidate paths cover serving from the repo root or a parent.
+  async function loadLiveData() {
+    if (typeof window.buildLibraryData !== "function" || typeof fetch !== "function") return false;
+    const candidates = ["../catalog/skills-index.json", "catalog/skills-index.json", "./catalog/skills-index.json"];
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) continue;
+        const catalog = await res.json();
+        if (!catalog || !Array.isArray(catalog.skills)) continue;
+        setData(window.buildLibraryData(catalog), "live");
+        return true;
+      } catch (_e) { /* try next candidate, then fall back */ }
+    }
+    return false;
+  }
 
   const KIND = {
     skill:     { label: "Skill",     glyph: "◇", plural: "Skills",     blurb: "Reusable capability" },
@@ -32,7 +64,7 @@
     document.getElementById("app").innerHTML = `
       <div class="shell">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="mark"></span> Library</div>
+          <div class="brand"><span class="mark"></span> Library<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
           <nav class="nav">
             ${item("home", "⌂", "Home")}
             <div class="group">Library</div>
@@ -455,6 +487,10 @@
     else if (e.key === "Escape") closeAll();
   });
   window.addEventListener("hashchange", router);
-  shell();
-  router();
+
+  (async function boot() {
+    await loadLiveData(); // falls back to the bundled snapshot on failure
+    shell();
+    router();
+  })();
 })();
