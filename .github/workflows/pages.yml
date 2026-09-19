@@ -1,8 +1,9 @@
 name: Deploy site to GitHub Pages
 
-# Publishes the Skills Field Guide (the library) at the site root, with the
-# Verdant design system kept at /design-system/ for reference. Brand fonts are
-# the committed OFL faces, so the site renders in the real type.
+# Publishes the Library UI app at the site root (the sidebar + cards experience),
+# the Skills Field Guide table at /field-guide/, and the Verdant design system at
+# /design-system/. Brand fonts are the committed OFL faces, so everything renders
+# in the real type. The Library UI reads the live catalog shipped at /catalog/.
 
 on:
   push:
@@ -33,16 +34,30 @@ jobs:
       - name: Assemble site
         run: |
           set -euo pipefail
-          mkdir -p _site/fonts
-          # Site root IS the Skills Field Guide (the library) — no separate landing.
-          # Ship the OFL fonts so the backend Verdant theme renders (@font-face → ./fonts/*).
-          cp skills-database.html _site/index.html
-          cp design-system/fonts/*.woff2 _site/fonts/ 2>/dev/null || true
-          # Keep the Verdant design system reachable at /design-system/ (reference/admin).
+          mkdir -p _site
+
+          # --- Site root: the Library UI app (index.html, app.js/css, data*.js, fonts/) ---
+          cp -r library-ui/. _site/
+          rm -f _site/build-data.mjs _site/README.md   # dev-only files, not needed on the site
+
+          # Ship the live catalog so the app loads real data at runtime.
+          # (The committed data.js snapshot is the fallback if this ever 404s.)
+          mkdir -p _site/catalog
+          cp catalog/skills-index.json _site/catalog/
+
+          # --- /field-guide/: the Skills Field Guide table (searchable, ranked) ---
+          mkdir -p _site/field-guide/fonts
+          cp skills-database.html _site/field-guide/index.html
+          cp design-system/fonts/*.woff2 _site/field-guide/fonts/ 2>/dev/null || true
+          # Rewrite the table's nav links for the /field-guide/ subpath.
+          sed -i 's#href="\./"#href="../"#; s#href="design-system/"#href="../design-system/"#' _site/field-guide/index.html
+
+          # --- /design-system/: the Verdant design system reference ---
           mkdir -p _site/design-system/fonts
           cp design-system/index.html design-system/tokens.css _site/design-system/
           [ -f design-system/README.md ] && cp design-system/README.md _site/design-system/ || true
           cp design-system/fonts/*.woff2 _site/design-system/fonts/ 2>/dev/null || true
+
           echo "Assembled:" && find _site -maxdepth 2 -type f | sort
 
       - name: Upload Pages artifact
