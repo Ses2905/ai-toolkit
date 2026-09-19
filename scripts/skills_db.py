@@ -772,45 +772,20 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
   @font-face { font-family:"Plus Jakarta Sans"; src:url("fonts/PlusJakartaSans-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
 
-  /* Semantic tokens (design-system: the semantic layer enables theming).
-     --pine* alias --accent* so the many component rules stay theme-agnostic. */
+  /* Semantic tokens. One palette, baked in — no theme switcher. Teal/emerald on
+     botanical paper, Space Grotesk display + Plus Jakarta Sans UI (OFL fonts).
+     --pine* alias --accent* so the many component rules stay palette-agnostic. */
   :root {
     color-scheme: light;
-    --paper: #f3f5f2; --surface: #ffffff; --surface-2: #f7faf8;
-    --ink: #14232a; --muted: #57666c; --faint: #8a979c;
-    --line: #e3e8e4; --line-strong: #ccd4cf;
-    --accent: #0f766e; --accent-ink: #0b5a54; --accent-wash: #e6f1ef; --on-accent: #ffffff;
-    --pine: var(--accent); --pine-ink: var(--accent-ink); --pine-wash: var(--accent-wash);
-    --shadow: 0 1px 2px rgba(20,35,42,.04), 0 10px 30px rgba(20,35,42,.06);
-    --display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-    --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    --ease: cubic-bezier(.32,.72,0,1);
-  }
-  [data-theme="slate"] {
-    --paper: #eef1f5; --surface: #ffffff; --surface-2: #f5f7fa;
-    --ink: #1b2430; --muted: #59657a; --faint: #8b96a8;
-    --line: #e4e8ee; --line-strong: #cdd5e1;
-    --accent: #4f46e5; --accent-ink: #4338ca; --accent-wash: #ecebfc;
-    --display: var(--ui);
-  }
-  [data-theme="nocturne"] {
-    color-scheme: dark;
-    --paper: #0f1518; --surface: #151d21; --surface-2: #1a242a;
-    --ink: #e7edea; --muted: #a2b2af; --faint: #71827e;
-    --line: #233036; --line-strong: #32434b;
-    --accent: #46c2a4; --accent-ink: #6fd6bd; --accent-wash: #12302a; --on-accent: #06231d;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px rgba(0,0,0,.4);
-  }
-  /* Verdant — the botanical design system applied as a theme (teal/emerald/mint
-     + Juturu display / Lenia Sans body). Fonts load in serve mode; else fall back. */
-  [data-theme="verdant"] {
     --paper: #f4faf8; --surface: #ffffff; --surface-2: #ecfbf4;
     --ink: #083344; --muted: #3f6b6b; --faint: #7fa3a3;
     --line: #d7ebe6; --line-strong: #bfe0d8;
     --accent: #0e7490; --accent-ink: #06323d; --accent-wash: #d7eef0; --on-accent: #ffffff;
+    --pine: var(--accent); --pine-ink: var(--accent-ink); --pine-wash: var(--accent-wash);
     --shadow: 0 1px 2px rgba(8,51,68,.05), 0 10px 30px rgba(8,51,68,.08);
     --display: "Space Grotesk", "Archivo", ui-sans-serif, system-ui, sans-serif;
-    --ui: "Plus Jakarta Sans", "Century Gothic", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(.32,.72,0,1);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -819,11 +794,20 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
   button, select, input, .th-sort, .disclosure { touch-action: manipulation; }
   code { font-size: .85em; background: var(--surface); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
-  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
-  header { padding: 46px 0 20px; }
-  .eyebrow { font-family: var(--display); font-style: italic; color: var(--pine-ink); font-size: 17px; margin: 0 0 4px; }
-  h1 { font-family: var(--display); font-weight: 600; font-size: 41px; line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 12px; text-wrap: balance; }
-  .lede { color: var(--muted); font-size: 16px; max-width: 64ch; margin: 0; text-wrap: pretty; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  .topnav { border-bottom: 1px solid var(--line); background: var(--surface); }
+  .topnav .wrap { display: flex; align-items: center; gap: 18px; padding-top: 14px; padding-bottom: 14px; }
+  .topnav .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); letter-spacing: -0.01em; }
+  .topnav .brand .logo { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), #34d399); flex: none; }
+  .topnav .links { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+  .topnav .links a { color: var(--muted); font-weight: 600; padding: 7px 11px; border-radius: 8px; text-decoration: none; }
+  .topnav .links a:hover { color: var(--ink); background: var(--surface-2); }
+  .topnav .links a.active { color: var(--accent-ink); background: var(--accent-wash); }
+
+  header { padding: 40px 0 18px; }
+  h1 { font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 12px; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 16px; max-width: 66ch; margin: 0; text-wrap: pretty; }
   .counts { margin-top: 16px; display: flex; gap: 22px; flex-wrap: wrap; color: var(--faint); font-size: 13px; }
   .counts b { color: var(--ink); font-weight: 600; }
 
@@ -861,7 +845,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 
   .board { padding: 22px 0 40px; }
   .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
-  table { width: 100%; border-collapse: collapse; min-width: 1040px; }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
   thead th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); text-align: left; font-weight: 600; font-size: 12px;
     color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
   .th-sort { font: inherit; font-weight: 600; color: var(--muted); background: none; border: 0; padding: 0;
@@ -876,7 +860,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   .skill-name { font-weight: 600; font-size: 14.5px; }
   .chev { color: var(--faint); transition: transform .18s var(--ease); font-size: 10px; }
   tr.row.open .chev { transform: rotate(90deg); }
-  .skill-sum { color: var(--muted); font-size: 12.5px; margin-top: 3px; max-width: 44ch;
+  .skill-sum { color: var(--muted); font-size: 12.5px; margin-top: 3px; max-width: 60ch;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .catcell { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: 13px; }
   .dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
@@ -910,9 +894,18 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 </style>
 </head>
 <body>
+<nav class="topnav"><div class="wrap">
+  <a class="brand" href="./" aria-label="Library home"><span class="logo" aria-hidden="true"></span>Library</a>
+  <div class="links">
+    <a href="./" class="active">Library</a>
+    <a href="design-system/">Design system</a>
+    <a href="https://github.com/Ses2905/cursor-skills" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
 <header><div class="wrap">
-  <h1>Library</h1>
-  <p class="lede">Every capability in the kit — <strong>skills</strong>, <strong>prompts</strong>, and <strong>workflows</strong> — with what each does, where it fits, how it's invoked, and how current it is. Filter by kind or category, sort any column, or open a row for the full brief.</p>
+  <h1>Your AI Library</h1>
+  <p class="lede">Every capability in the kit — <strong>skills</strong>, <strong>prompts</strong>, and <strong>workflows</strong> — with what each does, where it fits, and how it's invoked. Search, filter, and sort any column, or open a row for the full brief.</p>
   <div class="counts"><span><b id="c-total">0</b> items</span><span id="c-kinds"></span><span><b id="c-cats">0</b> categories</span><span>generated by <code>__GENERATED__</code></span></div>
 </div></header>
 
@@ -927,17 +920,12 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
   <button id="refresh" class="btn" hidden><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span class="lbl">Refresh</span></button>
   <span id="updated" class="updated" role="status" aria-live="polite"></span>
   <details class="admin" id="admin">
-    <summary aria-label="Settings"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15H4.5a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 11 4.6h.09A1.65 1.65 0 0 0 12 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 19.4 8.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 21 15z"/></svg><span>Settings</span></summary>
+    <summary aria-label="About this library"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>About</span></summary>
     <div class="admin-panel">
-      <p class="admin-title">Admin · appearance</p>
-      <label class="admin-row" for="ftheme">Theme
-        <select id="ftheme" aria-label="Color theme">
-          <option value="field">Field Guide</option>
-          <option value="slate">Slate</option>
-          <option value="nocturne">Nocturne</option>
-        </select>
-      </label>
-      <p class="admin-note">Verdant is a backend brand theme — preview it with <code>?theme=verdant</code>.</p>
+      <p class="admin-title">About this library</p>
+      <p class="admin-note">A living catalog of every <strong>skill</strong>, <strong>prompt</strong>, and <strong>workflow</strong> in the kit. Search or filter to find one, then open a row for the full brief — what it does, when to use it, and how to invoke it.</p>
+      <p class="admin-note" id="about-counts"></p>
+      <p class="admin-note">Add new items with the <code>/add-to-library</code> command; the catalog re-indexes and ranks them automatically.</p>
     </div>
   </details>
 </div></div>
@@ -949,11 +937,8 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
         <th aria-sort="none"><button type="button" class="th-sort" data-sort="name">Skill <span class="arrow" aria-hidden="true"></span></button></th>
         <th aria-sort="none"><button type="button" class="th-sort" data-sort="category">Category <span class="arrow" aria-hidden="true"></span></button></th>
         <th aria-sort="none"><button type="button" class="th-sort" data-sort="type">Type <span class="arrow" aria-hidden="true"></span></button></th>
-        <th>Best For</th>
-        <th>Watch-Outs</th>
-        <th aria-sort="none"><button type="button" class="th-sort" data-sort="score">Score <span class="arrow" aria-hidden="true"></span></button></th>
         <th>Invoke</th>
-        <th aria-sort="none"><button type="button" class="th-sort" data-sort="date_added">Added <span class="arrow" aria-hidden="true"></span></button></th>
+        <th aria-sort="none"><button type="button" class="th-sort" data-sort="score">Score <span class="arrow" aria-hidden="true"></span></button></th>
         <th aria-sort="none"><button type="button" class="th-sort" data-sort="date_updated">Updated <span class="arrow" aria-hidden="true"></span></button></th>
       </tr></thead>
       <tbody id="tbody"></tbody>
@@ -967,7 +952,7 @@ _HTML_TEMPLATE = r"""<!DOCTYPE html>
 let DB = __DATA__;
 const LIVE = location.protocol !== "file:";
 const CAT_COLORS = ["#0f766e","#7c3aed","#c2410c","#2563eb","#5f7a33","#a1348a","#0e7490","#9a6b00"];
-const state = { q:"", kind:"All", cat:"All", type:"All", sort:"score", dir:-1, theme:"field" };
+const state = { q:"", kind:"All", cat:"All", type:"All", sort:"name", dir:1 };
 const $ = id => document.getElementById(id);
 function esc(s){ return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function catColor(cat){ const i = DB.categories.indexOf(cat); return CAT_COLORS[(i<0?DB.categories.length:i)%CAT_COLORS.length]; }
@@ -1029,11 +1014,8 @@ function rowHTML(sk, idx){
     <td><button type="button" class="disclosure" aria-expanded="false" aria-controls="d-${idx}"><span class="chev" aria-hidden="true">▶</span><span class="skill-name">${esc(sk.name)}</span><span class="kind-pill k-${esc(sk.kind||'skill')}">${esc(sk.kind||'skill')}</span></button><div class="skill-sum">${esc(sk.summary)}</div></td>
     <td><span class="catcell"><span class="dot" style="background:${color}"></span>${esc(sk.category)}</span></td>
     <td><span class="type-pill">${esc(sk.type||"—")}</span></td>
-    <td>${proseCell(sk.best_use)}</td>
-    <td>${proseCell(sk.watch_outs)}</td>
-    <td><div class="score"><span class="bar"><span style="width:${sk.score}%"></span></span><span class="num">${sk.score}</span></div></td>
     <td>${invokeCell(sk)}</td>
-    <td class="date">${esc(sk.date_added||"—")}</td>
+    <td><div class="score"><span class="bar"><span style="width:${sk.score}%"></span></span><span class="num">${sk.score}</span></div></td>
     <td class="date">${esc(sk.date_updated||"—")}</td>
   </tr>`;
   const badges = [];
@@ -1041,7 +1023,7 @@ function rowHTML(sk, idx){
   badges.push(`<span class="badge${sk.has_rule?" on":""}">rule</span>`);
   ["scripts","tests","examples","docs"].forEach(k=>{ if(sk["has_"+k]) badges.push(`<span class="badge on">${k}</span>`); });
   if(sk.theme) badges.push(`<span class="badge">${esc(sk.theme)}</span>`);
-  const detail = `<tr class="detail" id="d-${idx}" data-for="${idx}" hidden><td colspan="9"><div class="inner">
+  const detail = `<tr class="detail" id="d-${idx}" data-for="${idx}" hidden><td colspan="6"><div class="inner">
     <div class="fb" style="grid-column:1/-1"><h4>WHAT IT IS</h4><p>${esc(sk.description)}</p></div>
     <div class="fb"><h4>BEST USED FOR</h4><p>${sk.best_use?esc(sk.best_use):"—"}</p></div>
     <div class="fb"><h4>WATCH-OUTS</h4><p>${sk.watch_outs?esc(sk.watch_outs):"No limits stated in the skill — check its SKILL.md."}</p></div>
@@ -1085,6 +1067,8 @@ function counts(){
   $("c-cats").textContent = DB.categories.length;
   const ck = DB.counts_by_kind || {};
   $("c-kinds").textContent = kinds().map(k=>`${ck[k]||0} ${k}s`).join(" · ");
+  const about = $("about-counts");
+  if(about) about.textContent = `${DB.total} items across ${DB.categories.length} categories — ` + kinds().map(k=>`${ck[k]||0} ${k}s`).join(", ") + ".";
 }
 async function fetchData(path){
   const r = await fetch(path, { method: path.indexOf("refresh")>=0?"POST":"GET", cache:"no-store" });
@@ -1105,23 +1089,14 @@ document.querySelector("thead").addEventListener("click", e=>{
   const btn = e.target.closest(".th-sort"); if(btn) setSort(btn.dataset.sort);
 });
 $("tbody").addEventListener("click", e=> toggleRow(e.target.closest("tr.row")));
-$("ftheme").addEventListener("change", e=> applyTheme(e.target.value));
 
-function applyTheme(name){
-  state.theme = name;
-  document.documentElement.setAttribute("data-theme", name);
-  $("ftheme").value = name;
-  try { localStorage.setItem("skdb-theme", name); } catch(e) {}
-  syncURL();
-}
 function syncURL(){
   const p = new URLSearchParams();
   if(state.q) p.set("q", state.q);
   if(state.kind!=="All") p.set("kind", state.kind);
   if(state.cat!=="All") p.set("cat", state.cat);
   if(state.type!=="All") p.set("type", state.type);
-  if(state.sort!=="score" || state.dir!==-1){ p.set("sort", state.sort); p.set("dir", state.dir<0?"desc":"asc"); }
-  if(state.theme!=="field") p.set("theme", state.theme);
+  if(state.sort!=="name" || state.dir!==1){ p.set("sort", state.sort); p.set("dir", state.dir<0?"desc":"asc"); }
   const qs = p.toString();
   history.replaceState(null, "", qs ? "?"+qs : location.pathname);
 }
@@ -1132,17 +1107,28 @@ function readURL(){
   if(p.has("cat")) state.cat = p.get("cat");
   if(p.has("type")) state.type = p.get("type");
   if(p.has("sort")){ state.sort = p.get("sort"); state.dir = p.get("dir")==="asc" ? 1 : -1; }
-  let theme = p.get("theme");
-  if(!theme){ try { theme = localStorage.getItem("skdb-theme"); } catch(e) {} }
-  if(theme) state.theme = theme;
+}
+// Refresh only makes sense against a live backend (the serve command). On a
+// static host (GitHub Pages, file://) there is no /api, so probe it first and
+// only reveal Refresh when the backend actually answers — otherwise the button
+// would always fail. The embedded snapshot renders regardless.
+async function enableLiveIfAvailable(){
+  if(!LIVE) return false;
+  try {
+    const data = await fetchData("/api/skills");
+    DB = data;
+    const b = $("refresh");
+    b.hidden = false;
+    b.addEventListener("click", refresh);
+    return true;
+  } catch(e) { return false; }
 }
 async function init(){
   readURL();
-  applyTheme(state.theme);
-  if(LIVE){ const b=$("refresh"); b.hidden=false; b.addEventListener("click", refresh); try { DB = await fetchData("/api/skills"); } catch(e) {} }
+  const live = await enableLiveIfAvailable();
   fillFilters();
   $("q").value = state.q;
-  counts(); render(); stamp(LIVE ? "Loaded" : "Snapshot");
+  counts(); render(); stamp(live ? "Loaded" : "Snapshot");
 }
 init();
 </script>
