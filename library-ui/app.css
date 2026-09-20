@@ -10,7 +10,7 @@
 @font-face { font-family:"Fraunces"; src:url("fonts/Fraunces-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
 :root {
   --bg: #f4faf8; --surface: #ffffff; --surface-2: #ecfbf4;
-  --ink: #0c2a30; --muted: #48696b; --faint: #7fa1a1;
+  --ink: #0c2a30; --muted: #48696b; --faint: #527575;
   --line: #dcece7; --line-strong: #c3ded6;
   --accent: #0e7490; --accent-ink: #06323d; --accent-wash: #d7eef0;
   --warn: #b5730d; --warn-wash: #fdecc8; --danger: #c23b1e; --danger-wash: #fbe3db;
@@ -67,6 +67,7 @@ a { color: inherit; text-decoration: none; }
 .btn:hover { background: var(--surface-2); }
 .btn.primary { background: var(--accent); border-color: var(--accent-ink); color: #fff; }
 .btn.primary:hover { background: var(--accent-ink); }
+.btn:active { transform: scale(.98); }
 .btn.ghost { border-color: transparent; background: transparent; color: var(--accent-ink); }
 .btn.sm { padding: 6px 10px; font-size: 13px; }
 
@@ -214,7 +215,13 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size:
   .grid { grid-template-columns: 1fr; }
   .compare, .srcgrid { grid-template-columns: 1fr; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } .btn:active { transform: none; } }
+
+/* Keyboard focus for clickable rows/cards. .list clips overflow, so use an
+   inset ring on rows to keep the focus indicator visible; cards can use a ring. */
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.list .row:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+.res-row:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
 
 /* Dropdowns / selects use the UI font (were falling back to the system font) */
 select, option, input, textarea { font-family: var(--ui); }
@@ -408,3 +415,33 @@ select.f { font-size: 13px; }
 .ip-check { color: var(--accent-ink); font-weight: 700; }
 
 @media (max-width: 900px) { .notif { right: 12px; } }
+
+/* ---------- Small screens (≤640px): usable list + topbar ---------- */
+@media (max-width: 640px) {
+  /* Tighter page gutters so nothing overflows the viewport. */
+  .page { padding: 20px 16px 64px; }
+  .topbar-inner { padding: 10px 12px; gap: 8px; }
+
+  /* Topbar: shrink the search, drop the ⌘K hint, and reduce "+ Add" to "+". */
+  .topsearch { min-width: 0; padding: 8px 10px; }
+  .topsearch .kbd { display: none; }
+  #addbtn .addlabel { display: none; }
+  #addbtn { padding: 9px 12px; }
+
+  /* Library/search list rows (those with .nmwrap) collapse to two lines:
+     line 1 = [glyph] Name … Updated, line 2 = [glyph] Domain … Availability.
+     The sticky header's 5-col layout no longer applies, so hide it. */
+  .list.sticky-head .lhead { display: none; }
+  .list .row:has(.nmwrap) {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "kind name date"
+      "kind cat  avail";
+    row-gap: 5px; column-gap: 10px; align-items: center;
+  }
+  .list .row:has(.nmwrap) > .kind { grid-area: kind; align-self: center; }
+  .list .row:has(.nmwrap) .nmwrap { grid-area: name; }
+  .list .row:has(.nmwrap) .sub.date { grid-area: date; text-align: right; padding-left: 8px; white-space: nowrap; }
+  .list .row:has(.nmwrap) .sub.cat { grid-area: cat; }
+  .list .row:has(.nmwrap) .insti { grid-area: avail; justify-self: start; }
+}
