@@ -11,6 +11,7 @@
   let byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
   let byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
   let dataSource = "snapshot"; // "live" once the real catalog is loaded
+  let toolkitHome = (() => { try { return localStorage.getItem("ai-toolkit-home"); } catch (e) { return null; } })() || "$AI_TOOLKIT_HOME (~/.ai-toolkit)";
 
   function setData(data, source) {
     D = data || EMPTY;
@@ -52,6 +53,25 @@
 
   const esc = s => (s == null ? "" : String(s)).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const kebab = s => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  // Naming conventions: "&" becomes "+" everywhere; kebab domains render Title Case.
+  const plusify = s => String(s == null ? "" : s).replace(/&/g, "+");
+  const titleCase = s => String(s).replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  const catLabel = c => plusify(/\s/.test(c) ? c : titleCase(c));
+
+  // Domain (category) definitions surfaced as hover tooltips.
+  const DOMAIN_DEFS = {
+    "Product & Discovery": "Frame problems, run discovery, and shape product strategy before building.",
+    "Design & Frontend": "Distinctive UI, design systems, typography, and visual direction.",
+    "Motion & Animation": "Add, audit, and review motion with a real craft bar for animation.",
+    "Presentations & Diagrams": "Build editable decks, HTML presentations, and self-contained diagrams.",
+    "Engineering Workflow": "Plan, debug from evidence, review the diff, ship a clean commit, and hand off.",
+    "Setup & Install": "Install the toolkit and pull in external skill catalogs and tools.",
+    "Data Visualization": "Chart and data-display patterns that communicate the insight clearly.",
+    "Research": "Discovery inputs — personas, interviews, and evidence to draw on.",
+    "agent-tools": "Executable helpers that install, index, and route toolkit content.",
+  };
+  const domainDef = c => DOMAIN_DEFS[c] || "";
+  const tipAttr = c => (domainDef(c) ? ` data-tip="${esc(domainDef(c))}"` : "");
   const h = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const kindsPresent = () => KIND_ORDER.filter(k => ITEMS.some(i => i.kind === k));
   const cats = () => Array.from(new Set(ITEMS.map(i => i.category))).sort();
@@ -68,14 +88,14 @@
     document.getElementById("app").innerHTML = `
       <div class="shell">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="mark"></span> Library<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
+          <div class="brand"><span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v12H3z"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/><path d="M11 13h2v2h-2z" fill="currentColor" stroke="none"/></svg></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
           <nav class="nav">
             ${item("home", "⌂", "Home")}
-            <div class="group">Library</div>
+            <div class="group">AI Toolkit</div>
             ${item("library", "▤", "All", ITEMS.length)}
             <div class="sub">${subs}</div>
             <div class="group">Manage</div>
-            ${item("inbox", "▧", "Inbox", (D.inbox || []).length)}
+            ${item("inbox", "▧", "Inbox", (D.inbox || []).filter(x => !x.read).length)}
             ${item("discover", "◎", "Discover")}
             ${item("projects", "▦", "Projects")}
             ${item("integrations", "⇄", "Integrations")}
@@ -85,10 +105,10 @@
         <div class="main">
           <div class="topbar"><div class="topbar-inner">
             <button class="btn sm hamburger" id="ham">≡</button>
-            <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search the library…" aria-label="Search the library" /><span class="kbd">⌘K</span></label>
+            <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search your toolkit…" aria-label="Search your toolkit" /><span class="kbd">⌘K</span></label>
             <span class="spacer"></span>
             <button class="btn" id="new">+ New</button>
-            <button class="btn primary" id="add">+ Add to Library</button>
+            <button class="btn primary" id="add">+ Add to Toolkit</button>
           </div></div>
           <div id="view"></div>
         </div>
@@ -155,23 +175,28 @@
   /* ---------- Home ---------- */
   function viewHome() {
     const c = D.counts;
-    const summary = ["skill", "prompt", "workflow", "reference"].map(k => `<div class="s"><span class="n">${c[k] || 0}</span><span class="l">${KIND[k].plural}</span></div>`).join("");
+    const stats = KIND_ORDER.filter(k => c[k]).map(k => `<button class="statcard" data-nav="library/${k}"><span class="sc-ic kind" data-k="${k}"><span class="g">${KIND[k].glyph}</span></span><span class="sc-n">${c[k] || 0}</span><span class="sc-l">${KIND[k].plural}</span></button>`).join("");
+    const unread = (D.inbox || []).filter(x => !x.read).length;
     const att = [];
-    if ((D.inbox || []).length) att.push(["", `${D.inbox.length} items need classification`, "inbox"]);
-    if ((D.updates || []).length) att.push(["", `${D.updates.length} upstream updates available`, "health"]);
-    (D.health.issues || []).forEach(i => att.push(["", `${i.type}: ${i.detail}`, "health"]));
-    const attHtml = att.length ? att.map(([_, t, r]) => `<div class="att"><span class="dot"></span><span>${esc(t)}</span><button class="btn sm go" data-nav="${r}">Review</button></div>`).join("") : `<div class="att info"><span class="dot"></span><span>Everything looks healthy.</span></div>`;
-    const recent = (D.activity || []).slice(0, 5).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
-    const cols = (D.collections || []).slice(0, 8).map(x => `<button class="chip" data-nav="library/all">${esc(x.name)}<span class="c">${x.count}</span></button>`).join("");
+    if (unread) att.push([`${unread} item${unread > 1 ? "s" : ""} need classification`, "inbox"]);
+    if ((D.updates || []).length) att.push([`${D.updates.length} upstream update${D.updates.length > 1 ? "s" : ""} available`, "health"]);
+    (D.health.issues || []).forEach(i => att.push([`${i.type}: ${i.detail}`, "health"]));
+    const attHtml = att.length ? att.map(([t, r]) => `<div class="att"><span class="dot"></span><span>${esc(t)}</span><button class="btn sm go" data-nav="${r}">Review</button></div>`).join("") : `<div class="att info"><span class="dot"></span><span>Everything looks healthy — nothing needs your attention.</span></div>`;
+    const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
+    const cols = (D.collections || []).slice(0, 10).map(x => `<button class="chip" data-nav="library/all"${tipAttr(x.name)}>${esc(catLabel(x.name))}<span class="c">${x.count}</span></button>`).join("");
     return `
-      <div class="page">
-        <div class="page-head"><h1>Your AI Library</h1><p>Everything you can compose — skills, prompts, workflows and references — in one place.</p></div>
-        <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search all skills, prompts, workflows & references…" onkeydown="if(event.key==='Enter'){location.hash='#/search?q='+encodeURIComponent(this.value)}"/></label>
-        <div style="display:flex;gap:10px;margin-top:14px"><button class="btn primary" data-add>+ Add to Library</button><button class="btn" data-nav="discover">Browse / Discover</button></div>
-        <div class="section"><h2>Library summary</h2><div class="summary">${summary}</div></div>
-        <div class="section"><h2>Needs attention</h2><div class="attention">${attHtml}</div></div>
-        <div class="section"><h2>Your collections</h2><div class="chips">${cols}</div></div>
-        <div class="section"><h2>Recent activity</h2><div class="actlist">${recent}</div></div>
+      <div class="page home">
+        <div class="page-head"><h1>Your AI Toolkit</h1><p>Everything you can compose — skills, prompts, workflows, tools and references — in one place.</p></div>
+        <div class="home-hero">
+          <label class="topsearch home-search"><span>⌕</span><input placeholder="Search your toolkit…" onkeydown="if(event.key==='Enter'){location.hash='#/search?q='+encodeURIComponent(this.value)}"/></label>
+          <div class="home-cta"><button class="btn primary" data-add>+ Add to Toolkit</button><button class="btn" data-nav="discover">Discover</button></div>
+        </div>
+        <div class="section"><h2>AI Toolkit summary</h2><div class="statgrid">${stats}</div></div>
+        <div class="home-grid">
+          <div class="section"><h2>Needs attention</h2><div class="attention">${attHtml}</div></div>
+          <div class="section"><h2>Browse by domain</h2><div class="chips">${cols}</div></div>
+        </div>
+        <div class="section"><h2>Recent activity</h2><div class="actlist">${recent}</div><div style="margin-top:12px"><button class="btn sm" data-nav="activity">View all activity</button></div></div>
       </div>`;
   }
 
@@ -196,14 +221,14 @@
     return `<div class="card" data-item="${esc(i.id)}">
       <div class="top">${kindTag(i.kind)}${installDots(i)}</div>
       <div class="name">${esc(i.title)}</div>
-      <div class="meta"><span class="tag">${esc(i.category)}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
+      <div class="meta"><span class="tag"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
     </div>`;
   }
   function listRow(i) {
     return `<div class="row" data-item="${esc(i.id)}">
       <span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
       <span class="nmwrap"><span class="nm">${esc(i.title)}</span><span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span></span>
-      <span class="sub cat">${esc(i.category)}</span>
+      <span class="sub cat"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span>
       ${installDots(i)}
       <span class="sub date">${esc(i.date_updated || "")}</span>
     </div>`;
@@ -217,16 +242,16 @@
   function viewLibrary(kind) {
     state.kind = kind || "all";
     const tabs = ["all", ...kindsPresent()].map(k => `<button data-kindtab="${k}" class="${state.kind === k ? "active" : ""}">${k === "all" ? "All" : KIND[k].plural}</button>`).join("");
-    const catOpts = ['<option value="All">All categories</option>'].concat(cats().map(c => `<option value="${esc(c)}" ${state.cat === c ? "selected" : ""}>${esc(c)}</option>`)).join("");
+    const catOpts = ['<option value="All">All domains</option>'].concat(cats().map(c => `<option value="${esc(c)}" ${state.cat === c ? "selected" : ""}>${esc(catLabel(c))}</option>`)).join("");
     const chips = [];
     if (state.kind !== "all") chips.push(`<span class="chipf">${KIND[state.kind].plural}<button data-clearf="kind">×</button></span>`);
-    if (state.cat !== "All") chips.push(`<span class="chipf">${esc(state.cat)}<button data-clearf="cat">×</button></span>`);
+    if (state.cat !== "All") chips.push(`<span class="chipf">${esc(catLabel(state.cat))}<button data-clearf="cat">×</button></span>`);
     const active = state.kind !== "all" && KIND[state.kind];
-    const heading = active ? KIND[state.kind].plural : "Library";
+    const heading = active ? KIND[state.kind].plural : "AI Toolkit";
     const subtitle = active ? KIND[state.kind].desc : "Browse and manage everything you've installed.";
     return `<div class="page">
       <div class="page-head"><h1>${esc(heading)}</h1><p>${esc(subtitle)}</p></div>
-      <label class="topsearch" style="max-width:none"><span>⌕</span><input id="libsearch" placeholder="Search the library…" value="${esc(state.q)}"/></label>
+      <label class="topsearch" style="max-width:none"><span>⌕</span><input id="libsearch" placeholder="Search your toolkit…" value="${esc(state.q)}"/></label>
       <div class="filterbar"><div class="tabs">${tabs}</div></div>
       <div class="filterbar">
         <select class="f" data-filter="cat">${catOpts}</select>
@@ -243,9 +268,9 @@
   function viewSearch(q) {
     const qq = (q || "").toLowerCase().trim();
     const hits = qq ? ITEMS.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(qq)) : [];
-    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${hits.length} items across the library.` : "Type to search skills, prompts, workflows & references."}</p></div>`;
+    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${hits.length} items across your toolkit.` : "Type to search skills, prompts, workflows, tools + references."}</p></div>`;
     if (!qq) return `<div class="page">${head}</div>`;
-    if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>No library items match “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Library</button></div></div>`;
+    if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>Nothing in your toolkit matches “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Toolkit</button></div></div>`;
     const groups = KIND_ORDER.map(k => {
       const g = hits.filter(i => i.kind === k);
       if (!g.length) return "";
@@ -284,7 +309,7 @@
       <div class="field"><h4>Invocation</h4><p>${i.command ? "<span class='mono'>/" + esc(i.command) + "</span>" : "model-invoked"}</p></div>
       <details class="advanced"><summary>Advanced · technical details</summary><div class="adv-body">
         <p>Path: <span class="mono">${esc(pathOf(i))}</span></p>
-        <p>Kind: ${esc(i.kind)} · Category: ${esc(i.category)} · Status: ${esc(i.status)}</p>
+        <p>Kind: ${esc(i.kind)} · Domain: ${esc(catLabel(i.category))} · Status: ${esc(i.status)}</p>
       </div></details>`;
     dr.innerHTML = `
       <div class="dhead">
@@ -329,14 +354,14 @@
 
   /* ---------- Discover / Projects / Integrations / Inbox / Activity / Health / Settings ---------- */
   function viewDiscover() {
-    const colls = (D.collections || []).slice(0, 8).map(c => `<button class="chip" data-nav="library/all">${esc(c.name)}</button>`).join("");
+    const colls = (D.collections || []).slice(0, 12).map(c => `<button class="chip" data-nav="library/all"${tipAttr(c.name)}>${esc(catLabel(c.name))}<span class="c">${c.count}</span></button>`).join("");
     return `<div class="page">
-      <div class="page-head"><h1>Discover</h1><p>What you could add. External discovery isn't wired up yet — this is the architecture.</p></div>
-      <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search skills, prompts, workflows & tools to add…"/></label>
+      <div class="page-head"><h1>Discover</h1><p>What you could add. External discovery isn't wired up yet — this is the architecture. Hover a domain for what it covers.</p></div>
+      <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search skills, prompts, workflows + tools to add…"/></label>
       <div class="section"><h2>Browse by domain</h2><div class="chips">${colls}</div></div>
       <div class="section"><h2>From sources</h2><div class="list">
-        <div class="row" data-add><span class="kind" data-k="tool"><span class="g">⚙</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected & routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
-        <div class="row"><span class="kind"><span class="g">◎</span></span><span><div class="nm">Community libraries</div><div class="sub">Curated catalogs (coming soon)</div></span><span class="sub">registry</span><span class="sub faint">soon</span></div>
+        <div class="row" data-add><span class="kind" data-k="tool"><span class="g">⚙</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected + routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
+        <div class="row"><span class="kind"><span class="g">◎</span></span><span><div class="nm">Community catalogs</div><div class="sub">Curated catalogs (coming soon)</div></span><span class="sub">registry</span><span class="sub faint">soon</span></div>
       </div></div>
       <div class="empty" style="margin-top:24px"><h3>Discovery feed coming soon</h3><p>When registries are connected, recommended skills, prompts and workflows will appear here.</p><button class="btn primary" data-add>+ Add from GitHub</button></div>
     </div>`;
@@ -344,42 +369,53 @@
   function viewProjects() {
     const rows = (D.projects || []).map(p => `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
       <span><div class="nm">${esc(p.name)}</div><div class="sub">${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references</div></span>
-      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} integrations synced</span><span class="btn sm">Open</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your global library are active where.</p></div><div class="list">${rows}</div></div>`;
+      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} agents synced</span><span class="btn sm">Open</span></div>`).join("");
+    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your toolkit are active in each project, and which agents they're synced to.</p></div><div class="list">${rows}</div></div>`;
   }
   function viewProject(id) {
     const p = (D.projects || []).find(x => x.id === id); if (!p) return viewProjects();
     const caps = p.skills.map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><button class="btn sm" data-action="disable-cap" data-proj="${esc(p.id)}" data-name="${esc(n)}">Disable</button></div>`; }).join("");
     const wfs = p.workflows.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
     const refs = p.references.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div><div class="sub">${v === "synced" ? "This project's items are live in " + esc(k) : "Not synced to " + esc(k) + " yet"}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm ${v === "synced" ? "" : "primary"}" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
     return `<div class="page">
       <div class="crumb" style="margin-bottom:8px"><a href="#/projects">Projects</a> / ${esc(p.name)}</div>
       <div class="page-head"><h1>${esc(p.name)}</h1><p>${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references enabled.</p></div>
-      <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skills">+ Enable from Library</button></div></div>
+      <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skill">+ Enable from toolkit</button></div></div>
       <div class="section"><h2>Workflows</h2><div class="chips">${wfs || '<span class="faint">None yet</span>'}</div></div>
       <div class="section"><h2>References</h2><div class="chips">${refs || '<span class="faint">None yet</span>'}</div></div>
-      <div class="section"><h2>Integrations</h2><div class="list">${integ}</div></div>
+      <div class="section"><div class="sec-head"><h2>Sync to agents</h2></div><p class="muted" style="margin:-4px 0 12px">Your toolkit is the source of truth. Sync copies this project's enabled items into each agent (Cursor, Claude Code, Codex).</p><div class="list">${integ}</div></div>
     </div>`;
   }
   function viewIntegrations() {
+    const c = D.counts || {};
+    const byKind = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${KIND[k].plural.toLowerCase()}`).join(" · ");
+    const total = ITEMS.length;
     const rows = (D.integrations || []).map(x => `<div class="row"><span class="kind"><span class="g">⇄</span></span>
-      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${x.count} skills available · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
       <span>${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your global library across AI coding environments. The library is the source of truth; each tool syncs from it.</p></div><div class="list">${rows}</div>
-      <details class="advanced" style="margin-top:16px"><summary>Advanced · how syncing works</summary><div class="adv-body">Each integration maps the global library into that tool's expected structure (generated indexes / links). You don't manage symlinks by hand.</div></details></div>`;
+    return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your toolkit across AI coding environments. The toolkit is the source of truth; each agent syncs from it — skills, prompts, workflows, tools + references.</p></div><div class="list">${rows}</div></div>`;
   }
   function viewInbox() {
-    const rows = (D.inbox || []).map(x => `<div class="row"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span>
-      <span><div class="nm">${esc(x.name)}</div><div class="sub">Suggested: ${esc(x.detected)} · ${esc(x.category)} — ${esc(x.reason)}</div></span>
-      <span class="sub">${esc(x.source)}</span><button class="btn sm" data-action="review-inbox" data-name="${esc(x.name)}">Review</button></div>`).join("");
-    if (!(D.inbox || []).length) return `<div class="page"><div class="page-head"><h1>Inbox</h1></div><div class="empty"><h3>Inbox is clear</h3><p>Items the router can't confidently classify land here for a quick decision.</p></div></div>`;
-    return `<div class="page"><div class="page-head"><h1>Inbox</h1><p>${D.inbox.length} items need review. This is a staging area — not a second library.</p></div><div class="list">${rows}</div></div>`;
+    const all = D.inbox || [];
+    const head = `<div class="page-head"><h1>Inbox</h1><p>Items the router couldn't confidently classify. Review to file one into your toolkit, or delete what you don't need — this is a staging area, not a second toolkit.</p></div>`;
+    if (!all.length) return `<div class="page">${head}<div class="empty"><h3>Inbox is clear</h3><p>Nothing waiting. New unclassified items will show up here.</p></div></div>`;
+    const unread = all.filter(x => !x.read), read = all.filter(x => x.read);
+    const rowU = x => `<div class="row inbox-row"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">Suggested: ${esc(x.detected)} · ${esc(catLabel(x.category))} — ${esc(x.reason)}</div></span>
+      <span class="inbox-actions"><button class="btn sm primary" data-action="review-inbox" data-name="${esc(x.name)}">Review</button><button class="btn sm" data-action="mark-read" data-name="${esc(x.name)}">Mark read</button><button class="btn sm danger" data-action="delete-inbox" data-name="${esc(x.name)}">Delete</button></span></div>`;
+    const rowR = x => `<div class="row inbox-row read"><span class="kind" data-k="${x.filedAs || x.detected}"><span class="g">${(KIND[x.filedAs || x.detected] || KIND.reference).glyph}</span></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.filedAs ? "Filed as " + esc(x.filedAs) : "Marked read"}${x.category ? " · " + esc(catLabel(x.category)) : ""}</div></span>
+      <span class="inbox-actions"><button class="btn sm" data-action="unread-inbox" data-name="${esc(x.name)}">Mark unread</button><button class="btn sm danger" data-action="delete-inbox" data-name="${esc(x.name)}">Delete</button></span></div>`;
+    return `<div class="page">${head}
+      <div class="section"><div class="sec-head"><h2>Unread${unread.length ? " · " + unread.length : ""}</h2></div>${unread.length ? `<div class="list">${unread.map(rowU).join("")}</div>` : `<p class="faint">Nothing unread — inbox zero.</p>`}</div>
+      ${read.length ? `<div class="section"><div class="sec-head"><h2>Read · ${read.length}</h2></div><div class="list">${read.map(rowR).join("")}</div></div>` : ""}
+    </div>`;
   }
   function viewActivity() {
     const rows = (D.activity || []).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Activity</h1><p>What changed across your library.</p></div><div class="actlist">${rows}</div></div>`;
+    return `<div class="page"><div class="page-head"><h1>Activity</h1><p>What changed across your toolkit.</p></div><div class="actlist">${rows}</div></div>`;
   }
   function viewHealth() {
     const ok = (D.health.ok || []).map(t => `<div class="att info"><span class="dot"></span><span>${esc(t)}</span></div>`).join("");
@@ -393,10 +429,10 @@
     const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("") || `<div class="a"><span class="faint">No activity yet.</span></div>`;
     const c = D.counts || {};
     const totals = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${c[k] === 1 ? KIND[k].label.toLowerCase() : KIND[k].plural.toLowerCase()}`).join(" · ");
-    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Where your library lives, what's in it, and what's changed.</p></div>
-      <div class="section"><h2>Global library</h2><div class="list">
-        <div class="row settings-row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div>
-        <div class="row settings-row"><span class="kind"><span class="g">▤</span></span><span><div class="nm">Contents</div><div class="sub">${esc(totals || "empty")}</div></span><span></span><button class="btn sm" data-nav="library">Open library</button></div>
+    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Where your toolkit lives, what's in it, and what's changed.</p></div>
+      <div class="section"><h2>Global toolkit</h2><div class="list">
+        <div class="row settings-row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Toolkit home</div><div class="sub mono">${esc(toolkitHome)}</div><div class="sub">The folder that holds every skill, prompt, workflow, tool + reference. Agents sync from here.</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div>
+        <div class="row settings-row"><span class="kind"><span class="g">▤</span></span><span><div class="nm">Contents</div><div class="sub">${esc(plusify(totals) || "empty")}</div></span><span></span><button class="btn sm" data-nav="library">Open toolkit</button></div>
       </div></div>
       <div class="section"><div class="sec-head"><h2>Activity</h2><button class="btn sm" data-nav="activity">View all</button></div><div class="actlist">${recent}</div></div>
     </div>`;
@@ -411,7 +447,7 @@
   const add = { step: "source", src: "github" };
   function openAdd() { add.step = "source"; renderAdd(); }
   function renderAdd() {
-    let body = "", foot = "", title = "Add to Library";
+    let body = "", foot = "", title = "Add to Toolkit";
     if (add.step === "source") {
       body = `<p class="muted">Where is it coming from?</p><div class="srcgrid">
         ${[["github", "GitHub URL", "Install a public repo"], ["zip", "Upload ZIP", "A downloaded archive"], ["local", "Local File / Folder", "Something on disk"], ["paste", "Paste Content", "A prompt or skill you copied"]].map(([k, t, d]) => `<button class="srcopt" data-src="${k}"><div class="t">${t}</div><div class="d">${d}</div></button>`).join("")}
@@ -488,8 +524,8 @@
 
   /* ---------- Command palette ---------- */
   const COMMANDS = [
-    ["Search Library", () => location.hash = "#/library"],
-    ["Add to Library", openAdd], ["Install from GitHub", () => { openAdd(); add.step = "input"; renderAdd(); }],
+    ["Search Toolkit", () => location.hash = "#/library"],
+    ["Add to Toolkit", openAdd], ["Install from GitHub", () => { openAdd(); add.step = "input"; renderAdd(); }],
     ["Create Skill", openCreate], ["Create Prompt", openCreate], ["Create Workflow", openCreate],
     ["Open Inbox", () => location.hash = "#/inbox"], ["Review Updates", () => location.hash = "#/health"],
     ["Sync Cursor", () => toast("Syncing Cursor…")], ["Sync Claude Code", () => toast("Syncing Claude Code…")],
@@ -525,9 +561,37 @@
       case "edit-item": return openCreate();
       case "rename-item": return openRename(ds.id);
       case "push-item": return pushItem(ds.id, ds.plat);
-      case "change-home": return toast("Choose a library folder…");
+      case "mark-read": return setInboxRead(ds.name, true);
+      case "unread-inbox": return setInboxRead(ds.name, false);
+      case "delete-inbox": return deleteInbox(ds.name);
+      case "change-home": return openChangeHome();
       default: return undefined;
     }
+  }
+
+  function setInboxRead(name, read) {
+    const it = (D.inbox || []).find(x => x.name === name); if (!it) return;
+    it.read = read; if (!read) it.filedAs = undefined;
+    addActivity(read ? "Marked read" : "Marked unread", name);
+    toast(name + (read ? " marked read" : " moved back to unread")); rebuildAll();
+  }
+  function deleteInbox(name) {
+    D.inbox = (D.inbox || []).filter(x => x.name !== name);
+    addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); rebuildAll();
+  }
+  function openChangeHome() {
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Toolkit home</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <div class="field"><h4>Folder</h4><input class="input" id="th-home" value="${esc(toolkitHome)}" autocomplete="off" /></div>
+      <p class="muted">Where the toolkit is stored on disk. Skills, prompts, workflows, tools + references live here, and every agent syncs from it.</p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="th-save">Save</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("#th-save").onclick = () => {
+      const v = ov.querySelector("#th-home").value.trim(); if (!v) { closeOverlay(); return; }
+      toolkitHome = v; try { localStorage.setItem("ai-toolkit-home", v); } catch (e) {}
+      addActivity("Changed", "Toolkit home → " + v); closeOverlay(); toast("Toolkit home set"); rerenderView();
+    };
+    ov.querySelector("#th-home").focus();
   }
 
   /* Installed-in panel (drawer) + push to an environment it's not in yet. */
@@ -629,17 +693,18 @@
     const opts = ["skill", "prompt", "workflow", "reference", "template"]
       .map(k => `<button class="chip ${k === it.detected ? "active" : ""}" data-k="${k}">${KIND[k] ? KIND[k].label : k}</button>`).join("");
     overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Review · ${esc(it.name)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
-      <p class="muted">Suggested: <strong>${esc(it.detected)}</strong> · ${esc(it.category)} — ${esc(it.reason)}</p>
+      <p class="muted">Suggested: <strong>${esc(it.detected)}</strong> · ${esc(catLabel(it.category))} — ${esc(it.reason)}</p>
       <div class="field"><h4>File as</h4><div class="chips" id="ib-kinds">${opts}</div></div>
       <div class="field"><h4>Source</h4><p class="mono">${esc(it.source)}</p></div>
-    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" data-file>File item</button></div></div></div>`);
+    </div><div class="mfoot"><button class="btn danger" data-del>Delete</button><div style="display:flex;gap:8px"><button class="btn" data-x>Cancel</button><button class="btn primary" data-file>File + mark read</button></div></div></div></div>`);
     const ov = document.getElementById("overlay");
     let chosen = it.detected;
     ov.querySelectorAll("#ib-kinds .chip").forEach(c => c.onclick = () => { ov.querySelectorAll("#ib-kinds .chip").forEach(x => x.classList.remove("active")); c.classList.add("active"); chosen = c.dataset.k; });
     ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("[data-del]").onclick = () => { closeOverlay(); deleteInbox(name); };
     ov.querySelector("[data-file]").onclick = () => {
-      D.inbox = (D.inbox || []).filter(x => x.name !== name);
-      addActivity("Filed", name + " → " + chosen); closeOverlay(); toast("Filed " + name + " as " + chosen); rebuildAll();
+      it.read = true; it.filedAs = chosen;
+      addActivity("Filed", name + " → " + chosen); closeOverlay(); toast("Filed " + name + " as " + chosen + " · re-synced"); rebuildAll();
     };
   }
 
@@ -663,6 +728,26 @@
     };
   }
 
+  /* ---------- Tooltips (delegated; the tip element lives on <body>) ---------- */
+  function initTooltips() {
+    let tip = document.getElementById("tip");
+    if (!tip) { tip = document.createElement("div"); tip.id = "tip"; tip.className = "tip"; tip.setAttribute("role", "tooltip"); document.body.appendChild(tip); }
+    const show = el => {
+      const text = el.getAttribute("data-tip"); if (!text) return;
+      tip.textContent = text;
+      const r = el.getBoundingClientRect();
+      tip.style.left = Math.round(r.left + r.width / 2) + "px";
+      tip.style.top = Math.round(r.bottom + 8) + "px";
+      tip.classList.add("show");
+    };
+    const hide = () => tip.classList.remove("show");
+    document.addEventListener("mouseover", e => { const el = e.target.closest("[data-tip]"); if (el) show(el); });
+    document.addEventListener("mouseout", e => { const el = e.target.closest("[data-tip]"); if (el) hide(); });
+    document.addEventListener("focusin", e => { const el = e.target.closest("[data-tip]"); if (el) show(el); });
+    document.addEventListener("focusout", hide);
+    window.addEventListener("scroll", hide, true);
+  }
+
   /* ---------- Boot ---------- */
   window.addEventListener("keydown", e => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); }
@@ -674,5 +759,6 @@
     await loadLiveData(); // falls back to the bundled snapshot on failure
     shell();
     router();
+    initTooltips();
   })();
 })();
