@@ -174,9 +174,11 @@
     ];
     const inbox = [
       { name: "animation-patterns", detected: "reference", category: "Presentations & Diagrams",
-        reason: "Could also be classified as a Skill", source: "github.com/example/motion" },
+        reason: "Could also be classified as a Skill", source: "github.com/example/motion", read: false },
       { name: "deck-linting", detected: "prompt", category: "Presentations & Diagrams",
-        reason: "Low category confidence", source: "pasted" },
+        reason: "Low category confidence", source: "pasted", read: false },
+      { name: "slide-linter", detected: "prompt", category: "Presentations & Diagrams",
+        reason: "Filed from an earlier review", source: "pasted", read: true, filedAs: "prompt" },
     ];
     const updates = [
       { name: pres[0] || "presentation-design", kind: "skill", note: "Source has changed", has_local: true },
@@ -190,7 +192,7 @@
       ],
     };
     const activity = [
-      { action: "Installed", target: "Add to Library", when: "just now" },
+      { action: "Installed", target: "Add to Toolkit", when: "just now" },
       { action: "Updated", target: workflows[0].title, when: "15 min ago" },
       { action: "Enabled", target: `${prod[0] ? titleOf(prod[0]) : "a skill"} · Q4 Launch`, when: "1 h ago" },
       { action: "Classification changed", target: "deck-linting → Prompt", when: "2 h ago" },
