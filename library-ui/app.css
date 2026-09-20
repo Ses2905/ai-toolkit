@@ -237,7 +237,7 @@ select.f { font-size: 13px; }
 
 /* Clean list row: name + kind pill · category · install · updated (desc lives in the flyout).
    Columns share a left edge: headers and cells are start-aligned, including Updated. */
-.list .row { grid-template-columns: 22px minmax(0, 1.7fr) 1fr auto minmax(96px, max-content); column-gap: 12px; }
+.list.sticky-head .row { grid-template-columns: 22px minmax(0, 1.7fr) minmax(0, 1fr) 140px 108px; column-gap: 12px; }
 .nmwrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .nmwrap .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpill { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); flex: none;
