@@ -236,9 +236,8 @@ select.f { font-size: 13px; }
 .filterbar { gap: 12px; row-gap: 10px; }
 
 /* Clean list row: name + kind pill · category · install · updated (desc lives in the flyout).
-   A dedicated min-width date track + extra left gap keeps the availability/install
-   column from crowding the Updated date. */
-.list .row { grid-template-columns: 22px minmax(0, 1.7fr) 1fr auto minmax(96px, max-content); column-gap: 12px; }
+   Columns share a left edge: headers and cells are start-aligned, including Updated. */
+.list.sticky-head .row { grid-template-columns: 22px minmax(0, 1.7fr) minmax(0, 1fr) 140px 108px; column-gap: 12px; }
 .nmwrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .nmwrap .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpill { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); flex: none;
@@ -246,7 +245,7 @@ select.f { font-size: 13px; }
 .kpill[data-k="prompt"] { color: #6b4d1a; } .kpill[data-k="workflow"] { color: #1d5b73; }
 .kpill[data-k="reference"] { color: #4a5568; } .kpill[data-k="tool"] { color: #5a3a7a; }
 .list .row .cat { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.list .row .date { text-align: right; white-space: nowrap; padding-left: 20px; }
+.list .row .date { text-align: left; white-space: nowrap; }
 
 /* Install indicator: one dot per environment (filled = installed) */
 .insti { display: inline-flex; gap: 4px; }
@@ -325,8 +324,11 @@ select.f { font-size: 13px; }
   box-shadow: 0 1px 0 var(--line); }
 .list.sticky-head .lhead:hover { background: var(--surface-2); }
 .list.sticky-head .lhead span { font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--faint); font-weight: 700; white-space: nowrap; }
-.list.sticky-head .lhead .date { text-align: right; }
+  color: var(--faint); font-weight: 700; white-space: nowrap; text-align: left; }
+.list.sticky-head .lhead .date { text-align: left; }
+.list.sticky-head .lhead .avail { text-align: left; justify-self: start; }
+.list .row .insti { justify-self: start; }
+.list.sticky-head .row { justify-items: start; }
 .list.sticky-head .row:last-child { border-bottom-left-radius: var(--r-md); border-bottom-right-radius: var(--r-md); }
 
 /* ---------- Integrations: brand logo + open-in link ---------- */
@@ -461,7 +463,47 @@ select.f { font-size: 13px; }
   }
   .list .row:has(.nmwrap) > .kind { grid-area: kind; align-self: center; }
   .list .row:has(.nmwrap) .nmwrap { grid-area: name; }
-  .list .row:has(.nmwrap) .sub.date { grid-area: date; text-align: right; padding-left: 8px; white-space: nowrap; }
+  .list .row:has(.nmwrap) .sub.date { grid-area: date; text-align: left; padding-left: 0; white-space: nowrap; }
   .list .row:has(.nmwrap) .sub.cat { grid-area: cat; }
   .list .row:has(.nmwrap) .insti { grid-area: avail; justify-self: start; }
+}
+
+/* ---------- Reference subtypes (pills, previews, structured docs) ---------- */
+.dkindrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 2px; }
+.subpill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--muted); flex: none;
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 1px 7px; background: transparent; }
+.subpill .sg { font-size: 10px; opacity: .75; }
+.card .name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.codeblock { border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); overflow: hidden; }
+.cb-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px;
+  border-bottom: 1px solid var(--line); }
+.cb-label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+.cb-pre { margin: 0; padding: 12px 14px; overflow-x: hidden; white-space: pre-wrap; word-break: break-word; }
+.cb-pre code { background: none; border: 0; padding: 0; font-size: 12px; display: block; overflow-wrap: anywhere;
+  white-space: pre-wrap; word-break: break-word; }
+
+.prev-img img { max-width: 100%; height: auto; border-radius: var(--r-sm); border: 1px solid var(--line); display: block; }
+.prev-gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.prev-gallery img { width: 88px; height: 66px; object-fit: cover; border-radius: var(--r-sm); border: 1px solid var(--line); }
+
+.deflist { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.dl-row { display: grid; grid-template-columns: 132px 1fr; gap: 10px; align-items: start; }
+.dl-row dt { font-weight: 650; font-size: 13px; }
+.dl-row dd { margin: 0; color: var(--muted); font-size: 13px; }
+
+.dlist { margin: 0; padding-left: 18px; }
+.dlist li { margin: 4px 0; }
+
+.dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dodont h5 { margin: 0 0 6px; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+.dodont .do h5 { color: var(--accent-ink); }
+.dodont .dont h5 { color: var(--danger); }
+.tpl-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.adv-body { font-size: 12.5px; color: var(--muted); }
+.adv-body p { margin: 0 0 4px; }
+
+@media (max-width: 640px) {
+  .dodont, .dl-row { grid-template-columns: 1fr; }
 }
