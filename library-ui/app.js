@@ -165,7 +165,6 @@
     "Setup & Install": "Install the toolkit and pull in external skill catalogs and tools.",
     "Data Visualization": "Chart and data-display patterns that communicate the insight clearly.",
     "Research": "Discovery inputs — personas, interviews, and evidence to draw on.",
-    "agent-tools": "Executable helpers that install, index, and route toolkit content.",
   };
   const domainDef = c => DOMAIN_DEFS[c] || "";
   const tipAttr = c => (domainDef(c) ? ` data-tip="${esc(domainDef(c))}"` : "");
@@ -241,8 +240,13 @@
             <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search your toolkit…" aria-label="Search your toolkit" /><span class="kbd">⌘K</span></label>
             <span class="spacer"></span>
             <button class="btn iconbtn bell" id="bell" aria-label="Notifications" aria-haspopup="true" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>${bellBadgeHtml()}</button>
-            <button class="btn" id="new">+ New</button>
-            <button class="btn primary" id="add">+ Add to Toolkit</button>
+            <div class="overflow addwrap" id="addwrap">
+              <button class="btn primary" id="addbtn" aria-haspopup="true" aria-expanded="false">+ Add</button>
+              <div class="ovmenu ovmenu-right" id="addmenu" hidden>
+                <button data-addopt="import"><strong>Add to Toolkit</strong><span class="mi-sub">Import from GitHub, ZIP, file, or paste</span></button>
+                <button data-addopt="new"><strong>New item</strong><span class="mi-sub">Create a skill, prompt, workflow… from scratch</span></button>
+              </div>
+            </div>
           </div></div>
           <div id="notif" class="notif" hidden></div>
           <div id="view"></div>
@@ -252,8 +256,9 @@
       <div class="drawer" id="drawer" aria-hidden="true"></div>
       <div id="overlay"></div>`;
     document.getElementById("q").addEventListener("input", e => { location.hash = "#/search?q=" + encodeURIComponent(e.target.value); });
-    document.getElementById("add").onclick = openAdd;
-    document.getElementById("new").onclick = openCreate;
+    const addbtn = document.getElementById("addbtn"), addmenu = document.getElementById("addmenu");
+    addbtn.onclick = e => { e.stopPropagation(); const open = addmenu.hidden; addmenu.hidden = !open; addbtn.setAttribute("aria-expanded", String(open)); };
+    addmenu.querySelectorAll("[data-addopt]").forEach(b => b.onclick = e => { e.stopPropagation(); closeAddMenu(); (b.dataset.addopt === "import" ? openAdd : openCreate)(); });
     document.getElementById("ham").onclick = () => document.getElementById("sidebar").classList.toggle("show");
     document.getElementById("scrim").onclick = closeAll;
     notifOpen = false;
@@ -300,6 +305,7 @@
   function openNotif() { notifOpen = true; const p = document.getElementById("notif"); if (!p) return; p.hidden = false; renderNotifPanel(); const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "true"); }
   function closeNotif() { notifOpen = false; const p = document.getElementById("notif"); if (p) p.hidden = true; const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "false"); }
   function toggleNotif() { notifOpen ? closeNotif() : openNotif(); }
+  function closeAddMenu() { const m = document.getElementById("addmenu"); if (m) m.hidden = true; const b = document.getElementById("addbtn"); if (b) b.setAttribute("aria-expanded", "false"); }
 
   function setActiveNav(route) {
     document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("active", a.dataset.route === route));
@@ -737,13 +743,17 @@
     const rows = (D.activity || []).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
     return `<div class="page"><div class="page-head"><h1>Activity</h1><p>What changed across your toolkit.</p></div><div class="actlist">${rows}</div></div>`;
   }
+  function issueAction(type) {
+    if (/reference/i.test(type)) return { label: "Repoint", act: "review-issue" };
+    if (/duplicate/i.test(type)) return { label: "Compare", act: "review-issue" };
+    return { label: "Fix", act: "review-issue" };
+  }
   function viewHealth() {
     const ok = (D.health.ok || []).map(t => `<div class="att info"><span class="dot"></span><span>${esc(t)}</span></div>`).join("");
-    const iss = (D.health.issues || []).map((i, ix) => `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><button class="btn sm go" data-action="review-issue" data-i="${ix}">Review</button></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Library health</h1><p>Is everything wired up correctly?</p></div>
+    const iss = (D.health.issues || []).map((i, ix) => { const a = issueAction(i.type); return `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><span class="att-actions"><button class="btn sm" data-action="${a.act}" data-i="${ix}">${a.label}</button><button class="btn sm primary" data-action="resolve-issue" data-i="${ix}">Resolve</button><button class="btn sm" data-action="dismiss-issue" data-i="${ix}">Dismiss</button></span></div>`; }).join("");
+    return `<div class="page"><div class="page-head"><h1>Toolkit health</h1><p>Is everything wired up correctly? Act on anything that needs attention right here.</p></div>
       <div class="section"><h2>Healthy</h2><div class="attention">${ok}</div></div>
-      ${iss ? `<div class="section"><h2>${D.health.issues.length} need attention</h2><div class="attention">${iss}</div></div>` : ""}
-      <details class="advanced" style="margin-top:16px"><summary>Advanced · doctor output</summary><div class="adv-body mono">$ ai-lib doctor<br/>registry: ok · integrations: ok · references: 1 broken · duplicates: 1 candidate</div></details></div>`;
+      ${iss ? `<div class="section"><h2>${D.health.issues.length} need attention</h2><div class="attention">${iss}</div></div>` : `<div class="section"><h2>Needs attention</h2><div class="att info"><span class="dot"></span><span>Nothing needs attention — all clear.</span></div></div>`}</div>`;
   }
   function viewSettings() {
     const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("") || `<div class="a"><span class="faint">No activity yet.</span></div>`;
@@ -762,7 +772,7 @@
   function overlay(html) { document.getElementById("overlay").innerHTML = html; }
   function closeOverlay() { document.getElementById("overlay").innerHTML = ""; }
   function closeDrawerOnly() { const dr = document.getElementById("drawer"); if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); } document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show"); }
-  function closeAll() { closeDrawerOnly(); closeOverlay(); closeNotif(); }
+  function closeAll() { closeDrawerOnly(); closeOverlay(); closeNotif(); closeAddMenu(); }
 
   const add = { step: "source", src: "github" };
   function openAdd() { add.step = "source"; renderAdd(); }
@@ -875,6 +885,8 @@
       case "setup-integration": return setupIntegration(ds.name);
       case "review-inbox": return openInboxReview(ds.name);
       case "review-issue": return openIssueReview(+ds.i);
+      case "resolve-issue": return resolveIssue(+ds.i);
+      case "dismiss-issue": return dismissIssue(+ds.i);
       case "disable-cap": return disableCap(ds.proj, ds.name);
       case "sync-project-integration": return syncProjectIntegration(ds.proj, ds.name);
       case "enable-item": return enableItem(ds.id);
@@ -1046,6 +1058,17 @@
     if (/duplicate/i.test(type)) return "Compare the two items, then merge unique content or keep them separate.";
     return "Review the details and update the affected item.";
   }
+  function resolveIssue(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+    (D.health.ok = D.health.ok || []).push(iss.type + " resolved");
+    addActivity("Resolved", iss.type); toast(iss.type + " resolved"); rerenderView();
+  }
+  function dismissIssue(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+    addActivity("Dismissed", iss.type); toast("Dismissed " + iss.type); rerenderView();
+  }
   function openIssueReview(ix) {
     const iss = (D.health.issues || [])[ix]; if (!iss) return;
     overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>${esc(iss.type)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
@@ -1088,6 +1111,7 @@
   });
   window.addEventListener("hashchange", router);
   document.addEventListener("click", e => {
+    if (!e.target.closest("#addwrap")) closeAddMenu();
     if (!notifOpen) return;
     if (e.target.closest("#notif") || e.target.closest("#bell")) return;
     closeNotif();
