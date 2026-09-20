@@ -559,21 +559,26 @@
     }).join("");
     return `<div class="field"><h4>Availability</h4><div class="instlist">${rows}</div></div>`;
   }
+  // True when `hay` clearly embeds `needle` (used to spot a summary/best_use that
+  // has just been concatenated into the description).
+  const containsText = (hay, needle) => { hay = normText(hay); needle = normText(needle); return needle.length >= 15 && hay.includes(needle); };
   function overviewPane(i) {
     const desc = i.description || "";
     const summ = i.summary || "";
     const bu = i.best_use || "";
-    // The header already shows the summary, so only add "What it does" when the
-    // description says something the summary doesn't.
-    const whatBlock = (desc && !sameText(desc, summ)) ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
-    // best_use renders either as short "Best for" chips (when it's a real list)
-    // or as a "Use when" sentence — but never both, and never when it just
-    // repeats the summary/description we've already shown.
+    // best_use is the most distinctive blurb, so surface it (as short "Best for"
+    // chips when it's a real list, else a "Use when" sentence) — but skip it when
+    // it just repeats the summary the drawer header already shows.
     const chips = bestForField(i);
-    let bestBlock = "";
-    if (chips) bestBlock = chips;
-    else if (bu && !sameText(bu, summ) && !sameText(bu, desc)) bestBlock = `<div class="field"><h4>Use when</h4><p>${esc(bu)}</p></div>`;
-    return whatBlock + bestBlock + availabilityPanel(i);
+    let useBlock = "";
+    if (chips) useBlock = chips;
+    else if (bu && !sameText(bu, summ)) useBlock = `<div class="field"><h4>Use when</h4><p>${esc(bu)}</p></div>`;
+    // "What it does" only when the description adds something beyond the summary
+    // and best_use — not when it's the summary again, or just summary + best_use.
+    const descIsConcat = containsText(desc, summ) && bu && containsText(desc, bu);
+    const whatBlock = (desc && !sameText(desc, summ) && !sameText(desc, bu) && !descIsConcat)
+      ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
+    return whatBlock + useBlock + availabilityPanel(i);
   }
   // Render an argument hint, highlighting placeholder tokens (<...> [...] {...}).
   function renderArgHint(hint) {
