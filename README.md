@@ -70,7 +70,7 @@ Pushes `main` to [Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skill
 ./scripts/install-catalog-skills.sh --preset design-product
 ```
 
-That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/install-github-skills/SKILL.md`. List first with `--list`.
+That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/github-skills/SKILL.md`. List first with `--list`.
 
 ## Skills database (find a skill)
 

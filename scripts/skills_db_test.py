@@ -180,6 +180,8 @@ class RepoScanTest(unittest.TestCase):
             "ui-ux-pro-max": "Design & Frontend",
             "hyperframes-animation": "Motion & Animation",
             "plan-the-work": "Engineering Workflow",
+            "work-kit": "Setup & Install",
+            "github-skills": "Setup & Install",
             "install-work-kit": "Setup & Install",
         }
         for name, cat in cases.items():
@@ -268,33 +270,43 @@ class BuildTest(unittest.TestCase):
     def test_html_is_a_sortable_filterable_table(self):
         html = skills_db.render_html(self.skills)
         self.assertIn("<table>", html)
+        self.assertIn('data-sort="name"', html)          # sortable by name
         self.assertIn('data-sort="score"', html)
-        self.assertIn('data-sort="date_added"', html)
+        self.assertIn('data-sort="date_updated"', html)
         self.assertIn('id="fcat"', html)   # category filter
         self.assertIn('id="ftype"', html)  # type filter
-        self.assertIn("Watch-Outs", html)
-        self.assertIn("Best For", html)
+        self.assertIn('id="fkind"', html)  # kind filter
+        # Default sort is alphabetical (by name, ascending).
+        self.assertIn('sort:"name", dir:1', html)
+        # The wide prose columns moved into the expandable per-row detail.
+        self.assertIn("WATCH-OUTS", html)
+        self.assertIn("BEST USED FOR", html)
 
-    def test_html_theming_and_accessibility(self):
+    def test_verdant_baked_in_no_theme_switcher(self):
         html = skills_db.render_html(self.skills)
-        # multi-theme token system + switcher
-        self.assertIn('[data-theme="slate"]', html)
-        self.assertIn('[data-theme="nocturne"]', html)
-        # Verdant stays defined (backend brand theme) but is NOT a user-facing option.
-        self.assertIn('[data-theme="verdant"]', html)
+        # Verdant is the single baked-in look: no theme switcher, no data-theme
+        # variants, no ?theme handling.
+        self.assertNotIn('id="ftheme"', html)
+        self.assertNotIn("data-theme", html)
         self.assertNotIn('value="verdant"', html)
+        # OFL brand faces + the Verdant teal accent are present.
         self.assertIn("@font-face", html)
         self.assertIn("Space Grotesk", html)
-        self.assertIn('id="ftheme"', html)
+        self.assertIn("#0e7490", html)
+        # Accessibility affordances retained.
+        self.assertIn(":focus-visible", html)
+        self.assertIn("aria-sort", html)
 
-    def test_header_and_settings(self):
+    def test_header_and_about_panel(self):
         html = skills_db.render_html(self.skills)
-        # "Work Kit" eyebrow removed — straight into the title.
+        # No "Work Kit" eyebrow — a website-style title instead.
         self.assertNotIn('class="eyebrow"', html)
-        self.assertIn("<h1>Library</h1>", html)
-        # theme control moved into an admin/settings panel.
+        self.assertIn("<h1>Your AI Library</h1>", html)
+        # A top site nav makes it feel like a website.
+        self.assertIn('class="topnav"', html)
+        # The settings dropdown is now About-the-library, not theming.
         self.assertIn('id="admin"', html)
-        self.assertIn("Admin", html)
+        self.assertIn("About this library", html)
 
     def test_library_kinds(self):
         html = skills_db.render_html(self.skills)

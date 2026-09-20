@@ -26,17 +26,17 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 82,
+  "total": 85,
   "counts_by_category": {
     "Product & Discovery": 28,
     "Design & Frontend": 15,
     "Motion & Animation": 7,
-    "Presentations & Diagrams": 11,
-    "Engineering Workflow": 17,
+    "Presentations & Diagrams": 13,
+    "Engineering Workflow": 18,
     "Setup & Install": 4
   },
   "counts_by_kind": {
-    "skill": 56,
+    "skill": 59,
     "prompt": 26
   },
   "skills": [
@@ -305,50 +305,6 @@
       "tags": []
     },
     {
-      "name": "lark-slides",
-      "source_root": "skills",
-      "category": "Presentations & Diagrams",
-      "type": "",
-      "theme": "",
-      "description": "Creates and edits Lark/Feishu slides via lark-cli XML. Use for Feishu presentations, slide page CRUD, block replace, or doubao.com /slides/ URLs. 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Creates and edits Lark/Feishu slides via lark-cli XML.",
-      "best_use": "Use for Feishu presentations, slide page CRUD, block replace, or doubao.com /slides/ URLs. 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。",
-      "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-16",
-      "command": "lark-slides",
-      "has_command": true,
-      "has_rule": true,
-      "has_scripts": true,
-      "has_tests": true,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 52,
-      "skill_md_bytes": 28939,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 82,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 8,
-        "scripts": 8,
-        "tests": 6,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 20,
-        "breadth": 12,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
-      "rank_overall": 7,
-      "rank_in_category": 6,
-      "kind": "skill",
-      "tags": []
-    },
-    {
       "name": "huashu-design",
       "source_root": "skills",
       "category": "Design & Frontend",
@@ -387,7 +343,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 8,
+      "rank_overall": 7,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": []
@@ -431,7 +387,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 9,
+      "rank_overall": 8,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -479,7 +435,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 10,
+      "rank_overall": 9,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": [
@@ -526,7 +482,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 11,
+      "rank_overall": 10,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -570,7 +526,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 12,
+      "rank_overall": 11,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -614,7 +570,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 13,
+      "rank_overall": 12,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -658,7 +614,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 14,
+      "rank_overall": 13,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -702,7 +658,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 15,
+      "rank_overall": 14,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -746,8 +702,8 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 16,
-      "rank_in_category": 7,
+      "rank_overall": 15,
+      "rank_in_category": 6,
       "kind": "skill",
       "tags": []
     },
@@ -790,7 +746,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 17,
+      "rank_overall": 16,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": []
@@ -834,7 +790,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 18,
+      "rank_overall": 17,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": []
@@ -878,7 +834,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 19,
+      "rank_overall": 18,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": []
@@ -922,7 +878,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 20,
+      "rank_overall": 19,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": []
@@ -966,7 +922,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 21,
+      "rank_overall": 20,
       "rank_in_category": 7,
       "kind": "skill",
       "tags": []
@@ -1010,7 +966,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 22,
+      "rank_overall": 21,
       "rank_in_category": 8,
       "kind": "skill",
       "tags": []
@@ -1054,8 +1010,52 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 23,
+      "rank_overall": 22,
       "rank_in_category": 9,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "mck-ppt-design",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "Create professional, consultant-grade PowerPoint presentations from scratch using MckEngine (python-pptx wrapper) with McKinsey-style design. Use when user asks to create slides, pitch decks, business presentations, strategy decks, quarterly reviews, board meeting slides, or any professional PPTX. AI calls eng.cover(), eng.donut(), eng.timeline() etc — 67 high-level methods across 12 categories (structure, data, framework, comparison, narrative, timeline, team, charts, images, advanced viz, dashboards, visual storytelling), consistent typography, zero file-corruption issues, BLOCK_ARC native shapes for circular charts (donut, pie, gauge), production-hardened guard rails for spacing, overflow, legend consistency, title style uniformity, dynamic sizing for variable-count layouts, horizontal item overflow protection, chart rendering, and AI-generated cover images via Tencent Hunyuan 2.0 with professional cutout, cool grey-blue tint, and McKinsey-style Bézier ribbon decoration.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Create professional, consultant-grade PowerPoint presentations from scratch using MckEngine (python-pptx wrapper) with McKinsey-style design.",
+      "best_use": "Use when user asks to create slides, pitch decks, business presentations, strategy decks, quarterly reviews, board meeting slides, or any professional PPTX. AI calls eng.cover(), eng.donut(), eng.timeline() etc — 67 high-level methods across 12 categories (structure, data, framework, comparison, narrative, timeline, team, charts, images, advanced viz, dashboards, visual storytelling), consistent typography, zero file-corruption issues, BLOCK_ARC native shapes for circular charts (donut, pie, gauge), production-hardened guard rails for spacing, overflow, legend consistency, title style uniformity, dynamic sizing for variable-count layouts, horizontal item overflow protection, chart rendering, and AI-generated cover images via Tencent Hunyuan 2.0 with professional cutout, cool grey-blue tint, and McKinsey-style Bézier ribbon decoration.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": true,
+      "has_docs": true,
+      "file_count": 51,
+      "skill_md_bytes": 11923,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 56,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 4,
+        "docs": 3,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 23,
+      "rank_in_category": 7,
       "kind": "skill",
       "tags": []
     },
@@ -1192,6 +1192,50 @@
       "tags": []
     },
     {
+      "name": "skills-slides",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "Create stunning HTML presentations with 50,000+ unique design combinations. 50 aesthetics, 20 palettes, 10 fonts, 30+ effects. Zero dependencies, anti-AI-slop.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Create stunning HTML presentations with 50,000+ unique design combinations. 50 aesthetics, 20 palettes, 10 fonts, 30+ effects. Zero dependencies, anti-AI-slop.",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": true,
+      "has_docs": false,
+      "file_count": 21,
+      "skill_md_bytes": 11470,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 53,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 4,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 27,
+      "rank_in_category": 10,
+      "kind": "skill",
+      "tags": []
+    },
+    {
       "name": "tam-sam-som-calculator",
       "source_root": "skills",
       "category": "Product & Discovery",
@@ -1234,7 +1278,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 27,
+      "rank_overall": 28,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": [
@@ -1281,7 +1325,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 28,
+      "rank_overall": 29,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -1325,8 +1369,52 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 29,
-      "rank_in_category": 10,
+      "rank_overall": 30,
+      "rank_in_category": 11,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "dashi-ppt",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "制作 PPT、演示文稿、幻灯片、汇报材料时使用。Dashi PPT 基于预置视觉主题组合页面,生成可离线打开、可在浏览器编辑的 HTML 演示,支持导出 PPTX / PDF 文件。",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "制作 PPT、演示文稿、幻灯片、汇报材料时使用。Dashi PPT 基于预置视觉主题组合页面,生成可离线打开、可在浏览器编辑的 HTML 演示,支持导出 PPTX / PDF 文件。",
+      "best_use": "",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": true,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 312,
+      "skill_md_bytes": 25972,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 48,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 8,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 20,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 31,
+      "rank_in_category": 12,
       "kind": "skill",
       "tags": []
     },
@@ -1369,7 +1457,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 30,
+      "rank_overall": 32,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": []
@@ -1413,7 +1501,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 31,
+      "rank_overall": 33,
       "rank_in_category": 7,
       "kind": "skill",
       "tags": []
@@ -1457,52 +1545,8 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 32,
+      "rank_overall": 34,
       "rank_in_category": 11,
-      "kind": "skill",
-      "tags": []
-    },
-    {
-      "name": "install-open-design",
-      "source_root": "skills",
-      "category": "Setup & Install",
-      "type": "",
-      "theme": "",
-      "description": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP. Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP.",
-      "best_use": "Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
-      "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-16",
-      "command": "install-open-design",
-      "has_command": true,
-      "has_rule": true,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 2,
-      "skill_md_bytes": 4481,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 44,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 8,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 9,
-        "breadth": 2,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
-      "rank_overall": 33,
-      "rank_in_category": 1,
       "kind": "skill",
       "tags": []
     },
@@ -1545,7 +1589,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 34,
+      "rank_overall": 35,
       "rank_in_category": 12,
       "kind": "skill",
       "tags": []
@@ -1593,7 +1637,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 36,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": [
@@ -1644,7 +1688,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
+      "rank_overall": 37,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": [
@@ -1695,57 +1739,13 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 37,
+      "rank_overall": 38,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": [
         "interactive",
         "discovery-research"
       ]
-    },
-    {
-      "name": "install-github-skills",
-      "source_root": "skills",
-      "category": "Setup & Install",
-      "type": "",
-      "theme": "",
-      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills.",
-      "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
-      "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-20",
-      "command": "install-github-skills",
-      "has_command": true,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 7048,
-      "in_catalog": false,
-      "in_readme": true,
-      "score": 40,
-      "score_breakdown": {
-        "command": 12,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 14,
-        "breadth": 1,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 5
-      },
-      "rank_overall": 38,
-      "rank_in_category": 2,
-      "kind": "skill",
-      "tags": []
     },
     {
       "name": "web-design-guidelines",
@@ -2142,6 +2142,50 @@
       ]
     },
     {
+      "name": "github-skills",
+      "source_root": "skills",
+      "category": "Setup & Install",
+      "type": "",
+      "theme": "",
+      "description": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills. Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Pulls selected Agent Skills from GitHub catalogs (default spencerpauly/awesome-cursor-skills plus Anthropic, Vercel, and Matt Pocock sources) into ~/.cursor/skills.",
+      "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "install-github-skills",
+      "has_command": true,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 6886,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 33,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 13,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 47,
+      "rank_in_category": 1,
+      "kind": "skill",
+      "tags": []
+    },
+    {
       "name": "workshop-facilitation",
       "source_root": "skills",
       "category": "Product & Discovery",
@@ -2184,7 +2228,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 13,
       "kind": "skill",
       "tags": [
@@ -2193,31 +2237,31 @@
       ]
     },
     {
-      "name": "install-impeccable",
+      "name": "open-design",
       "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
       "theme": "",
-      "description": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable). Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
+      "description": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP. Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
       "argument_hint": "",
       "best_for": [],
-      "summary": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable).",
-      "best_use": "Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
+      "summary": "Installs Open Design from GitHub Releases and connects it to Cursor via MCP.",
+      "best_use": "Use when the user asks for Open Design, open-design.ai, nexu-io/open-design, OD Next, Claude Design alternative, or `od mcp install cursor`.",
       "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-16",
-      "command": "install-impeccable",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "install-open-design",
       "has_command": true,
       "has_rule": false,
       "has_scripts": false,
       "has_tests": false,
       "has_examples": false,
       "has_docs": false,
-      "file_count": 1,
-      "skill_md_bytes": 3235,
+      "file_count": 2,
+      "skill_md_bytes": 4457,
       "in_catalog": false,
-      "in_readme": true,
-      "score": 31,
+      "in_readme": false,
+      "score": 30,
       "score_breakdown": {
         "command": 12,
         "rule": 0,
@@ -2225,14 +2269,14 @@
         "tests": 0,
         "examples": 0,
         "docs": 0,
-        "doc_depth": 6,
-        "breadth": 1,
+        "doc_depth": 9,
+        "breadth": 2,
         "metadata": 5,
         "catalog": 0,
-        "readme": 5
+        "readme": 0
       },
-      "rank_overall": 48,
-      "rank_in_category": 3,
+      "rank_overall": 49,
+      "rank_in_category": 2,
       "kind": "skill",
       "tags": []
     },
@@ -2275,7 +2319,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 49,
+      "rank_overall": 50,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -2319,7 +2363,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 50,
+      "rank_overall": 51,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -2363,7 +2407,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 51,
+      "rank_overall": 52,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -2407,7 +2451,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 52,
+      "rank_overall": 53,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": []
@@ -2451,8 +2495,96 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 53,
+      "rank_overall": 54,
       "rank_in_category": 6,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "impeccable",
+      "source_root": "skills",
+      "category": "Setup & Install",
+      "type": "",
+      "theme": "",
+      "description": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable). Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Installs the Impeccable frontend-design skill for Cursor (npx impeccable install, ZIP from impeccable.style, or copy from pbakaus/impeccable).",
+      "best_use": "Use when the user wants Impeccable, impeccable.style, /impeccable, frontend design skills, or to remove AI UI slop.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "install-impeccable",
+      "has_command": true,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 3235,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 26,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 6,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 55,
+      "rank_in_category": 3,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "visualise",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "Render inline interactive visuals — SVG diagrams, HTML widgets, charts, and explainers — directly in the conversation. Use this skill whenever the user asks to visualize, diagram, chart, illustrate, or explain something visually, or when an explanation would genuinely benefit from a spatial/interactive diagram rather than text. Also triggers for: flowcharts, architecture diagrams, data visualizations, interactive explainers, comparison layouts, UI mockups, and any request containing 'show me', 'draw', 'map out', 'visualize', or 'diagram'. Even when the user doesn't explicitly ask for a visual, use this skill proactively when the topic has spatial, sequential, or systemic relationships that a diagram would clarify better than prose.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Render inline interactive visuals — SVG diagrams, HTML widgets, charts, and explainers — directly in the conversation.",
+      "best_use": "Use this skill whenever the user asks to visualize, diagram, chart, illustrate, or explain something visually, or when an explanation would genuinely benefit from a spatial/interactive diagram rather than text. Also triggers for: flowcharts, architecture diagrams, data visualizations, interactive explainers, comparison layouts, UI mockups, and any request containing 'show me', 'draw', 'map out', 'visualize', or 'diagram'. Even when the user doesn't explicitly ask for a visual, use this skill proactively when the topic has spatial, sequential, or systemic relationships that a diagram would clarify better than prose.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 7,
+      "skill_md_bytes": 6025,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 26,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 12,
+        "breadth": 7,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 56,
+      "rank_in_category": 13,
       "kind": "skill",
       "tags": []
     },
@@ -2495,7 +2627,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 54,
+      "rank_overall": 57,
       "rank_in_category": 7,
       "kind": "prompt",
       "tags": [
@@ -2542,7 +2674,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 55,
+      "rank_overall": 58,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -2589,7 +2721,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 56,
+      "rank_overall": 59,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -2636,57 +2768,13 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 57,
+      "rank_overall": 60,
       "rank_in_category": 8,
       "kind": "prompt",
       "tags": [
         "prompt",
         "engineering"
       ]
-    },
-    {
-      "name": "lark-shared",
-      "source_root": "skills",
-      "category": "Presentations & Diagrams",
-      "type": "",
-      "theme": "",
-      "description": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
-      "argument_hint": "",
-      "best_for": [],
-      "summary": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
-      "best_use": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.",
-      "watch_outs": "",
-      "date_added": "2026-09-16",
-      "date_updated": "2026-09-16",
-      "command": "",
-      "has_command": false,
-      "has_rule": false,
-      "has_scripts": false,
-      "has_tests": false,
-      "has_examples": false,
-      "has_docs": false,
-      "file_count": 9,
-      "skill_md_bytes": 4613,
-      "in_catalog": false,
-      "in_readme": false,
-      "score": 25,
-      "score_breakdown": {
-        "command": 0,
-        "rule": 0,
-        "scripts": 0,
-        "tests": 0,
-        "examples": 0,
-        "docs": 0,
-        "doc_depth": 9,
-        "breadth": 9,
-        "metadata": 5,
-        "catalog": 0,
-        "readme": 0
-      },
-      "rank_overall": 58,
-      "rank_in_category": 11,
-      "kind": "skill",
-      "tags": []
     },
     {
       "name": "library-add",
@@ -2727,7 +2815,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 59,
+      "rank_overall": 61,
       "rank_in_category": 9,
       "kind": "skill",
       "tags": [
@@ -2773,7 +2861,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 60,
+      "rank_overall": 62,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -2820,7 +2908,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 61,
+      "rank_overall": 63,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -2867,7 +2955,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 62,
+      "rank_overall": 64,
       "rank_in_category": 10,
       "kind": "prompt",
       "tags": [
@@ -2914,7 +3002,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 63,
+      "rank_overall": 65,
       "rank_in_category": 11,
       "kind": "prompt",
       "tags": [
@@ -2961,7 +3049,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 64,
+      "rank_overall": 66,
       "rank_in_category": 18,
       "kind": "prompt",
       "tags": [
@@ -3008,7 +3096,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 65,
+      "rank_overall": 67,
       "rank_in_category": 12,
       "kind": "prompt",
       "tags": [
@@ -3055,7 +3143,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 66,
+      "rank_overall": 68,
       "rank_in_category": 19,
       "kind": "prompt",
       "tags": [
@@ -3102,7 +3190,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 67,
+      "rank_overall": 69,
       "rank_in_category": 20,
       "kind": "prompt",
       "tags": [
@@ -3149,7 +3237,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 68,
+      "rank_overall": 70,
       "rank_in_category": 13,
       "kind": "prompt",
       "tags": [
@@ -3196,7 +3284,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 69,
+      "rank_overall": 71,
       "rank_in_category": 21,
       "kind": "prompt",
       "tags": [
@@ -3243,7 +3331,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 70,
+      "rank_overall": 72,
       "rank_in_category": 22,
       "kind": "prompt",
       "tags": [
@@ -3290,7 +3378,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 71,
+      "rank_overall": 73,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -3337,7 +3425,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 72,
+      "rank_overall": 74,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3384,7 +3472,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 73,
+      "rank_overall": 75,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -3431,7 +3519,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 74,
+      "rank_overall": 76,
       "rank_in_category": 23,
       "kind": "prompt",
       "tags": [
@@ -3478,7 +3566,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 75,
+      "rank_overall": 77,
       "rank_in_category": 24,
       "kind": "prompt",
       "tags": [
@@ -3525,7 +3613,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 76,
+      "rank_overall": 78,
       "rank_in_category": 25,
       "kind": "prompt",
       "tags": [
@@ -3571,7 +3659,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 77,
+      "rank_overall": 79,
       "rank_in_category": 26,
       "kind": "prompt",
       "tags": [
@@ -3617,7 +3705,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 78,
+      "rank_overall": 80,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3663,7 +3751,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 79,
+      "rank_overall": 81,
       "rank_in_category": 27,
       "kind": "prompt",
       "tags": [
@@ -3709,7 +3797,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 80,
+      "rank_overall": 82,
       "rank_in_category": 28,
       "kind": "prompt",
       "tags": [
@@ -3755,7 +3843,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 81,
+      "rank_overall": 83,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -3763,7 +3851,7 @@
       ]
     },
     {
-      "name": "install-work-kit",
+      "name": "work-kit",
       "source_root": "skills",
       "category": "Setup & Install",
       "type": "",
@@ -3774,7 +3862,7 @@
       "summary": "Install this personal Cursor plugin at user scope, copy skills for Cloud Agent sync, and recommend marketplace plugins.",
       "best_use": "Use when the user asks how to install work-kit, set up plugins globally, or leverage skills across all projects.",
       "watch_outs": "",
-      "date_added": "2026-09-16",
+      "date_added": "2026-09-20",
       "date_updated": "2026-09-20",
       "command": "",
       "has_command": false,
@@ -3784,10 +3872,10 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2799,
+      "skill_md_bytes": 3024,
       "in_catalog": false,
-      "in_readme": true,
-      "score": 17,
+      "in_readme": false,
+      "score": 13,
       "score_breakdown": {
         "command": 0,
         "rule": 0,
@@ -3795,14 +3883,58 @@
         "tests": 0,
         "examples": 0,
         "docs": 0,
-        "doc_depth": 5,
+        "doc_depth": 6,
         "breadth": 1,
         "metadata": 5,
         "catalog": 0,
-        "readme": 5
+        "readme": 0
       },
-      "rank_overall": 82,
+      "rank_overall": 84,
       "rank_in_category": 4,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "capture-a-prompt",
+      "source_root": "skills",
+      "category": "Engineering Workflow",
+      "type": "",
+      "theme": "",
+      "description": "Save pasted text as a Cursor slash prompt in Prompt Kit. Use when the user wants to add a prompt to the prompt library, says this should be a prompt, or pastes a reusable instruction to keep.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Save pasted text as a Cursor slash prompt in Prompt Kit.",
+      "best_use": "Use when the user wants to add a prompt to the prompt library, says this should be a prompt, or pastes a reusable instruction to keep.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 1,
+      "skill_md_bytes": 1873,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 11,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 4,
+        "breadth": 1,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 85,
+      "rank_in_category": 18,
       "kind": "skill",
       "tags": []
     }

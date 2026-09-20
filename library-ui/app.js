@@ -1,29 +1,275 @@
-/* Library UI — functional wireframe. Data-driven from window.LIBRARY_DATA
-   (real skills + prompts from the catalog, plus synthesized workflows/projects/
-   integrations/inbox). Focus: information architecture, navigation, flows. */
+/* Library UI — functional wireframe. Reads the live catalog at runtime via
+   buildLibraryData() (data-live.js), falling back to the bundled window.LIBRARY_DATA
+   snapshot (data.js) when the catalog isn't reachable. Real skills + prompts come
+   from the catalog; workflows/references/tools/projects/integrations/inbox are
+   synthesized. Focus: information architecture, navigation, flows. */
 (function () {
   "use strict";
-  const D = window.LIBRARY_DATA || { items: [], counts: {}, collections: [], projects: [], integrations: [], inbox: [], updates: [], health: { ok: [], issues: [] }, activity: [] };
-  const ITEMS = D.items;
-  const byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
-  const byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+  const EMPTY = { items: [], counts: {}, collections: [], projects: [], integrations: [], inbox: [], updates: [], health: { ok: [], issues: [] }, activity: [] };
+  let D = window.LIBRARY_DATA || EMPTY;
+  let ITEMS = D.items;
+  let byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+  let byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+  let dataSource = "snapshot"; // "live" once the real catalog is loaded
+  let toolkitHome = (() => { try { return localStorage.getItem("ai-toolkit-home"); } catch (e) { return null; } })() || "$AI_TOOLKIT_HOME (~/.ai-toolkit)";
+
+  /* ---------- Persistence layer ----------
+     The library data is rebuilt from the catalog on every load, so any user
+     action (setting up/syncing an integration, pushing an item, syncing a
+     project, triaging the inbox, renaming) would otherwise reset on reload.
+     We keep a single versioned localStorage store of those mutations, keyed by
+     stable ids/names, and re-apply it after the catalog loads. All access is
+     guarded so a corrupt/blocked store never breaks the live-catalog load or
+     the snapshot fallback. Write-through: action handlers call persist* below. */
+  const STORE_KEY = "ai-toolkit-state-v1";
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  let store = loadStore();
+  function persistStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* ignore quota/denied */ } }
+  function persistIntegration(name, patch) {
+    store.integrations = store.integrations || {};
+    store.integrations[name] = Object.assign({}, store.integrations[name], patch);
+    persistStore();
+  }
+  function persistItemInstall(id, plat) {
+    store.installs = store.installs || {};
+    const arr = store.installs[id] = store.installs[id] || [];
+    if (!arr.includes(plat)) arr.push(plat);
+    persistStore();
+  }
+  function persistProjectIntegration(projId, name, stateVal) {
+    store.projectIntegrations = store.projectIntegrations || {};
+    const p = store.projectIntegrations[projId] = store.projectIntegrations[projId] || {};
+    p[name] = stateVal;
+    persistStore();
+  }
+  function persistInbox(name, patch) {
+    store.inbox = store.inbox || {};
+    store.inbox[name] = Object.assign({}, store.inbox[name], patch);
+    persistStore();
+  }
+  function persistRename(origId, title) {
+    store.renames = store.renames || {};
+    store.renames[origId] = { title };
+    persistStore();
+  }
+  // Custom (user-added) integrations: persisted as definitions so they can be
+  // re-added to D.integrations after every catalog rebuild. Their connect/sync
+  // state still flows through store.integrations (keyed by name) like built-ins.
+  function persistCustomIntegration(def) {
+    store.customIntegrations = store.customIntegrations || [];
+    const exists = store.customIntegrations.some(c => c && c.name && c.name.toLowerCase() === def.name.toLowerCase());
+    if (!exists) { store.customIntegrations.push(def); persistStore(); }
+  }
+  // Re-apply persisted user mutations onto a freshly built D, merging by stable
+  // ids/names so it stays correct if the catalog changes underneath us.
+  function applyPersistedState() {
+    if (!store || typeof store !== "object") return;
+    // Renames first, so id-keyed installs below line up with post-rename ids.
+    if (store.renames && typeof store.renames === "object") {
+      for (const origId of Object.keys(store.renames)) {
+        const r = store.renames[origId];
+        if (r && r.title) applyRename(origId, r.title);
+      }
+    }
+    // Re-add user-defined integrations first, so the status merge below (and
+    // platforms() everywhere) treats them exactly like the built-ins.
+    if (Array.isArray(store.customIntegrations)) {
+      D.integrations = D.integrations || [];
+      for (const def of store.customIntegrations) {
+        if (!def || !def.name) continue;
+        if (D.integrations.some(x => x.name.toLowerCase() === def.name.toLowerCase())) continue;
+        D.integrations.push({
+          id: def.id || kebab(def.name) || def.name, name: def.name,
+          status: "not configured", count: 0, last_synced: null,
+          custom: true, docUrl: def.docUrl || "", icon: def.icon || "",
+        });
+      }
+    }
+    if (store.integrations && Array.isArray(D.integrations)) {
+      for (const integ of D.integrations) {
+        const saved = store.integrations[integ.name];
+        if (!saved) continue;
+        if (saved.status) integ.status = saved.status;
+        if ("last_synced" in saved) integ.last_synced = saved.last_synced;
+        if (typeof saved.count === "number") integ.count = saved.count;
+      }
+    }
+    if (store.installs && typeof store.installs === "object") {
+      for (const id of Object.keys(store.installs)) {
+        const it = byId[id];
+        if (!it || !Array.isArray(store.installs[id])) continue;
+        it.installed_in = it.installed_in || [];
+        for (const plat of store.installs[id]) if (!it.installed_in.includes(plat)) it.installed_in.push(plat);
+      }
+    }
+    if (store.projectIntegrations && Array.isArray(D.projects)) {
+      for (const p of D.projects) {
+        const saved = store.projectIntegrations[p.id];
+        if (!saved) continue;
+        p.integrations = p.integrations || {};
+        for (const k of Object.keys(saved)) p.integrations[k] = saved[k];
+      }
+    }
+    if (store.inbox && Array.isArray(D.inbox)) {
+      const kept = [];
+      for (const it of D.inbox) {
+        const saved = store.inbox[it.name];
+        if (saved) {
+          if (saved.deleted) continue;
+          if ("read" in saved) it.read = saved.read;
+          if ("filedAs" in saved) it.filedAs = saved.filedAs;
+        }
+        kept.push(it);
+      }
+      D.inbox = kept;
+    }
+  }
+
+  function setData(data, source) {
+    D = data || EMPTY;
+    ITEMS = D.items || [];
+    byId = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+    byTitle = Object.fromEntries(ITEMS.map(i => [i.title, i]));
+    dataSource = source;
+  }
+
+  // Load the canonical catalog at runtime so the Library never drifts from the
+  // real skills/prompts index. Falls back to the committed snapshot (data.js)
+  // when the catalog isn't reachable (file://, offline, or served from within
+  // library-ui/). Candidate paths cover serving from the repo root or a parent.
+  async function loadLiveData() {
+    if (typeof window.buildLibraryData !== "function" || typeof fetch !== "function") return false;
+    const candidates = ["../catalog/skills-index.json", "catalog/skills-index.json", "./catalog/skills-index.json"];
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) continue;
+        const catalog = await res.json();
+        if (!catalog || !Array.isArray(catalog.skills)) continue;
+        setData(window.buildLibraryData(catalog), "live");
+        return true;
+      } catch (_e) { /* try next candidate, then fall back */ }
+    }
+    return false;
+  }
 
   const KIND = {
-    skill:     { label: "Skill",     glyph: "◇", plural: "Skills",     blurb: "Reusable capability" },
-    prompt:    { label: "Prompt",    glyph: "▤", plural: "Prompts",    blurb: "Task instruction" },
-    workflow:  { label: "Workflow",  glyph: "→", plural: "Workflows",  blurb: "Multi-step process" },
-    reference: { label: "Reference", glyph: "▱", plural: "References",  blurb: "Supporting knowledge" },
-    template:  { label: "Template",  glyph: "□", plural: "Templates",   blurb: "Reusable starting point" },
-    tool:      { label: "Tool",      glyph: "⚙", plural: "Tools",       blurb: "Executable capability" },
+    skill:     { label: "Skill",     glyph: "◇", plural: "Skills",     blurb: "Reusable capability",       desc: "Reusable capabilities an agent invokes by name to do a focused job well." },
+    prompt:    { label: "Prompt",    glyph: "▤", plural: "Prompts",    blurb: "Task instruction",          desc: "One-shot task instructions you run with a slash command." },
+    workflow:  { label: "Workflow",  glyph: "→", plural: "Workflows",  blurb: "Multi-step process",        desc: "Multi-step processes that chain skills and prompts into an outcome." },
+    tool:      { label: "Tool",      glyph: "⚙", plural: "Tools",       blurb: "Executable capability",     desc: "Executable helpers that install, index, and route library content." },
+    reference: { label: "Reference", glyph: "▱", plural: "References",  blurb: "Supporting knowledge",      desc: "Supporting knowledge and patterns your skills and prompts draw on." },
+    template:  { label: "Template",  glyph: "□", plural: "Templates",   blurb: "Reusable starting point",   desc: "Reusable starting points you copy and fill in." },
   };
-  const KIND_ORDER = ["skill", "prompt", "workflow", "reference", "template", "tool"];
+  const KIND_ORDER = ["skill", "prompt", "workflow", "tool", "reference", "template"];
+
+  // Reference SUBTYPES (AI Toolkit expansion). These are NOT top-level nav —
+  // References stays the home for all of them. The map drives a subtle subtype
+  // pill and subtype-aware detail sections; unknown subtypes degrade to nothing.
+  const SUBTYPE = {
+    "design-system":        { label: "Design System",       glyph: "◈", desc: "Shared visual rules — foundations, components and tokens." },
+    "template":             { label: "Template",            glyph: "▤", desc: "A reusable starting structure you copy and fill in." },
+    "design-pattern":       { label: "Pattern",             glyph: "❖", desc: "A reusable solution — anatomy, rules, do/don't and variants." },
+    "html-css-foundation":  { label: "HTML/CSS Foundation", glyph: "⧉", desc: "Reusable layout + implementation logic to inherit, not rewrite." },
+  };
+  const subtypeMeta = i => (i && i.kind === "reference" && i.subtype) ? SUBTYPE[i.subtype] : null;
+  function subtypePill(i) {
+    const s = subtypeMeta(i); if (!s) return "";
+    return `<span class="subpill" data-sub="${esc(i.subtype)}" title="${esc(s.desc)}"><span class="sg" aria-hidden="true">${s.glyph}</span>${esc(s.label)}</span>`;
+  }
 
   const esc = s => (s == null ? "" : String(s)).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const kebab = s => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  // Naming conventions: "&" becomes "+" everywhere; kebab domains render Title Case.
+  const plusify = s => String(s == null ? "" : s).replace(/&/g, "+");
+  const titleCase = s => String(s).replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  // "1 workflow" / "2 workflows" — naive but correct for our plural nouns (drop
+  // the trailing "s" for a count of exactly 1).
+  const plural = (n, word) => `${n} ${n === 1 ? String(word).replace(/s$/, "") : word}`;
+  const catLabel = c => plusify(/\s/.test(c) ? c : titleCase(c));
+
+  // Domain (category) definitions surfaced as hover tooltips.
+  const DOMAIN_DEFS = {
+    "Product & Discovery": "Frame problems, run discovery, and shape product strategy before building.",
+    "Design & Frontend": "Distinctive UI, design systems, typography, and visual direction.",
+    "Motion & Animation": "Add, audit, and review motion with a real craft bar for animation.",
+    "Presentations & Diagrams": "Build editable decks, HTML presentations, and self-contained diagrams.",
+    "Engineering Workflow": "Plan, debug from evidence, review the diff, ship a clean commit, and hand off.",
+    "Setup & Install": "Install the toolkit and pull in external skill catalogs and tools.",
+    "Data Visualization": "Chart and data-display patterns that communicate the insight clearly.",
+    "Research": "Discovery inputs — personas, interviews, and evidence to draw on.",
+  };
+  const domainDef = c => DOMAIN_DEFS[c] || "";
+  const tipAttr = c => (domainDef(c) ? ` data-tip="${esc(domainDef(c))}"` : "");
   const h = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const kindsPresent = () => KIND_ORDER.filter(k => ITEMS.some(i => i.kind === k));
   const cats = () => Array.from(new Set(ITEMS.map(i => i.category))).sort();
 
-  const state = { kind: "all", cat: "All", source: "All", sort: "recent", view: "cards", q: "" };
+  const state = { kind: "all", cat: "All", source: "All", subtype: "All", sort: "name", view: "list", q: "" };
+  // Distinct reference subtypes actually present (drives the optional filter).
+  const subtypesPresent = () => Array.from(new Set(ITEMS.filter(i => i.kind === "reference" && i.subtype).map(i => i.subtype)));
+
+  // Environments the library can install/sync into (from the integrations tier).
+  const platforms = () => (D.integrations || []).map(x => x.name);
+  // Curated, real outbound resources for finding new skills/prompts/workflows.
+  // These are honest external links — not fabricated "recommended for you" items.
+  const DISCOVER_LINKS = [
+    { name: "Cursor Directory", url: "https://cursor.directory", desc: "Community-curated rules, MCP servers and prompts for Cursor." },
+    { name: "awesome-cursorrules", url: "https://github.com/PatrickJS/awesome-cursorrules", desc: "A large, curated collection of .cursorrules files to adapt." },
+    { name: "Anthropic Cookbook", url: "https://github.com/anthropics/anthropic-cookbook", desc: "Official Claude recipes, prompt patterns and agent skills." },
+    { name: "OpenAI Cookbook", url: "https://github.com/openai/openai-cookbook", desc: "Example code and guides for building with OpenAI models." },
+  ];
+  // Best-effort docs surfaces for "where my synced assets live in each tool".
+  // These are public documentation pages, not fabricated in-app deep links.
+  const TOOL_DOCS = {
+    "Cursor": { url: "https://docs.cursor.com/context/rules", label: "Open Cursor rules" },
+    "Claude Code": { url: "https://docs.anthropic.com/en/docs/claude-code/memory", label: "Open Claude Code memory" },
+    "Codex": { url: "https://platform.openai.com/docs", label: "Open Codex docs" },
+    "ChatGPT": { url: "https://platform.openai.com/docs", label: "Open OpenAI docs" },
+  };
+  // A contained code region with a Copy button that writes to the clipboard.
+  let SNIP_SEQ = 0;
+  function codeSnippet(text, label) {
+    const id = "snip-" + (++SNIP_SEQ);
+    return `<div class="snippet"><code id="${id}" class="snipcode">${esc(text)}</code><button class="btn sm snipcopy" data-action="copy-snippet" data-target="${id}" data-label="${esc(label || "")}" title="Copy">Copy</button></div>`;
+  }
+  function copySnippet(targetId, label) {
+    const el = document.getElementById(targetId); if (!el) return;
+    const text = el.textContent || "";
+    const done = () => toast((label ? label + " " : "") + "Copied");
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done)); }
+      else fallbackCopy(text, done);
+    } catch (_e) { fallbackCopy(text, done); }
+  }
+  function fallbackCopy(text, done) {
+    try { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); } catch (_e) { done(); }
+  }
+  // A multi-line, copyable code region that wraps (no horizontal scroll).
+  function codeBlock(text, label) {
+    const id = "cb-" + (++SNIP_SEQ);
+    return `<div class="codeblock"><div class="cb-head"><span class="cb-label">${esc(label || "Code")}</span><button class="btn sm snipcopy" data-action="copy-snippet" data-target="${id}" data-label="${esc(label || "")}" title="Copy">Copy</button></div><pre class="cb-pre"><code id="${id}">${esc(text)}</code></pre></div>`;
+  }
+  // Preview-first block for visual assets: image/thumbnail, gallery and/or code.
+  // Omits gracefully when a preview has none of them.
+  function previewBlock(p, opts) {
+    if (!p) return "";
+    const o = opts || {};
+    let out = "";
+    const hero = p.image || p.thumb;
+    if (hero) out += `<div class="prev-img"><img src="${esc(hero)}" alt="" loading="lazy" /></div>`;
+    if (Array.isArray(p.gallery) && p.gallery.length) out += `<div class="prev-gallery">${p.gallery.map(g => `<img src="${esc(g)}" alt="" loading="lazy" />`).join("")}</div>`;
+    if (p.code && !o.skipCode) out += codeBlock(p.code, o.codeLabel || "Code preview");
+    if (!out) return "";
+    return `<div class="field"><h4>${esc(o.heading || "Preview")}</h4>${out}</div>`;
+  }
 
   /* ---------- Shell ---------- */
   function shell() {
@@ -32,41 +278,91 @@
     document.getElementById("app").innerHTML = `
       <div class="shell">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="mark"></span> Library</div>
+          <div class="brand"><span class="mark" aria-hidden="true"><img class="brandimg" src="icons/brand-chatbot.png" alt="" /></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
           <nav class="nav">
             ${item("home", "⌂", "Home")}
-            <div class="group">Library</div>
+            <div class="group">AI Toolkit</div>
             ${item("library", "▤", "All", ITEMS.length)}
             <div class="sub">${subs}</div>
             <div class="group">Manage</div>
             ${item("discover", "◎", "Discover")}
             ${item("projects", "▦", "Projects")}
             ${item("integrations", "⇄", "Integrations")}
-            ${item("inbox", "▧", "Inbox", (D.inbox || []).length)}
-            ${item("activity", "≡", "Activity")}
             ${item("settings", "⚙", "Settings")}
           </nav>
         </aside>
         <div class="main">
           <div class="topbar"><div class="topbar-inner">
-            <button class="btn sm hamburger" id="ham">≡</button>
-            <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search the library…" aria-label="Search the library" /><span class="kbd">⌘K</span></label>
+            <button class="btn sm hamburger" id="ham" aria-label="Menu" aria-controls="sidebar" aria-expanded="false">≡</button>
+            <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search your toolkit…" aria-label="Search your toolkit" /><span class="kbd">⌘K</span></label>
             <span class="spacer"></span>
-            <button class="btn" id="new">+ New</button>
-            <button class="btn primary" id="add">+ Add to Library</button>
+            <button class="btn iconbtn bell" id="bell" aria-label="Notifications" aria-haspopup="true" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>${bellBadgeHtml()}</button>
+            <div class="overflow addwrap" id="addwrap">
+              <button class="btn primary" id="addbtn" aria-haspopup="true" aria-expanded="false" aria-label="Add to Toolkit"><span aria-hidden="true">+</span><span class="addlabel">Add</span></button>
+              <div class="ovmenu ovmenu-right" id="addmenu" hidden>
+                <button data-addopt="import"><strong>Add to Toolkit</strong><span class="mi-sub">Import from GitHub, ZIP, file, or paste</span></button>
+                <button data-addopt="new"><strong>New item</strong><span class="mi-sub">Create a skill, prompt, workflow… from scratch</span></button>
+              </div>
+            </div>
           </div></div>
+          <div id="notif" class="notif" hidden></div>
           <div id="view"></div>
         </div>
       </div>
       <div class="scrim" id="scrim"></div>
-      <div class="drawer" id="drawer" aria-hidden="true"></div>
+      <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-hidden="true"></div>
       <div id="overlay"></div>`;
     document.getElementById("q").addEventListener("input", e => { location.hash = "#/search?q=" + encodeURIComponent(e.target.value); });
-    document.getElementById("add").onclick = openAdd;
-    document.getElementById("new").onclick = openCreate;
-    document.getElementById("ham").onclick = () => document.getElementById("sidebar").classList.toggle("show");
+    const addbtn = document.getElementById("addbtn"), addmenu = document.getElementById("addmenu");
+    addbtn.onclick = e => { e.stopPropagation(); const open = addmenu.hidden; addmenu.hidden = !open; addbtn.setAttribute("aria-expanded", String(open)); };
+    addmenu.querySelectorAll("[data-addopt]").forEach(b => b.onclick = e => { e.stopPropagation(); closeAddMenu(); (b.dataset.addopt === "import" ? openAdd : openCreate)(); });
+    document.getElementById("ham").onclick = () => { const shown = document.getElementById("sidebar").classList.toggle("show"); document.getElementById("ham").setAttribute("aria-expanded", String(shown)); };
     document.getElementById("scrim").onclick = closeAll;
+    notifOpen = false;
+    document.getElementById("bell").onclick = (e) => { e.stopPropagation(); toggleNotif(); };
   }
+
+  /* ---------- Notification center (topbar bell) ---------- */
+  let notifOpen = false;
+  const unreadInbox = () => (D.inbox || []).filter(x => !x.read);
+  const bellBadgeHtml = () => { const n = unreadInbox().length; return n ? `<span class="badge">${n > 9 ? "9+" : n}</span>` : ""; };
+  function updateBellBadge() {
+    const b = document.getElementById("bell"); if (!b) return;
+    const n = unreadInbox().length;
+    let badge = b.querySelector(".badge");
+    if (n) { const txt = n > 9 ? "9+" : String(n); if (badge) badge.textContent = txt; else b.insertAdjacentHTML("beforeend", `<span class="badge">${txt}</span>`); }
+    else if (badge) badge.remove();
+  }
+  function notifPanelContent() {
+    const un = unreadInbox();
+    const head = `<div class="notif-head"><strong>Notifications</strong>${un.length ? `<span class="notif-count">${un.length} unread</span>` : ""}</div>`;
+    const body = un.length
+      ? `<div class="notif-list">${un.map(x => `<div class="notif-item">
+          <div class="ni-top"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span><span class="ni-name">${esc(x.name)}</span></div>
+          <div class="ni-sub">Suggested: ${esc(x.detected)} · ${esc(catLabel(x.category))} — ${esc(x.reason)}</div>
+          <div class="ni-actions"><button class="btn sm primary" data-nact="review" data-name="${esc(x.name)}">Review</button><button class="btn sm" data-nact="mark-read" data-name="${esc(x.name)}">Mark read</button><button class="btn sm danger" data-nact="delete" data-name="${esc(x.name)}">Delete</button></div>
+        </div>`).join("")}</div>`
+      : `<div class="notif-empty"><p>You're all caught up — inbox zero.</p></div>`;
+    const foot = `<div class="notif-foot"><a href="#/inbox" data-nact="viewall">View all →</a></div>`;
+    return head + body + foot;
+  }
+  function renderNotifPanel() {
+    const p = document.getElementById("notif"); if (!p) return;
+    p.innerHTML = notifPanelContent();
+    p.querySelectorAll("[data-nact]").forEach(b => b.onclick = (e) => {
+      const act = b.dataset.nact, name = b.dataset.name;
+      if (act === "viewall") { closeNotif(); return; }
+      e.preventDefault();
+      if (act === "review") { closeNotif(); return openInboxReview(name); }
+      if (act === "mark-read") { const it = (D.inbox || []).find(x => x.name === name); if (it) { it.read = true; it.filedAs = undefined; persistInbox(name, { read: true, filedAs: undefined }); addActivity("Marked read", name); } toast(name + " marked read"); return afterNotifMutate(); }
+      if (act === "delete") { D.inbox = (D.inbox || []).filter(x => x.name !== name); persistInbox(name, { deleted: true }); addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); return afterNotifMutate(); }
+    });
+  }
+  function afterNotifMutate() { updateBellBadge(); renderNotifPanel(); if (currentRoute().startsWith("inbox")) rerenderView(); }
+  function openNotif() { notifOpen = true; const p = document.getElementById("notif"); if (!p) return; p.hidden = false; renderNotifPanel(); const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "true"); }
+  function closeNotif() { notifOpen = false; const p = document.getElementById("notif"); if (p) p.hidden = true; const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "false"); }
+  function toggleNotif() { notifOpen ? closeNotif() : openNotif(); }
+  function closeAddMenu() { const m = document.getElementById("addmenu"); if (m) m.hidden = true; const b = document.getElementById("addbtn"); if (b) b.setAttribute("aria-expanded", "false"); }
 
   function setActiveNav(route) {
     document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("active", a.dataset.route === route));
@@ -98,17 +394,34 @@
     window.scrollTo(0, 0);
   }
 
+  // Wire a click handler and, for non-interactive elements (plain <div>s used as
+  // clickable rows/cards), make them keyboard-operable: expose them as buttons
+  // and activate on Enter/Space. We only fire when the element itself is focused
+  // (e.target === el) so inner controls (e.g. a row's own Disable button) keep
+  // working without the row swallowing their keystrokes.
+  const INTERACTIVE = { BUTTON: 1, A: 1, INPUT: 1, SELECT: 1, TEXTAREA: 1 };
+  function activatable(el, fn) {
+    el.onclick = fn;
+    if (INTERACTIVE[el.tagName]) return;
+    if (!el.hasAttribute("role")) el.setAttribute("role", "button");
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+    el.onkeydown = (e) => {
+      if (e.target !== el) return;
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); fn(e); }
+    };
+  }
   function wireView() {
-    document.querySelectorAll("[data-item]").forEach(el => el.onclick = () => { location.hash = "#/item/" + encodeURIComponent(el.dataset.item); });
+    document.querySelectorAll("[data-item]").forEach(el => activatable(el, () => { location.hash = "#/item/" + encodeURIComponent(el.dataset.item); }));
     document.querySelectorAll("[data-kindtab]").forEach(b => b.onclick = () => { location.hash = "#/library/" + b.dataset.kindtab; });
     document.querySelectorAll("[data-filter]").forEach(sel => sel.onchange = () => { state[sel.dataset.filter] = sel.value; rerenderLibrary(); });
     document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { state.view = b.dataset.view; rerenderLibrary(); });
     document.querySelectorAll("[data-clearf]").forEach(b => b.onclick = () => { state[b.dataset.clearf] = b.dataset.clearf === "kind" ? "all" : "All"; if (b.dataset.clearf === "kind") location.hash = "#/library/all"; else rerenderLibrary(); });
     const ls = document.getElementById("libsearch");
     if (ls) ls.oninput = () => { state.q = ls.value; rerenderList(); };
-    document.querySelectorAll("[data-nav]").forEach(b => b.onclick = () => { location.hash = "#/" + b.dataset.nav; });
-    document.querySelectorAll("[data-add]").forEach(b => b.onclick = openAdd);
+    document.querySelectorAll("[data-nav]").forEach(b => activatable(b, () => { location.hash = "#/" + b.dataset.nav; }));
+    document.querySelectorAll("[data-add]").forEach(b => activatable(b, openAdd));
     document.querySelectorAll("[data-create]").forEach(b => b.onclick = openCreate);
+    document.querySelectorAll("[data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
   }
   function rerenderLibrary() { document.getElementById("view").innerHTML = viewLibrary(state.kind); wireView(); }
   function rerenderList() { const host = document.getElementById("libresults"); if (host) { host.outerHTML = libResults(); wireView(); } }
@@ -119,23 +432,28 @@
   /* ---------- Home ---------- */
   function viewHome() {
     const c = D.counts;
-    const summary = ["skill", "prompt", "workflow", "reference"].map(k => `<div class="s"><span class="n">${c[k] || 0}</span><span class="l">${KIND[k].plural}</span></div>`).join("");
+    const stats = KIND_ORDER.filter(k => c[k]).map(k => `<button class="statcard" data-nav="library/${k}"><span class="sc-ic kind" data-k="${k}"><span class="g">${KIND[k].glyph}</span></span><span class="sc-n">${c[k] || 0}</span><span class="sc-l">${KIND[k].plural}</span></button>`).join("");
+    const unread = (D.inbox || []).filter(x => !x.read).length;
     const att = [];
-    if ((D.inbox || []).length) att.push(["", `${D.inbox.length} items need classification`, "inbox"]);
-    if ((D.updates || []).length) att.push(["", `${D.updates.length} upstream updates available`, "health"]);
-    (D.health.issues || []).forEach(i => att.push(["", `${i.type}: ${i.detail}`, "health"]));
-    const attHtml = att.length ? att.map(([_, t, r]) => `<div class="att"><span class="dot"></span><span>${esc(t)}</span><button class="btn sm go" data-nav="${r}">Review</button></div>`).join("") : `<div class="att info"><span class="dot"></span><span>Everything looks healthy.</span></div>`;
-    const recent = (D.activity || []).slice(0, 5).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
-    const cols = (D.collections || []).slice(0, 8).map(x => `<button class="chip" data-nav="library/all">${esc(x.name)}<span class="c">${x.count}</span></button>`).join("");
+    if (unread) att.push([`${unread} item${unread > 1 ? "s" : ""} need classification`, "inbox"]);
+    if ((D.updates || []).length) att.push([`${D.updates.length} upstream update${D.updates.length > 1 ? "s" : ""} available`, "health"]);
+    (D.health.issues || []).forEach(i => att.push([`${i.type}: ${i.detail}`, "health"]));
+    const attHtml = att.length ? att.map(([t, r]) => `<div class="att"><span class="dot"></span><span>${esc(t)}</span><button class="btn sm go" data-nav="${r}">Review</button></div>`).join("") : `<div class="att info"><span class="dot"></span><span>Everything looks healthy — nothing needs your attention.</span></div>`;
+    const cols = (D.collections || []).slice(0, 10).map(x => `<button class="chip" data-nav="library/all"${tipAttr(x.name)}>${esc(catLabel(x.name))}<span class="c">${x.count}</span></button>`).join("");
+    const resources = DISCOVER_LINKS.map(r => `<a class="res-row" href="${esc(r.url)}" target="_blank" rel="noopener">
+        <span class="res-ic" aria-hidden="true">◎</span>
+        <span class="res-main"><span class="res-name">${esc(r.name)}<span class="ext" aria-hidden="true">↗</span></span><span class="res-sub">${esc(r.desc)}</span></span>
+      </a>`).join("");
     return `
-      <div class="page">
-        <div class="page-head"><h1>Your AI Library</h1><p>Everything you can compose — skills, prompts, workflows and references — in one place.</p></div>
-        <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search all skills, prompts, workflows & references…" onkeydown="if(event.key==='Enter'){location.hash='#/search?q='+encodeURIComponent(this.value)}"/></label>
-        <div style="display:flex;gap:10px;margin-top:14px"><button class="btn primary" data-add>+ Add to Library</button><button class="btn" data-nav="discover">Browse / Discover</button></div>
-        <div class="section"><h2>Library summary</h2><div class="summary">${summary}</div></div>
+      <div class="page home">
+        <div class="page-head"><h1>Your AI Toolkit</h1><p>Everything you can compose — skills, prompts, workflows, tools and references — in one place.</p></div>
+        <div class="home-hero">
+          <label class="topsearch home-search"><span>⌕</span><input placeholder="Search your toolkit…" onkeydown="if(event.key==='Enter'){location.hash='#/search?q='+encodeURIComponent(this.value)}"/></label>
+        </div>
+        <div class="section"><h2>Discover more</h2><p class="muted lead">Places to discover new skills, prompts and workflows to add.</p><div class="reslist">${resources}</div></div>
+        <div class="section"><h2>AI Toolkit summary</h2><div class="statgrid">${stats}</div></div>
         <div class="section"><h2>Needs attention</h2><div class="attention">${attHtml}</div></div>
-        <div class="section"><h2>Your collections</h2><div class="chips">${cols}</div></div>
-        <div class="section"><h2>Recent activity</h2><div class="actlist">${recent}</div></div>
+        <div class="section"><h2>Browse by domain</h2><div class="chips">${cols}</div></div>
       </div>`;
   }
 
@@ -144,43 +462,99 @@
     let list = ITEMS.slice();
     if (state.kind !== "all") list = list.filter(i => i.kind === state.kind);
     if (state.cat !== "All") list = list.filter(i => i.category === state.cat);
-    if (state.q.trim()) { const q = state.q.toLowerCase(); list = list.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(q)); }
+    if (state.subtype !== "All") list = list.filter(i => i.subtype === state.subtype);
+    if (state.q.trim()) {
+      const q = state.q.toLowerCase();
+      list = list.filter(i => {
+        const sub = (i.subtype && SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype || "";
+        return (i.title + " " + i.name + " " + i.summary + " " + i.category + " " + sub).toLowerCase().includes(q);
+      });
+    }
     if (state.sort === "name") list.sort((a, b) => a.title.localeCompare(b.title));
     else list.sort((a, b) => (b.date_updated || "").localeCompare(a.date_updated || "") || a.title.localeCompare(b.title));
     return list;
   }
-  function card(i) {
+  const platInitial = p => ({ "Cursor": "Cu", "Claude Code": "Cl", "Claude": "Cl", "Codex": "Cx", "ChatGPT": "Gp" }[p] || String(p).slice(0, 2));
+  // Real, full-color brand marks (committed PNGs served as static assets so the
+  // relative paths resolve at the Pages subpath). Rendered as-is — no monochrome
+  // filter — since each carries its own brand color.
+  const PLAT_IMG = {
+    "Cursor": "cursor.png",
+    "Claude Code": "claude.png",
+    "Claude": "claude.png",
+    "Codex": "openai.png",
+    "ChatGPT": "openai.png",
+    "Lovable": "lovable.png",
+    "GitHub": "github.png",
+  };
+  // A custom (user-added) integration can carry its own bundled-icon filename.
+  const customIconFile = p => { const it = (D.integrations || []).find(x => x.name === p); return it && it.icon ? it.icon : null; };
+  const iconImg = (p, file) => `<img class="plogo" src="icons/${file}" alt="${esc(p)}" title="${esc(p)}" loading="lazy" />`;
+  // Resolve a platform/integration name to its brand logo: real PNG when we have
+  // one (built-in or a custom integration's chosen icon), else a clean monogram.
+  const platLogo = p => {
+    const file = PLAT_IMG[p] || customIconFile(p);
+    return file ? iconImg(p, file) : `<i class="plchar" title="${esc(p)}">${esc(platInitial(p))}</i>`;
+  };
+
+  function installDots(i) {
+    const inn = i.installed_in || [];
+    const pl = platforms();
+    return `<span class="insti">${pl.map(p => { const on = inn.includes(p); const t = `${p}: ${on ? "installed" : "not installed"}`; return `<span class="idot ${on ? "on" : ""}" title="${esc(t)}" aria-label="${esc(t)}">${platLogo(p)}</span>`; }).join("")}</span>`;
+  }
+  function card(i, showKind = true) {
+    const top = showKind ? `<div class="top">${kindTag(i.kind)}${installDots(i)}</div>` : `<div class="top solo">${installDots(i)}</div>`;
     return `<div class="card" data-item="${esc(i.id)}">
-      <div class="top">${kindTag(i.kind)}<span class="status">${esc(i.status || "installed")}</span></div>
-      <div class="name">${esc(i.title)}</div>
-      <div class="desc">${esc(i.summary || i.description)}</div>
-      <div class="meta"><span class="tag">${esc(i.category)}</span><span>${i.used_by && i.used_by.length ? "Used by " + i.used_by.length : (i.command ? "/" + esc(i.command) : "")}</span></div>
+      ${top}
+      <div class="name">${esc(i.title)}${subtypePill(i)}</div>
+      <div class="meta"><span class="tag"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
     </div>`;
   }
-  function listRow(i) {
-    return `<div class="row" data-item="${esc(i.id)}"><span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
-      <span><div class="nm">${esc(i.title)}</div><div class="sub">${esc(i.summary || i.description).slice(0,90)}</div></span>
-      <span class="sub">${esc(i.category)}</span><span class="sub">${esc(i.date_updated || "")}</span></div>`;
+  function listRow(i, showKind = true) {
+    return `<div class="row" data-item="${esc(i.id)}">
+      <span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
+      <span class="nmwrap"><span class="nm">${esc(i.title)}</span>${showKind ? `<span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span>` : ""}${subtypePill(i)}</span>
+      <span class="sub cat"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span>
+      ${installDots(i)}
+      <span class="sub date">${esc(i.date_updated || "")}</span>
+    </div>`;
   }
+  const listHeaderRow = () => `<div class="row lhead" aria-hidden="true"><span></span><span class="nm">Name</span><span class="cat">Domain</span><span class="avail">Availability</span><span class="date">Updated</span></div>`;
   function libResults() {
     const list = filtered();
     if (!list.length) return `<div id="libresults"><div class="empty"><h3>Nothing matches</h3><p>Try clearing a filter or searching a different term.</p></div></div>`;
-    const body = state.view === "list" ? `<div class="list">${list.map(listRow).join("")}</div>` : `<div class="grid">${list.map(card).join("")}</div>`;
+    const showKind = state.kind === "all";
+    const body = state.view === "list"
+      ? `<div class="list sticky-head">${listHeaderRow()}${list.map(i => listRow(i, showKind)).join("")}</div>`
+      : `<div class="grid">${list.map(i => card(i, showKind)).join("")}</div>`;
     return `<div id="libresults"><div class="count-line">${list.length} of ${ITEMS.length} items</div>${body}</div>`;
   }
   function viewLibrary(kind) {
     state.kind = kind || "all";
     const tabs = ["all", ...kindsPresent()].map(k => `<button data-kindtab="${k}" class="${state.kind === k ? "active" : ""}">${k === "all" ? "All" : KIND[k].plural}</button>`).join("");
-    const catOpts = ['<option value="All">All categories</option>'].concat(cats().map(c => `<option value="${esc(c)}" ${state.cat === c ? "selected" : ""}>${esc(c)}</option>`)).join("");
+    const catOpts = ['<option value="All">All domains</option>'].concat(cats().map(c => `<option value="${esc(c)}" ${state.cat === c ? "selected" : ""}>${esc(catLabel(c))}</option>`)).join("");
+    // Subtype filter is only relevant on All / References, and only when
+    // subtype'd references actually exist — otherwise it stays out of the way.
+    const subs = subtypesPresent();
+    const showSubFilter = subs.length && (state.kind === "all" || state.kind === "reference");
+    if (!showSubFilter && state.subtype !== "All") state.subtype = "All";
+    const subOpts = showSubFilter
+      ? ['<option value="All">All subtypes</option>'].concat(subs.map(s => `<option value="${esc(s)}" ${state.subtype === s ? "selected" : ""}>${esc((SUBTYPE[s] && SUBTYPE[s].label) || s)}</option>`)).join("")
+      : "";
     const chips = [];
     if (state.kind !== "all") chips.push(`<span class="chipf">${KIND[state.kind].plural}<button data-clearf="kind">×</button></span>`);
-    if (state.cat !== "All") chips.push(`<span class="chipf">${esc(state.cat)}<button data-clearf="cat">×</button></span>`);
+    if (state.cat !== "All") chips.push(`<span class="chipf">${esc(catLabel(state.cat))}<button data-clearf="cat">×</button></span>`);
+    if (showSubFilter && state.subtype !== "All") chips.push(`<span class="chipf">${esc((SUBTYPE[state.subtype] && SUBTYPE[state.subtype].label) || state.subtype)}<button data-clearf="subtype">×</button></span>`);
+    const active = state.kind !== "all" && KIND[state.kind];
+    const heading = active ? KIND[state.kind].plural : "AI Toolkit";
+    const subtitle = active ? KIND[state.kind].desc : "Browse and manage everything you've installed.";
     return `<div class="page">
-      <div class="page-head"><h1>Library</h1><p>Browse and manage everything you've installed.</p></div>
-      <label class="topsearch" style="max-width:none"><span>⌕</span><input id="libsearch" placeholder="Search the library…" value="${esc(state.q)}"/></label>
+      <div class="page-head"><h1>${esc(heading)}</h1><p>${esc(subtitle)}</p></div>
+      <label class="topsearch" style="max-width:none"><span>⌕</span><input id="libsearch" placeholder="Search your toolkit…" value="${esc(state.q)}"/></label>
       <div class="filterbar"><div class="tabs">${tabs}</div></div>
       <div class="filterbar">
         <select class="f" data-filter="cat">${catOpts}</select>
+        ${showSubFilter ? `<select class="f" data-filter="subtype">${subOpts}</select>` : ""}
         <select class="f" data-filter="sort"><option value="recent" ${state.sort==="recent"?"selected":""}>Recently updated</option><option value="name" ${state.sort==="name"?"selected":""}>Name</option></select>
         ${chips.join("")}
         <span class="spacer"></span>
@@ -193,10 +567,13 @@
   /* ---------- Search (grouped) ---------- */
   function viewSearch(q) {
     const qq = (q || "").toLowerCase().trim();
-    const hits = qq ? ITEMS.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(qq)) : [];
-    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${hits.length} items across the library.` : "Type to search skills, prompts, workflows & references."}</p></div>`;
+    const hits = qq ? ITEMS.filter(i => {
+      const sub = (i.subtype && SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype || "";
+      return (i.title + " " + i.name + " " + i.summary + " " + i.category + " " + sub).toLowerCase().includes(qq);
+    }) : [];
+    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${plural(hits.length, "items")} across your toolkit.` : "Type to search skills, prompts, workflows, tools + references."}</p></div>`;
     if (!qq) return `<div class="page">${head}</div>`;
-    if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>No library items match “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Library</button></div></div>`;
+    if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>Nothing in your toolkit matches “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Toolkit</button></div></div>`;
     const groups = KIND_ORDER.map(k => {
       const g = hits.filter(i => i.kind === k);
       if (!g.length) return "";
@@ -206,59 +583,301 @@
   }
 
   /* ---------- Item detail (drawer) ---------- */
-  function relRow(label, names) {
+  // Skills count as "enabled" once they're active in at least one project.
+  const isEnabled = i => i.kind === "skill" && Array.isArray(i.enabled_in) && i.enabled_in.length > 0;
+  // Only treat best_use as a chip list when it's clearly a short, delimited
+  // list — never shred free prose into fragments. Split on ";" (deliberate list
+  // separator) or on "," when there are no parentheses; then require ≥2
+  // segments and reject anything that looks like a full clause (long text) or
+  // carries a stray parenthesis. Otherwise it renders as a normal sentence.
+  function bestChips(s) {
+    s = String(s || "").trim();
+    if (!s) return null;
+    let parts;
+    if (s.includes(";")) parts = s.split(";");
+    else if (!/[()]/.test(s) && s.includes(",")) parts = s.split(",");
+    else return null;
+    parts = parts.map(t => t.trim().replace(/[.;,]+$/, "")).filter(Boolean);
+    if (parts.length < 2) return null;
+    if (parts.some(p => p.length > 24 || /[()]/.test(p))) return null;
+    return parts;
+  }
+  // Normalize prose for duplicate detection (whitespace/case-insensitive).
+  const normText = s => String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
+  // True when two blurbs are effectively the same text — equal, or one wholly
+  // contains the other (so we don't repeat the summary as "What it does"/"Use when").
+  function sameText(a, b) {
+    a = normText(a); b = normText(b);
+    if (!a || !b) return false;
+    if (a === b) return true;
+    return a.length >= 20 && b.length >= 20 && (a.includes(b) || b.includes(a));
+  }
+  function resolveRel(n) {
+    return byTitle[n] || byId[n] || byId["skill:" + n] || byId["reference:" + n] || byId["workflow:" + n] || byId["tool:" + n] || null;
+  }
+  function relChip(n, withKind) {
+    const it = resolveRel(n);
+    const label = it ? it.title : n;
+    const kb = (withKind && it) ? `<span class="relk kind" data-k="${it.kind}"><span class="g">${KIND[it.kind].glyph}</span></span>` : "";
+    return it ? `<a class="relchip" href="#/item/${encodeURIComponent(it.id)}">${kb}${esc(label)}</a>` : `<span class="relchip disabled">${esc(label)}</span>`;
+  }
+  function relGroup(label, names, opts) {
     if (!names || !names.length) return "";
-    const links = names.map(n => { const it = byTitle[n] || byId["skill:" + n] || byId["reference:" + n]; return it ? `<a href="#/item/${encodeURIComponent(it.id)}">${esc(it.title)}</a>` : `<a>${esc(n)}</a>`; }).join("");
-    return `<div class="field"><h4>${label}</h4><div class="rellist">${links}</div></div>`;
+    const o = opts || {};
+    const note = o.note ? `<span class="rel-note">${esc(o.note)}</span>` : "";
+    return `<div class="field relgroup"><h4>${label}${note}</h4><div class="rellist">${names.map(n => relChip(n, o.withKind)).join("")}</div></div>`;
+  }
+  function availInGroup(i) {
+    const inn = i.installed_in || [];
+    if (!inn.length) return "";
+    return `<div class="field relgroup"><h4>Available in</h4><div class="rellist">${inn.map(p => `<span class="relchip plat"><span class="rlogo">${platLogo(p)}</span>${esc(p)}</span>`).join("")}</div></div>`;
+  }
+  function bestForField(i) {
+    const parts = bestChips(i.best_use);
+    if (!parts) return "";
+    return `<div class="field"><h4>Best for</h4><div class="chips bestfor">${parts.map(p => `<span class="chip xs">${esc(p)}</span>`).join("")}</div></div>`;
+  }
+  // Reusable Availability list across destinations (installed ✓ or Push).
+  // Destinations derive from the SAME source as Integrations (platforms() →
+  // D.integrations), so we never offer a push target with no integration.
+  function availabilityPanel(i) {
+    const inn = i.installed_in || [];
+    const rows = platforms().map(p => {
+      const on = inn.includes(p);
+      return `<div class="instrow"><span class="idot ${on ? "on" : ""}">${platLogo(p)}</span><span class="ip-name">${esc(p)}</span><span class="ip-status ${on ? "on" : ""}">${on ? "Installed" : "Not installed"}</span>${on ? `<span class="ip-check" aria-hidden="true">✓</span>` : `<button class="btn sm" data-action="push-item" data-id="${esc(i.id)}" data-plat="${esc(p)}">Push</button>`}</div>`;
+    }).join("");
+    return `<div class="field"><h4>Availability</h4><div class="instlist">${rows}</div></div>`;
+  }
+  // True when `hay` clearly embeds `needle` (used to spot a summary/best_use that
+  // has just been concatenated into the description).
+  const containsText = (hay, needle) => { hay = normText(hay); needle = normText(needle); return needle.length >= 15 && hay.includes(needle); };
+  function overviewPane(i) {
+    const desc = i.description || "";
+    const summ = i.summary || "";
+    const bu = i.best_use || "";
+    // best_use is the most distinctive blurb, so surface it (as short "Best for"
+    // chips when it's a real list, else a "Use when" sentence) — but skip it when
+    // it just repeats the summary the drawer header already shows.
+    const chips = bestForField(i);
+    let useBlock = "";
+    if (chips) useBlock = chips;
+    else if (bu && !sameText(bu, summ)) useBlock = `<div class="field"><h4>Use when</h4><p>${esc(bu)}</p></div>`;
+    // "What it does" only when the description adds something beyond the summary
+    // and best_use — not when it's the summary again, or just summary + best_use.
+    const descIsConcat = containsText(desc, summ) && bu && containsText(desc, bu);
+    const whatBlock = (desc && !sameText(desc, summ) && !sameText(desc, bu) && !descIsConcat)
+      ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
+    // Preview-first for visual assets: show the thumbnail/gallery/code up top.
+    const preview = previewBlock(i.preview);
+    return preview + whatBlock + useBlock + availabilityPanel(i);
+  }
+  // Render an argument hint, highlighting placeholder tokens (<...> [...] {...}).
+  function renderArgHint(hint) {
+    const parts = String(hint).split(/(\s+)/).map(tok => {
+      if (/^[<\[{].*[>\]}]$/.test(tok.trim()) && tok.trim()) return `<span class="vartoken">${esc(tok)}</span>`;
+      return esc(tok);
+    });
+    return `<div class="varline">${parts.join("")}</div>`;
+  }
+  function pathLink(i, label) {
+    return `<a class="pathlink" href="${esc(pathOf(i))}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>`;
+  }
+  function howtoPane(i) {
+    const section = (label, body) => `<div class="field"><h4>${label}</h4>${body}</div>`;
+    if (i.kind === "workflow") {
+      return section("Step sequence", `<div class="steps">${workflowStepsInner(i)}</div>`);
+    }
+    if (i.kind === "prompt") {
+      const inv = i.command ? codeSnippet("/" + i.command, "Invocation") : `<p class="muted">Model-invoked (no slash command)</p>`;
+      const vars = i.argument_hint ? section("Variables", renderArgHint(i.argument_hint)) : "";
+      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
+      return section("Invocation", inv) + vars + what + section("Full prompt", `<div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full prompt")}</div>`);
+    }
+    if (i.kind === "tool") {
+      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
+      const usedBy = relGroup("Used by", i.used_by, { withKind: true });
+      return what + usedBy + section("Capabilities", `<p class="muted empty-note">No capability metadata yet.</p>`);
+    }
+    if (i.kind === "reference") return referenceHowto(i, section);
+    // skill (default)
+    const inv = i.command ? codeSnippet("/" + i.command, "Invocation") : `<p class="muted">Model-invoked (no slash command)</p>`;
+    const vars = i.argument_hint ? section("Variables", renderArgHint(i.argument_hint)) : "";
+    const preview = i.description || i.summary || "";
+    const instrBody = preview
+      ? `<p class="instr-preview">${esc(preview)}</p><div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full instructions")}</div>`
+      : `<div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full instructions")}</div>`;
+    return section("Invocation", inv) + vars + section("Instructions", instrBody) + section("Usage examples", `<p class="muted empty-note">No usage examples yet.</p>`);
+  }
+  // Subtype-aware "How to Use" for reference items. Each branch reuses section()
+  // and omits any section whose data is absent, so partial assets still read well.
+  function referenceHowto(i, section) {
+    const p = (label, txt) => txt ? section(label, `<p>${esc(txt)}</p>`) : "";
+    const ul = (label, arr) => (arr && arr.length) ? section(label, `<ul class="dlist">${arr.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`) : "";
+    const relatedByDomain = () => ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+    switch (i.subtype) {
+      case "design-system": {
+        const found = (i.foundations && i.foundations.length)
+          ? section("Foundations", `<dl class="deflist">${i.foundations.map(([k, v]) => `<div class="dl-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`) : "";
+        const comps = (i.components && i.components.length)
+          ? section("Components", `<dl class="deflist">${i.components.map(([k, v]) => `<div class="dl-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`) : "";
+        const tokens = i.tokens ? section("Tokens", `<p>${esc(i.tokens)}</p>${i.preview && i.preview.code ? codeBlock(i.preview.code, "Token preview") : ""}`) : "";
+        const impl = p("Implementation", i.implementation);
+        return (found + comps + tokens + impl) || `<p class="muted empty-note">No structured documentation yet.</p>`;
+      }
+      case "template": {
+        const preview = previewBlock(i.preview, { heading: "Preview", codeLabel: "Template markup" });
+        const best = p("Best for", i.bestFor);
+        const fmt = p("Format", i.outputFormat);
+        const vars = (i.variables && i.variables.length)
+          ? section("Variables", `<div class="varline">${i.variables.map(v => `<span class="vartoken">${esc(v)}</span>`).join(" ")}</div>`) : "";
+        const inputs = ul("Required inputs", i.inputs);
+        const usage = p("Usage", i.usage);
+        const actions = section("Actions", `<div class="tpl-actions"><button class="btn sm primary" data-action="use-template" data-id="${esc(i.id)}">Use</button><button class="btn sm" data-action="duplicate-template" data-id="${esc(i.id)}">Duplicate</button></div>`);
+        return preview + best + fmt + vars + inputs + usage + actions;
+      }
+      case "design-pattern": {
+        const useWhen = p("Use when", i.useWhen);
+        const anatomy = ul("Anatomy", i.anatomy);
+        const rules = ul("Rules", i.rules);
+        const dodont = (i.dos && i.dos.length || i.donts && i.donts.length)
+          ? section("Do / Don't", `<div class="dodont"><div class="do"><h5>Do</h5><ul class="dlist">${(i.dos || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div><div class="dont"><h5>Don't</h5><ul class="dlist">${(i.donts || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>`) : "";
+        const variants = ul("Variants", i.variants);
+        const impl = (i.preview && i.preview.code) ? section("Implementation", codeBlock(i.preview.code, "Implementation"))
+          : p("Implementation", i.implementation);
+        return useWhen + anatomy + rules + dodont + variants + impl;
+      }
+      case "html-css-foundation": {
+        const overview = p("Overview", i.overview || i.description);
+        const principles = ul("Core principles", i.principles);
+        const frame = p("Master content frame", i.masterFrame);
+        const extras = p("Typography", i.typography) + p("Spacing", i.spacing) + p("Dividers", i.dividers) + p("Responsive", i.responsive);
+        const code = (i.preview && i.preview.code) ? section("Code example", codeBlock(i.preview.code, "HTML + CSS")) : "";
+        const related = relGroup("Related", (i.used_by && i.used_by.length ? i.used_by : relatedByDomain()), { withKind: true });
+        return overview + principles + frame + extras + code + related;
+      }
+      default: {
+        const what = p("What it does", i.description);
+        const useWhen = p("Use when", i.best_use);
+        return what + useWhen + relGroup("Related", relatedByDomain(), { withKind: true, note: "Same domain" });
+      }
+    }
+  }
+  function relationshipsPane(i) {
+    const worksWith = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+    const rel = i.relationships || {};
+    const belongsTo = rel.belongsTo || i.belongs_to;
+    const uses = rel.uses || i.uses;
+    const storedWorks = rel.worksWith || i.works_with;
+    const groups = [
+      relGroup("Belongs to", belongsTo, { withKind: true }),
+      relGroup("Uses", uses, { withKind: true }),
+      relGroup("Used by", i.used_by, { withKind: true }),
+      relGroup("Works with", (storedWorks && storedWorks.length) ? storedWorks : worksWith, { withKind: true, note: (storedWorks && storedWorks.length) ? "" : "Related by domain" }),
+      relGroup("Depends on", i.depends_on, { withKind: true }),
+      relGroup("References", i.references, { withKind: true }),
+      relGroup("Enabled in", i.enabled_in),
+      availInGroup(i),
+    ].filter(Boolean);
+    if (!groups.length) return `<div class="rel-empty"><p>No relationships recorded yet.</p></div>`;
+    const mapCta = `<div class="rel-mapcta"><button class="btn sm" disabled title="Coming soon">View relationship map →</button></div>`;
+    return groups.join("") + mapCta;
+  }
+  function sourcePane(i) {
+    const src = i.source || {};
+    const label = src.label || "this repo";
+    const originUrl = src.url || ( /github\.com|gitlab\.com|bitbucket\.org|^https?:\/\//i.test(label) ? (/^https?:/i.test(label) ? label : "https://" + label) : "");
+    const originLink = originUrl ? ` <a class="pathlink" href="${esc(originUrl)}" target="_blank" rel="noopener noreferrer">Open repository ↗</a>` : "";
+    const originBits = [esc(label)];
+    if (src.author) originBits.push("Author " + esc(src.author));
+    if (src.repository) originBits.push(esc(src.repository));
+    const origin = `<div class="field"><h4>Origin</h4><p>${originBits.join(" · ")}${originLink}</p></div>`;
+    const localPath = `<div class="field"><h4>Local path</h4>${codeSnippet(src.localPath || pathOf(i), "Path")}</div>`;
+    const hist = [];
+    if (i.date_updated) hist.push(`Updated ${esc(i.date_updated)}`);
+    if (i.date_added) hist.push(`Added ${esc(i.date_added)}`);
+    const history = hist.length ? `<div class="field"><h4>History</h4><p>${hist.join(" · ")}</p></div>` : "";
+    const techRows = [
+      `Id: <span class="mono">${esc(i.id)}</span>`,
+      `Kind: ${esc(i.kind)}`,
+      i.subtype ? `Subtype: ${esc((SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype)}` : "",
+      `Domain: ${esc(catLabel(i.category))}`,
+      src.type ? `Source type: ${esc(src.type)}` : "",
+      src.license ? `License: ${esc(src.license)}` : "",
+      (src.version || i.version) ? `Version: ${esc(src.version || i.version)}` : "",
+      src.lastSynced ? `Last synced: ${esc(src.lastSynced)}` : "",
+      src.hasLocalChanges ? "Local changes: yes" : "",
+      i.status ? `Status: ${esc(i.status)}` : "",
+      i.command ? `Invocation: <span class="mono">/${esc(i.command)}</span>` : "",
+    ].filter(Boolean).map(r => `<p>${r}</p>`).join("");
+    const tech = `<div class="field"><h4>Tech details</h4><div class="adv-body">${techRows}</div></div>`;
+    return origin + localPath + tech + history;
   }
   function openItem(id) {
     const i = byId[id]; if (!i) { location.hash = "#/library"; return; }
     const dr = document.getElementById("drawer");
-    const isWf = i.kind === "workflow";
-    const overview = isWf ? workflowSteps(i) : `
-      <div class="field"><h4>What it is</h4><p>${esc(i.description || i.summary)}</p></div>
-      ${i.best_use ? `<div class="field"><h4>Activate when</h4><p>${esc(i.best_use)}</p></div>` : ""}
-      ${relRow("Used by", i.used_by)}
-      ${relRow("Depends on", i.depends_on)}
-      ${relRow("References", i.references)}
-      ${relRow("Enabled in", i.enabled_in)}`;
-    const related = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 4).map(x => x.title);
-    const rels = `<div class="relmap">
-        ${i.depends_on && i.depends_on.length ? `<div class="up">${i.depends_on.map(esc).join(" · ")}<div class="arr">▲</div></div>` : ""}
-        <div class="center">${esc(i.title)}</div>
-        <div class="faint">${related.length ? "related · " + related.map(esc).join(" · ") : "no direct relations yet"}</div>
-        ${i.used_by && i.used_by.length ? `<div class="down"><div class="arr">▼</div>${i.used_by.map(esc).join(" · ")}</div>` : ""}
-      </div><p class="faint" style="margin-top:10px">USES · USED BY · DEPENDS ON · REFERENCES · ENABLED IN</p>`;
-    const source = `
-      <div class="field"><h4>Source</h4><p>${esc(i.source && i.source.label || "this repo")}</p></div>
-      <div class="field"><h4>Updated</h4><p>${esc(i.date_updated)} · added ${esc(i.date_added)}</p></div>
-      <div class="field"><h4>Invocation</h4><p>${i.command ? "<span class='mono'>/" + esc(i.command) + "</span>" : "model-invoked"}</p></div>
-      <details class="advanced"><summary>Advanced · technical details</summary><div class="adv-body">
-        <p>Path: <span class="mono">${esc(pathOf(i))}</span></p>
-        <p>Kind: ${esc(i.kind)} · Category: ${esc(i.category)} · Status: ${esc(i.status)}</p>
-      </div></details>`;
+    // Remember what opened the drawer so focus can return there on close.
+    if (!dr.classList.contains("show")) drawerReturnFocus = document.activeElement;
+    const enabled = isEnabled(i);
+    const enableCtrl = enabled
+      ? `<span class="enabled-state" title="Active in ${esc((i.enabled_in || []).join(", "))}">Enabled ✓</span>`
+      : `<button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button>`;
+    const metaParts = [];
+    if (enabled) metaParts.push("Enabled");
+    if (i.date_updated) metaParts.push("Updated " + i.date_updated);
+    const metaLine = metaParts.length ? `<div class="dmeta">${esc(metaParts.join(" · "))}</div>` : "";
     dr.innerHTML = `
       <div class="dhead">
         <div class="crumb">Library / ${KIND[i.kind].plural} / ${esc(i.title)}</div>
-        ${kindTag(i.kind)}
+        <div class="dkindrow">${kindTag(i.kind)}${subtypePill(i)}</div>
         <h2>${esc(i.title)}</h2>
         <p class="muted">${esc(i.summary || i.description)}</p>
-        <div class="dactions"><button class="btn primary">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn">Edit</button><button class="btn" id="drclose">Close</button></div>
+        ${metaLine}
+        <div class="dactions">
+          <div class="dactions-l">
+            ${enableCtrl}
+            <button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button>
+            <div class="overflow">
+              <button class="btn iconbtn" id="dmore" aria-haspopup="true" aria-expanded="false" aria-label="More actions">•••</button>
+              <div class="ovmenu" id="ovmenu" hidden>
+                <button data-action="rename-item" data-id="${esc(i.id)}">Rename</button>
+                <button data-action="duplicate-item" data-id="${esc(i.id)}">Duplicate</button>
+                <button data-action="export-item" data-id="${esc(i.id)}">Export</button>
+                <button class="danger" data-action="delete-item" data-id="${esc(i.id)}">Delete</button>
+              </div>
+            </div>
+          </div>
+          <button class="iconx" id="drclose" aria-label="Close" title="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
       </div>
       <div class="dtabs">
         <button data-dt="ov" class="active">Overview</button>
+        <button data-dt="howto">How to Use</button>
         <button data-dt="rel">Relationships</button>
         <button data-dt="src">Source</button>
       </div>
-      <div class="dbody" id="dbody">${overview}</div>`;
+      <div class="dbody" id="dbody"></div>`;
     dr.setAttribute("aria-hidden", "false");
+    dr.setAttribute("aria-label", i.title);
     dr.classList.add("show"); document.getElementById("scrim").classList.add("show");
-    const panes = { ov: overview, rel: rels, src: source };
+    const panes = { ov: overviewPane, howto: howtoPane, rel: relationshipsPane, src: sourcePane };
+    const wireActions = () => dr.querySelectorAll(".dbody [data-action]").forEach(x => x.onclick = (e) => { e.stopPropagation(); handleAction(x.dataset.action, x.dataset); });
+    const showPane = key => { document.getElementById("dbody").innerHTML = panes[key](i); wireActions(); };
     dr.querySelectorAll("[data-dt]").forEach(b => b.onclick = () => {
       dr.querySelectorAll("[data-dt]").forEach(x => x.classList.remove("active")); b.classList.add("active");
-      document.getElementById("dbody").innerHTML = panes[b.dataset.dt];
+      showPane(b.dataset.dt);
     });
+    showPane("ov");
+    // Overflow menu (Rename / Duplicate / Export / Delete)
+    const more = dr.querySelector("#dmore"), menu = dr.querySelector("#ovmenu");
+    const closeMenu = () => { menu.hidden = true; more.setAttribute("aria-expanded", "false"); };
+    more.onclick = (e) => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; more.setAttribute("aria-expanded", String(open)); };
+    menu.querySelectorAll("[data-action]").forEach(x => x.onclick = (e) => { e.stopPropagation(); closeMenu(); handleAction(x.dataset.action, x.dataset); });
+    dr.addEventListener("click", e => { if (!e.target.closest(".overflow")) closeMenu(); });
     document.getElementById("drclose").onclick = () => history.length > 1 ? history.back() : (location.hash = "#/library");
+    // Header actions (Enable/Use, Edit) live outside .dbody.
+    dr.querySelectorAll(".dactions-l > [data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
+    // Move focus into the panel so keyboard/AT users land inside the dialog.
+    const closeBtn = document.getElementById("drclose"); if (closeBtn) closeBtn.focus();
   }
   function pathOf(i) {
     if (i.kind === "skill") return `skills/${i.name}/SKILL.md`;
@@ -267,96 +886,161 @@
     if (i.kind === "reference") return `references/${i.name}.md`;
     return `tools/${i.name}/`;
   }
-  function workflowSteps(w) {
-    const steps = (w.steps || []).map((s, idx) => {
+  function workflowStepsInner(w) {
+    return (w.steps || []).map((s, idx) => {
       const uses = (s.uses || []).map(n => { const it = byTitle[byTitleKey(n)] || byId["skill:" + n]; return `<a class="tag" href="#/item/${encodeURIComponent(it ? it.id : "skill:" + n)}">${esc(it ? it.title : n)}</a>`; }).join("");
       return `${idx ? '<div class="stepconn"></div>' : ""}<div class="step"><div class="sn"><span class="num">${idx + 1}</span><strong>${esc(s.name)}</strong></div>${uses ? `<div class="uses">${uses}</div>` : ""}</div>`;
     }).join("");
-    return `<div class="field"><h4>What it is</h4><p>${esc(w.description || w.summary)}</p></div><div class="field"><h4>Steps</h4><div class="steps">${steps}</div></div>`;
   }
   function byTitleKey(name) { const it = byId["skill:" + name]; return it ? it.title : name; }
 
   /* ---------- Discover / Projects / Integrations / Inbox / Activity / Health / Settings ---------- */
   function viewDiscover() {
-    const colls = (D.collections || []).slice(0, 8).map(c => `<button class="chip" data-nav="library/all">${esc(c.name)}</button>`).join("");
+    const colls = (D.collections || []).slice(0, 12).map(c => `<button class="chip" data-nav="library/all"${tipAttr(c.name)}>${esc(catLabel(c.name))}<span class="c">${c.count}</span></button>`).join("");
     return `<div class="page">
-      <div class="page-head"><h1>Discover</h1><p>What you could add. External discovery isn't wired up yet — this is the architecture.</p></div>
-      <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search skills, prompts, workflows & tools to add…"/></label>
+      <div class="page-head"><h1>Discover</h1><p>What you could add. External discovery isn't wired up yet — this is the architecture. Hover a domain for what it covers.</p></div>
+      <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search skills, prompts, workflows + tools to add…"/></label>
       <div class="section"><h2>Browse by domain</h2><div class="chips">${colls}</div></div>
       <div class="section"><h2>From sources</h2><div class="list">
-        <div class="row" data-add><span class="kind" data-k="tool"><span class="g">⚙</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected & routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
-        <div class="row"><span class="kind"><span class="g">◎</span></span><span><div class="nm">Community libraries</div><div class="sub">Curated catalogs (coming soon)</div></span><span class="sub">registry</span><span class="sub faint">soon</span></div>
+        <div class="row" data-add><span class="kind integ-logo"><span class="g">${iconImg("GitHub", "github.png")}</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected + routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
+        <div class="row"><span class="kind"><span class="g">◎</span></span><span><div class="nm">Community catalogs</div><div class="sub">Curated catalogs (coming soon)</div></span><span class="sub">registry</span><span class="sub faint">soon</span></div>
       </div></div>
       <div class="empty" style="margin-top:24px"><h3>Discovery feed coming soon</h3><p>When registries are connected, recommended skills, prompts and workflows will appear here.</p><button class="btn primary" data-add>+ Add from GitHub</button></div>
     </div>`;
   }
   function viewProjects() {
-    const rows = (D.projects || []).map(p => `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
-      <span><div class="nm">${esc(p.name)}</div><div class="sub">${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references</div></span>
-      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} integrations synced</span><span class="btn sm">Open</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your global library are active where.</p></div><div class="list">${rows}</div></div>`;
+    const rows = (D.projects || []).map(p => {
+      const bits = [plural((p.skills || []).length, "skills"), plural((p.workflows || []).length, "workflows"), plural((p.references || []).length, "references")];
+      if ((p.prompts || []).length) bits.push(plural(p.prompts.length, "prompts"));
+      if (p.updated) bits.push("updated " + p.updated);
+      return `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
+      <span><div class="nm">${esc(p.name)}</div><div class="sub">${esc(bits.join(" · "))}</div></span>
+      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} agents synced</span><span class="btn sm">Open</span></div>`;
+    }).join("");
+    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your toolkit are active in each project, and which agents they're synced to. These are example projects — they reference toolkit assets rather than duplicating them.</p></div><div class="list">${rows}</div></div>`;
   }
   function viewProject(id) {
     const p = (D.projects || []).find(x => x.id === id); if (!p) return viewProjects();
-    const caps = p.skills.map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><span class="btn sm">Disable</span></div>`; }).join("");
-    const wfs = p.workflows.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const refs = p.references.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const caps = (p.skills || []).map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><button class="btn sm" data-action="disable-cap" data-proj="${esc(p.id)}" data-name="${esc(n)}">Disable</button></div>`; }).join("");
+    const wfs = (p.workflows || []).map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
+    const refs = (p.references || []).map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
+    const prompts = (p.prompts || []).map(n => { const it = byId["prompt:" + n]; return `<span class="tag">${esc(it ? it.title : n)}</span>`; }).join(" ");
+    const integ = Object.entries(p.integrations || {}).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div><div class="sub">${v === "synced" ? "This project's items are live in " + esc(k) : "Not synced to " + esc(k) + " yet"}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm ${v === "synced" ? "" : "primary"}" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const countBits = [plural((p.skills || []).length, "skills"), plural((p.workflows || []).length, "workflows"), plural((p.references || []).length, "references")];
+    if ((p.prompts || []).length) countBits.push(plural(p.prompts.length, "prompts"));
     return `<div class="page">
       <div class="crumb" style="margin-bottom:8px"><a href="#/projects">Projects</a> / ${esc(p.name)}</div>
-      <div class="page-head"><h1>${esc(p.name)}</h1><p>${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references enabled.</p></div>
-      <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skills">+ Enable from Library</button></div></div>
+      <div class="page-head"><h1>${esc(p.name)}</h1><p>${esc(countBits.join(" · "))} enabled${p.updated ? " · updated " + esc(p.updated) : ""}.</p></div>
+      <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skill">+ Enable from toolkit</button></div></div>
       <div class="section"><h2>Workflows</h2><div class="chips">${wfs || '<span class="faint">None yet</span>'}</div></div>
+      ${(p.prompts || []).length ? `<div class="section"><h2>Prompts</h2><div class="chips">${prompts}</div></div>` : ""}
       <div class="section"><h2>References</h2><div class="chips">${refs || '<span class="faint">None yet</span>'}</div></div>
-      <div class="section"><h2>Integrations</h2><div class="list">${integ}</div></div>
+      <div class="section"><div class="sec-head"><h2>Sync to agents</h2></div><p class="muted" style="margin:-4px 0 12px">Your toolkit is the source of truth. Sync copies this project's enabled items into each agent (Cursor, Claude Code, Codex).</p><div class="list">${integ}</div></div>
     </div>`;
   }
   function viewIntegrations() {
-    const rows = (D.integrations || []).map(x => `<div class="row"><span class="kind"><span class="g">⇄</span></span>
-      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${x.count} skills available · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
+    const c = D.counts || {};
+    const byKind = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${KIND[k].plural.toLowerCase()}`).join(" · ");
+    const total = ITEMS.length;
+    const rows = (D.integrations || []).map(x => {
+      const doc = TOOL_DOCS[x.name] || (x.docUrl ? { url: x.docUrl, label: "Docs" } : null);
+      const openLink = (x.status === "connected" && doc) ? `<a class="btn sm openin" href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer" title="${esc(doc.label)} (opens in a new tab)">Open</a>` : "";
+      return `<div class="row"><span class="kind integ-logo"><span class="g">${platLogo(x.name)}</span></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : (x.custom ? "Custom integration · not configured" : "Not configured")}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
-      <span>${x.status === "connected" ? '<button class="btn sm">Sync</button>' : '<button class="btn sm primary">Set up</button>'}</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your global library across AI coding environments. The library is the source of truth; each tool syncs from it.</p></div><div class="list">${rows}</div>
-      <details class="advanced" style="margin-top:16px"><summary>Advanced · how syncing works</summary><div class="adv-body">Each integration maps the global library into that tool's expected structure (generated indexes / links). You don't manage symlinks by hand.</div></details></div>`;
+      <span class="integ-actions">${openLink}${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`;
+    }).join("");
+    return `<div class="page"><div class="page-head page-head-row"><div><h1>Integrations</h1><p>Use your toolkit across AI coding environments. The toolkit is the source of truth; each agent syncs from it — skills, prompts, workflows, tools + references.</p></div><button class="btn primary" data-action="add-integration">+ Add integration</button></div><div class="list">${rows}</div></div>`;
   }
   function viewInbox() {
-    const rows = (D.inbox || []).map(x => `<div class="row"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span>
-      <span><div class="nm">${esc(x.name)}</div><div class="sub">Suggested: ${esc(x.detected)} · ${esc(x.category)} — ${esc(x.reason)}</div></span>
-      <span class="sub">${esc(x.source)}</span><button class="btn sm">Review</button></div>`).join("");
-    if (!(D.inbox || []).length) return `<div class="page"><div class="page-head"><h1>Inbox</h1></div><div class="empty"><h3>Inbox is clear</h3><p>Items the router can't confidently classify land here for a quick decision.</p></div></div>`;
-    return `<div class="page"><div class="page-head"><h1>Inbox</h1><p>${D.inbox.length} items need review. This is a staging area — not a second library.</p></div><div class="list">${rows}</div></div>`;
+    const all = D.inbox || [];
+    const head = `<div class="page-head"><h1>Inbox</h1><p>Items the router couldn't confidently classify. Review to file one into your toolkit, or delete what you don't need — this is a staging area, not a second toolkit.</p></div>`;
+    if (!all.length) return `<div class="page">${head}<div class="empty"><h3>Inbox is clear</h3><p>Nothing waiting. New unclassified items will show up here.</p></div></div>`;
+    const unread = all.filter(x => !x.read), read = all.filter(x => x.read);
+    const rowU = x => `<div class="row inbox-row"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">Suggested: ${esc(x.detected)} · ${esc(catLabel(x.category))} — ${esc(x.reason)}</div></span>
+      <span class="inbox-actions"><button class="btn sm primary" data-action="review-inbox" data-name="${esc(x.name)}">Review</button><button class="btn sm" data-action="mark-read" data-name="${esc(x.name)}">Mark read</button><button class="btn sm danger" data-action="delete-inbox" data-name="${esc(x.name)}">Delete</button></span></div>`;
+    const rowR = x => `<div class="row inbox-row read"><span class="kind" data-k="${x.filedAs || x.detected}"><span class="g">${(KIND[x.filedAs || x.detected] || KIND.reference).glyph}</span></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.filedAs ? "Filed as " + esc(x.filedAs) : "Marked read"}${x.category ? " · " + esc(catLabel(x.category)) : ""}</div></span>
+      <span class="inbox-actions"><button class="btn sm" data-action="unread-inbox" data-name="${esc(x.name)}">Mark unread</button><button class="btn sm danger" data-action="delete-inbox" data-name="${esc(x.name)}">Delete</button></span></div>`;
+    return `<div class="page">${head}
+      <div class="section"><div class="sec-head"><h2>Unread${unread.length ? " · " + unread.length : ""}</h2></div>${unread.length ? `<div class="list">${unread.map(rowU).join("")}</div>` : `<p class="faint">Nothing unread — inbox zero.</p>`}</div>
+      ${read.length ? `<div class="section"><div class="sec-head"><h2>Read · ${read.length}</h2></div><div class="list">${read.map(rowR).join("")}</div></div>` : ""}
+    </div>`;
   }
   function viewActivity() {
     const rows = (D.activity || []).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Activity</h1><p>What changed across your library.</p></div><div class="actlist">${rows}</div></div>`;
+    return `<div class="page"><div class="page-head"><h1>Activity</h1><p>What changed across your toolkit.</p></div><div class="actlist">${rows}</div></div>`;
+  }
+  function issueAction(type) {
+    if (/reference/i.test(type)) return { label: "Repoint", act: "review-issue" };
+    if (/duplicate/i.test(type)) return { label: "Compare", act: "review-issue" };
+    return { label: "Fix", act: "review-issue" };
   }
   function viewHealth() {
     const ok = (D.health.ok || []).map(t => `<div class="att info"><span class="dot"></span><span>${esc(t)}</span></div>`).join("");
-    const iss = (D.health.issues || []).map(i => `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><button class="btn sm go">Review</button></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Library health</h1><p>Is everything wired up correctly?</p></div>
+    const iss = (D.health.issues || []).map((i, ix) => { const a = issueAction(i.type); return `<div class="att"><span class="dot"></span><span><strong>${esc(i.type)}</strong> — ${esc(i.detail)}</span><span class="att-actions"><button class="btn sm" data-action="${a.act}" data-i="${ix}">${a.label}</button><button class="btn sm primary" data-action="resolve-issue" data-i="${ix}">Resolve</button><button class="btn sm" data-action="dismiss-issue" data-i="${ix}">Dismiss</button></span></div>`; }).join("");
+    return `<div class="page"><div class="page-head"><h1>Toolkit health</h1><p>Is everything wired up correctly? Act on anything that needs attention right here.</p></div>
       <div class="section"><h2>Healthy</h2><div class="attention">${ok}</div></div>
-      ${iss ? `<div class="section"><h2>${D.health.issues.length} need attention</h2><div class="attention">${iss}</div></div>` : ""}
-      <details class="advanced" style="margin-top:16px"><summary>Advanced · doctor output</summary><div class="adv-body mono">$ ai-lib doctor<br/>registry: ok · integrations: ok · references: 1 broken · duplicates: 1 candidate</div></details></div>`;
+      ${iss ? `<div class="section"><h2>${D.health.issues.length} need attention</h2><div class="attention">${iss}</div></div>` : `<div class="section"><h2>Needs attention</h2><div class="att info"><span class="dot"></span><span>Nothing needs attention — all clear.</span></div></div>`}</div>`;
   }
   function viewSettings() {
-    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Library location and defaults.</p></div>
-      <div class="section"><h2>Global library</h2><div class="list"><div class="row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm">Change</button></div></div></div>
-      <div class="section"><h2>Appearance</h2><div class="list"><div class="row"><span class="kind"><span class="g">◐</span></span><span><div class="nm">Theme</div><div class="sub">Neutral (wireframe)</div></span><span></span><span class="faint">later</span></div></div></div></div>`;
+    const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("") || `<div class="a"><span class="faint">No activity yet.</span></div>`;
+    const c = D.counts || {};
+    const totals = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${c[k] === 1 ? KIND[k].label.toLowerCase() : KIND[k].plural.toLowerCase()}`).join(" · ");
+    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Where your toolkit lives, what's in it, and what's changed.</p></div>
+      <div class="section"><h2>Global toolkit</h2><div class="list">
+        <div class="row settings-row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Toolkit home</div><div class="sub mono">${esc(toolkitHome)}</div><div class="sub">The folder that holds every skill, prompt, workflow, tool + reference. Agents sync from here.</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div>
+        <div class="row settings-row"><span class="kind"><span class="g">▤</span></span><span><div class="nm">Contents</div><div class="sub">${esc(plusify(totals) || "empty")}</div></span><span></span><button class="btn sm" data-nav="library">Open toolkit</button></div>
+      </div></div>
+      <div class="section"><div class="sec-head"><h2>Activity</h2><button class="btn sm" data-nav="activity">View all</button></div><div class="actlist">${recent}</div></div>
+    </div>`;
   }
 
   /* ---------- Overlays: Add / Create / Palette ---------- */
-  function overlay(html) { document.getElementById("overlay").innerHTML = html; }
-  function closeOverlay() { document.getElementById("overlay").innerHTML = ""; }
-  function closeDrawerOnly() { const dr = document.getElementById("drawer"); if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); } document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show"); }
-  function closeAll() { closeDrawerOnly(); closeOverlay(); }
+  // Focus to restore when the drawer / an overlay closes (light focus management).
+  let drawerReturnFocus = null, overlayReturnFocus = null;
+  function overlay(html) {
+    const host = document.getElementById("overlay");
+    // Capture the trigger only on first open, not on internal re-renders.
+    if (!host.innerHTML.trim()) overlayReturnFocus = document.activeElement;
+    host.innerHTML = html;
+    const box = host.querySelector(".box");
+    if (box) {
+      const dlg = box.closest(".modal, .palette") || box;
+      dlg.setAttribute("role", "dialog");
+      dlg.setAttribute("aria-modal", "true");
+      // If a specific opener didn't already move focus inside, land on the first
+      // focusable control (close button / input) so keyboard users start inside.
+      requestAnimationFrame(() => {
+        if (host.contains(document.activeElement) && document.activeElement !== document.body) return;
+        const t = box.querySelector("input, textarea, select, button, [href]");
+        if (t) t.focus();
+      });
+    }
+  }
+  function closeOverlay() {
+    document.getElementById("overlay").innerHTML = "";
+    if (overlayReturnFocus && document.contains(overlayReturnFocus)) { try { overlayReturnFocus.focus(); } catch (e) { /* element gone */ } }
+    overlayReturnFocus = null;
+  }
+  function closeDrawerOnly() {
+    const dr = document.getElementById("drawer");
+    const wasOpen = dr && dr.classList.contains("show");
+    if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); }
+    document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show");
+    if (wasOpen && drawerReturnFocus && document.contains(drawerReturnFocus)) { try { drawerReturnFocus.focus(); } catch (e) { /* element gone */ } }
+    drawerReturnFocus = null;
+  }
+  function closeAll() { closeDrawerOnly(); closeOverlay(); closeNotif(); closeAddMenu(); }
 
   const add = { step: "source", src: "github" };
   function openAdd() { add.step = "source"; renderAdd(); }
   function renderAdd() {
-    let body = "", foot = "", title = "Add to Library";
+    let body = "", foot = "", title = "Add to Toolkit";
     if (add.step === "source") {
       body = `<p class="muted">Where is it coming from?</p><div class="srcgrid">
-        ${[["github", "GitHub URL", "Install a public repo"], ["zip", "Upload ZIP", "A downloaded archive"], ["local", "Local File / Folder", "Something on disk"], ["paste", "Paste Content", "A prompt or skill you copied"]].map(([k, t, d]) => `<button class="srcopt" data-src="${k}"><div class="t">${t}</div><div class="d">${d}</div></button>`).join("")}
+        ${[["github", "GitHub URL", "Install a public repo"], ["zip", "Upload ZIP", "A downloaded archive"], ["local", "Local File / Folder", "Something on disk"], ["paste", "Paste Content", "A prompt or skill you copied"]].map(([k, t, d]) => `<button class="srcopt" data-src="${k}">${k === "github" ? `<span class="srcopt-ic">${iconImg("GitHub", "github.png")}</span>` : ""}<div class="t">${t}</div><div class="d">${d}</div></button>`).join("")}
       </div>`;
       foot = `<button class="btn" data-x>Cancel</button><span></span>`;
     } else if (add.step === "input") {
@@ -430,8 +1114,8 @@
 
   /* ---------- Command palette ---------- */
   const COMMANDS = [
-    ["Search Library", () => location.hash = "#/library"],
-    ["Add to Library", openAdd], ["Install from GitHub", () => { openAdd(); add.step = "input"; renderAdd(); }],
+    ["Search Toolkit", () => location.hash = "#/library"],
+    ["Add to Toolkit", openAdd], ["Install from GitHub", () => { openAdd(); add.step = "input"; renderAdd(); }],
     ["Create Skill", openCreate], ["Create Prompt", openCreate], ["Create Workflow", openCreate],
     ["Open Inbox", () => location.hash = "#/inbox"], ["Review Updates", () => location.hash = "#/health"],
     ["Sync Cursor", () => toast("Syncing Cursor…")], ["Sync Claude Code", () => toast("Syncing Claude Code…")],
@@ -449,12 +1133,312 @@
   }
   function toast(msg) { const t = h(`<div class="toast">${esc(msg)}</div>`); document.body.appendChild(t); setTimeout(() => t.remove(), 1600); }
 
+  /* ---------- Actions (optimistic; this is a front-end prototype) ---------- */
+  function addActivity(action, target) { (D.activity = D.activity || []).unshift({ action, target, when: "just now" }); }
+  function currentRoute() { return location.hash.replace(/^#\/?/, "").split("?")[0]; }
+  function rerenderView() { const y = window.scrollY; router(); window.scrollTo(0, y); }
+  function rebuildAll() { const y = window.scrollY; shell(); router(); window.scrollTo(0, y); }
+
+  function handleAction(action, ds) {
+    switch (action) {
+      case "sync-integration": return syncIntegration(ds.name);
+      case "setup-integration": return setupIntegration(ds.name);
+      case "add-integration": return openAddIntegration();
+      case "review-inbox": return openInboxReview(ds.name);
+      case "review-issue": return openIssueReview(+ds.i);
+      case "resolve-issue": return resolveIssue(+ds.i);
+      case "dismiss-issue": return dismissIssue(+ds.i);
+      case "disable-cap": return disableCap(ds.proj, ds.name);
+      case "sync-project-integration": return syncProjectIntegration(ds.proj, ds.name);
+      case "enable-item": return enableItem(ds.id);
+      case "edit-item": return openCreate();
+      case "rename-item": return openRename(ds.id);
+      case "push-item": return pushItem(ds.id, ds.plat);
+      case "mark-read": return setInboxRead(ds.name, true);
+      case "unread-inbox": return setInboxRead(ds.name, false);
+      case "delete-inbox": return deleteInbox(ds.name);
+      case "change-home": return openChangeHome();
+      case "copy-snippet": return copySnippet(ds.target, ds.label);
+      case "use-template": return useTemplate(ds.id);
+      case "duplicate-template": return duplicateTemplate(ds.id);
+      case "duplicate-item": return toast("Duplicate isn't wired up in this prototype");
+      case "export-item": return toast("Export isn't wired up in this prototype");
+      case "delete-item": return toast("Delete isn't wired up in this prototype");
+      default: return undefined;
+    }
+  }
+
+  // Template actions (front-end prototype): confirm intent via a toast + log.
+  function useTemplate(id) {
+    const it = byId[id]; if (!it) return;
+    addActivity("Used template", it.title);
+    toast("Started from “" + it.title + "” — fill the variables to compose your deck");
+  }
+  function duplicateTemplate(id) {
+    const it = byId[id]; if (!it) return;
+    addActivity("Duplicated", it.title);
+    toast("Duplicated “" + it.title + "” — a working copy is ready to edit");
+  }
+
+  function setInboxRead(name, read) {
+    const it = (D.inbox || []).find(x => x.name === name); if (!it) return;
+    it.read = read; if (!read) it.filedAs = undefined;
+    persistInbox(name, { read: read, filedAs: read ? it.filedAs : undefined });
+    addActivity(read ? "Marked read" : "Marked unread", name);
+    toast(name + (read ? " marked read" : " moved back to unread")); rebuildAll();
+  }
+  function deleteInbox(name) {
+    D.inbox = (D.inbox || []).filter(x => x.name !== name);
+    persistInbox(name, { deleted: true });
+    addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); rebuildAll();
+  }
+  function openChangeHome() {
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Toolkit home</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <div class="field"><h4>Folder</h4><input class="input" id="th-home" value="${esc(toolkitHome)}" autocomplete="off" /></div>
+      <p class="muted">Where the toolkit is stored on disk. Skills, prompts, workflows, tools + references live here, and every agent syncs from it.</p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="th-save">Save</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("#th-save").onclick = () => {
+      const v = ov.querySelector("#th-home").value.trim(); if (!v) { closeOverlay(); return; }
+      toolkitHome = v; try { localStorage.setItem("ai-toolkit-home", v); } catch (e) {}
+      addActivity("Changed", "Toolkit home → " + v); closeOverlay(); toast("Toolkit home set"); rerenderView();
+    };
+    ov.querySelector("#th-home").focus();
+  }
+
+  function pushItem(id, plat) {
+    const it = byId[id]; if (!it) return;
+    it.installed_in = it.installed_in || [];
+    if (!it.installed_in.includes(plat)) it.installed_in.push(plat);
+    persistItemInstall(id, plat);
+    addActivity("Installed", it.title + " → " + plat);
+    toast("Pushed " + it.title + " to " + plat);
+    openItem(id); // refresh drawer so status + push buttons update
+  }
+
+  /* Rename an item — propagates the new name across every in-memory reference,
+     then re-syncs the environments it's installed in. (Persisting to disk /
+     the real tool integrations needs a backend; this is the front-end path.) */
+  // Core in-memory rename + reference propagation. Returns { oldTitle, newId }
+  // or null when nothing changed. Kept side-effect-free (no UI/persist/history)
+  // so it can also run at boot when re-applying persisted renames.
+  function applyRename(id, newTitle) {
+    const it = byId[id]; if (!it) return null;
+    newTitle = String(newTitle).trim(); if (!newTitle || newTitle === it.title) return null;
+    const oldTitle = it.title, oldName = it.name, newName = kebab(newTitle) || oldName, newId = it.kind + ":" + newName;
+    it.title = newTitle; it.name = newName; it.id = newId;
+    const swap = (arr, from, to) => { if (arr) arr.forEach((v, ix) => { if (v === from) arr[ix] = to; }); };
+    ITEMS.forEach(x => {
+      swap(x.depends_on, oldName, newName); swap(x.uses_list, oldName, newName);
+      swap(x.used_by, oldTitle, newTitle); swap(x.references, oldTitle, newTitle);
+      // Typed subtype relationships (title-keyed). relationships is a by-reference
+      // view of these same arrays, so swapping in place keeps it in sync.
+      swap(x.belongs_to, oldTitle, newTitle); swap(x.uses, oldTitle, newTitle); swap(x.works_with, oldTitle, newTitle);
+      if (x.steps) x.steps.forEach(s => swap(s.uses, oldName, newName));
+    });
+    (D.projects || []).forEach(p => { swap(p.skills, oldName, newName); swap(p.workflows, oldTitle, newTitle); swap(p.references, oldTitle, newTitle); });
+    byId = Object.fromEntries(ITEMS.map(x => [x.id, x]));
+    byTitle = Object.fromEntries(ITEMS.map(x => [x.title, x]));
+    return { oldTitle, newId };
+  }
+  function renameItem(id, newTitle) {
+    const before = byId[id]; if (!before) return;
+    const t = String(newTitle).trim();
+    if (!t || t === before.title) { if (t === before.title) location.hash = "#/item/" + encodeURIComponent(id); return; }
+    const res = applyRename(id, t); if (!res) return;
+    persistRename(id, t);
+    addActivity("Renamed", res.oldTitle + " → " + t);
+    const it = byId[res.newId];
+    const where = (it && it.installed_in || []).join(", ");
+    toast("Renamed to “" + t + "”" + (where ? " · re-synced " + where : ""));
+    location.hash = "#/item/" + encodeURIComponent(res.newId); // reopen drawer at new id
+  }
+  function openRename(id) {
+    const it = byId[id]; if (!it) return;
+    const label = KIND[it.kind] ? KIND[it.kind].label.toLowerCase() : "item";
+    const where = (it.installed_in && it.installed_in.length) ? it.installed_in.join(", ") : "no environments yet";
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Rename ${esc(label)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <div class="field"><h4>Display name</h4><input class="input" id="rn-name" value="${esc(it.title)}" autocomplete="off" /></div>
+      <p class="muted">Updates every reference to this ${esc(label)} and re-syncs the environments it's installed in (${esc(where)}). The on-disk id becomes <span class="mono" id="rn-id"></span>.</p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="rn-save">Rename &amp; sync</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    const input = ov.querySelector("#rn-name"), idEl = ov.querySelector("#rn-id");
+    const upd = () => { idEl.textContent = it.kind + ":" + (kebab(input.value) || "…"); };
+    input.oninput = upd; upd();
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("#rn-save").onclick = () => { const v = input.value; closeOverlay(); renameItem(id, v); };
+    input.focus(); input.select();
+  }
+
+  function syncIntegration(name) {
+    const it = (D.integrations || []).find(x => x.name === name); if (!it) return;
+    toast("Syncing " + name + "…");
+    setTimeout(() => {
+      it.last_synced = "just now"; addActivity("Synced", name);
+      persistIntegration(name, { status: it.status, last_synced: it.last_synced, count: it.count });
+      toast(name + " synced");
+      if (currentRoute().startsWith("integrations")) rerenderView();
+    }, 700);
+  }
+  function setupIntegration(name) {
+    const it = (D.integrations || []).find(x => x.name === name); if (!it) return;
+    it.status = "connected"; it.count = ITEMS.filter(x => x.kind === "skill").length; it.last_synced = "just now";
+    persistIntegration(name, { status: "connected", count: it.count, last_synced: it.last_synced });
+    addActivity("Connected", name); toast(name + " connected"); rerenderView();
+  }
+  // Register a NEW AI tool as an integration/push destination. Persists a
+  // definition to the state store so it survives reloads (re-added by
+  // applyPersistedState). Bundled icons are optional; default is a monogram.
+  const CUSTOM_ICON_CHOICES = [
+    ["", "Generic (initials)"],
+    ["cursor.png", "Cursor"],
+    ["claude.png", "Claude"],
+    ["openai.png", "OpenAI / Codex"],
+    ["lovable.png", "Lovable"],
+    ["github.png", "GitHub"],
+  ];
+  function openAddIntegration() {
+    const iconOpts = CUSTOM_ICON_CHOICES.map(([f, label]) => `<option value="${esc(f)}">${esc(label)}</option>`).join("");
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Add integration</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">Register another AI tool as a sync destination. It behaves like the built-ins — appears here with Set up/Sync and as a push target in item flyouts.</p>
+      <div class="field"><h4>Name</h4><input class="input" id="ai-name" placeholder="e.g. Gemini CLI" autocomplete="off" /></div>
+      <div class="field"><h4>Docs / reference URL <span class="faint">(optional)</span></h4><input class="input" id="ai-url" placeholder="https://…" autocomplete="off" /></div>
+      <div class="field"><h4>Icon <span class="faint">(optional)</span></h4><select class="f" id="ai-icon">${iconOpts}</select></div>
+      <p class="ai-err" id="ai-err" hidden></p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="ai-save">Add integration</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    const nameEl = ov.querySelector("#ai-name"), urlEl = ov.querySelector("#ai-url"), iconEl = ov.querySelector("#ai-icon"), errEl = ov.querySelector("#ai-err");
+    const showErr = m => { errEl.textContent = m; errEl.hidden = false; };
+    const save = () => {
+      const name = (nameEl.value || "").trim();
+      if (!name) { showErr("Enter a name for the integration."); nameEl.focus(); return; }
+      if ((D.integrations || []).some(x => x.name.toLowerCase() === name.toLowerCase())) { showErr("An integration named “" + name + "” already exists."); nameEl.focus(); return; }
+      const def = { id: kebab(name) || name.toLowerCase(), name: name, docUrl: (urlEl.value || "").trim(), icon: iconEl.value || "" };
+      D.integrations = D.integrations || [];
+      D.integrations.push({ id: def.id, name: def.name, status: "not configured", count: 0, last_synced: null, custom: true, docUrl: def.docUrl, icon: def.icon });
+      persistCustomIntegration(def);
+      addActivity("Added integration", name);
+      closeOverlay(); toast(name + " added"); rebuildAll();
+    };
+    ov.querySelector("#ai-save").onclick = save;
+    nameEl.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); save(); } };
+    nameEl.focus();
+  }
+  function disableCap(projId, name) {
+    const p = (D.projects || []).find(x => x.id === projId); if (!p) return;
+    p.skills = p.skills.filter(s => s !== name);
+    const it = byId["skill:" + name]; if (it && it.enabled_in) it.enabled_in = it.enabled_in.filter(x => x !== p.name);
+    addActivity("Disabled", name + " · " + p.name); toast("Disabled " + name); rerenderView();
+  }
+  function syncProjectIntegration(projId, name) {
+    const p = (D.projects || []).find(x => x.id === projId); if (!p) return;
+    p.integrations[name] = "synced"; persistProjectIntegration(projId, name, "synced"); addActivity("Synced", name + " · " + p.name); toast(name + " synced"); rerenderView();
+  }
+  function enableItem(id) {
+    const it = byId[id]; if (!it) return;
+    const proj = (D.projects || [])[0];
+    if (it.kind === "skill" && proj) {
+      if (!proj.skills.includes(it.name)) proj.skills.push(it.name);
+      it.enabled_in = it.enabled_in || []; if (!it.enabled_in.includes(proj.name)) it.enabled_in.push(proj.name);
+      addActivity("Enabled", it.title + " · " + proj.name); toast("Enabled " + it.title + " in " + proj.name);
+      openItem(id); // refresh the drawer so "Enabled in" reflects the change
+    } else {
+      addActivity("Used", it.title); toast(it.title + " ready to use");
+    }
+  }
+
+  function openInboxReview(name) {
+    const it = (D.inbox || []).find(x => x.name === name); if (!it) return;
+    const opts = ["skill", "prompt", "workflow", "reference", "template"]
+      .map(k => `<button class="chip ${k === it.detected ? "active" : ""}" data-k="${k}">${KIND[k] ? KIND[k].label : k}</button>`).join("");
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Review · ${esc(it.name)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">Suggested: <strong>${esc(it.detected)}</strong> · ${esc(catLabel(it.category))} — ${esc(it.reason)}</p>
+      <div class="field"><h4>File as</h4><div class="chips" id="ib-kinds">${opts}</div></div>
+      <div class="field"><h4>Source</h4><p class="mono">${esc(it.source)}</p></div>
+    </div><div class="mfoot"><button class="btn danger" data-del>Delete</button><div style="display:flex;gap:8px"><button class="btn" data-x>Cancel</button><button class="btn primary" data-file>File + mark read</button></div></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    let chosen = it.detected;
+    ov.querySelectorAll("#ib-kinds .chip").forEach(c => c.onclick = () => { ov.querySelectorAll("#ib-kinds .chip").forEach(x => x.classList.remove("active")); c.classList.add("active"); chosen = c.dataset.k; });
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("[data-del]").onclick = () => { closeOverlay(); deleteInbox(name); };
+    ov.querySelector("[data-file]").onclick = () => {
+      it.read = true; it.filedAs = chosen;
+      persistInbox(name, { read: true, filedAs: chosen });
+      addActivity("Filed", name + " → " + chosen); closeOverlay(); toast("Filed " + name + " as " + chosen + " · re-synced"); rebuildAll();
+    };
+  }
+
+  function suggestFix(type) {
+    if (/reference/i.test(type)) return "Repoint the reference to an existing item, or remove it.";
+    if (/duplicate/i.test(type)) return "Compare the two items, then merge unique content or keep them separate.";
+    return "Review the details and update the affected item.";
+  }
+  function resolveIssue(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+    (D.health.ok = D.health.ok || []).push(iss.type + " resolved");
+    addActivity("Resolved", iss.type); toast(iss.type + " resolved"); rerenderView();
+  }
+  function dismissIssue(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+    addActivity("Dismissed", iss.type); toast("Dismissed " + iss.type); rerenderView();
+  }
+  function openIssueReview(ix) {
+    const iss = (D.health.issues || [])[ix]; if (!iss) return;
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>${esc(iss.type)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">${esc(iss.detail)}</p>
+      <div class="field"><h4>Suggested fix</h4><p>${esc(suggestFix(iss.type))}</p></div>
+    </div><div class="mfoot"><button class="btn" data-x>Dismiss</button><button class="btn primary" data-resolve>Mark resolved</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("[data-resolve]").onclick = () => {
+      D.health.issues = (D.health.issues || []).filter((_, i) => i !== ix);
+      (D.health.ok = D.health.ok || []).push(iss.type + " resolved");
+      addActivity("Resolved", iss.type); closeOverlay(); toast("Marked resolved"); rerenderView();
+    };
+  }
+
+  /* ---------- Tooltips (delegated; the tip element lives on <body>) ---------- */
+  function initTooltips() {
+    let tip = document.getElementById("tip");
+    if (!tip) { tip = document.createElement("div"); tip.id = "tip"; tip.className = "tip"; tip.setAttribute("role", "tooltip"); document.body.appendChild(tip); }
+    const show = el => {
+      const text = el.getAttribute("data-tip"); if (!text) return;
+      tip.textContent = text;
+      const r = el.getBoundingClientRect();
+      tip.style.left = Math.round(r.left + r.width / 2) + "px";
+      tip.style.top = Math.round(r.bottom + 8) + "px";
+      tip.classList.add("show");
+    };
+    const hide = () => tip.classList.remove("show");
+    document.addEventListener("mouseover", e => { const el = e.target.closest("[data-tip]"); if (el) show(el); });
+    document.addEventListener("mouseout", e => { const el = e.target.closest("[data-tip]"); if (el) hide(); });
+    document.addEventListener("focusin", e => { const el = e.target.closest("[data-tip]"); if (el) show(el); });
+    document.addEventListener("focusout", hide);
+    window.addEventListener("scroll", hide, true);
+  }
+
   /* ---------- Boot ---------- */
   window.addEventListener("keydown", e => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); }
     else if (e.key === "Escape") closeAll();
   });
   window.addEventListener("hashchange", router);
-  shell();
-  router();
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#addwrap")) closeAddMenu();
+    if (!notifOpen) return;
+    if (e.target.closest("#notif") || e.target.closest("#bell")) return;
+    closeNotif();
+  });
+
+  (async function boot() {
+    await loadLiveData(); // falls back to the bundled snapshot on failure
+    applyPersistedState(); // re-apply persisted user mutations before first render
+    shell();
+    router();
+    initTooltips();
+  })();
 })();

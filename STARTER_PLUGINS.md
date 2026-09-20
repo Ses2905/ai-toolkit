@@ -20,7 +20,7 @@ Official catalog: [cursor.com/marketplace](https://cursor.com/marketplace)
 npx impeccable install --providers=cursor --scope=global
 ```
 
-Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/install-impeccable/SKILL.md`.
+Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/impeccable/SKILL.md`.
 
 GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are lists. From this repo:
 
@@ -28,9 +28,9 @@ GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/
 ./scripts/install-catalog-skills.sh --preset design-product
 ```
 
-That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/install-github-skills/SKILL.md`.
+That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/github-skills/SKILL.md`.
 
-[Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/install-open-design/SKILL.md`.
+[Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/open-design/SKILL.md`.
 
 [React Bits](https://github.com/DavidHDev/react-bits) is a shadcn registry of animated React components. Add `@react-bits` to the app's `components.json`, then `npx shadcn@latest add @react-bits/<Name>-TS-TW`. Details: `skills/react-bits/SKILL.md`.
 
