@@ -1,0 +1,10 @@
+Source: https://github.com/kozz36/frontend-designer-skill
+Repo: https://github.com/kozz36/frontend-designer-skill
+Upstream folder: skills/frontend-designer
+Install name: frontend-designer
+Official CLI: npx skills add https://github.com/kozz36/frontend-designer-skill --skill frontend-designer
+Pinned: a1ca0df80260fc93dca89501802972eae49c29d4
+License: Apache-2.0 (kozz36) — see LICENSE
+Omitted: skills/frontend-designer-lite (derived subset without references), versions/ archives, docs/derivation
+Related: skills/frontend-design (Anthropic visual identity), skills/web-design-guidelines, skills/design-system
+Note: Production CSS architecture, tokens, container queries, WCAG. Distinct from /frontend-design.

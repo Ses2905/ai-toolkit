@@ -1,0 +1,7 @@
+---
+description: Framework-agnostic frontend design systems — CSS architecture, tokens, container queries, WCAG. Use for frontend-designer, token contracts, or production UI system decisions.
+alwaysApply: false
+globs: "**/*.{css,scss,sass,less,tsx,jsx,vue,svelte,html}"
+---
+
+frontend-designer: Follow `skills/frontend-designer/SKILL.md`. Preserve repository token and component-state contracts. Distinct from `frontend-design` (visual identity), `web-design-guidelines` (heuristic UI review), and `design-system` (this kit's token CSVs). Do not apply to backend-only, CLI, or infra work.

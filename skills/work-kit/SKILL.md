@@ -12,8 +12,18 @@ Public GitHub home: [github.com/Ses2905/cursor-skills](https://github.com/Ses290
 ```bash
 git clone https://github.com/Ses2905/cursor-skills.git
 cd cursor-skills
+bash scripts/install-global.sh
+```
+
+That one command installs the local plugin, copies every vendored skill into `~/.cursor/skills/`, installs the Owl-Listener `designer-skills` pack, and deletes the project-local `npx skills add` leftover (`.agents/`, `skills-lock.json`).
+
+The same steps, split out:
+
+```bash
 ./scripts/install-local.sh
 ./scripts/sync-user-skills.sh
+./scripts/install-catalog-skills.sh --preset designer-skills
+rm -rf .agents skills-lock.json
 ```
 
 Then **Developer: Reload Window**, confirm **Work Kit** under **Customize → User**, and enable **Settings → Agents → Context and Tools → Sync Skills for Cloud Agents**.
@@ -36,7 +46,7 @@ That copies this plugin to `~/.cursor/plugins/local/work-kit` as a real director
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Skills appear under **Agent Decides**; invoke with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`
+3. Skills appear under **Agent Decides**; invoke with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/ppt-visual`, `/presentation-art-director`, `/frontend-designer`, `/motion-design`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
 
 On Teams/Enterprise, local plugins require **Allow Local Plugin Imports**.
 
@@ -58,7 +68,7 @@ Repo-specific knowledge still belongs in that repo (`AGENTS.md`, `.cursor/rules`
 ./scripts/install-catalog-skills.sh --preset design-product
 ```
 
-See `skills/install-github-skills/SKILL.md`.
+See `skills/github-skills/SKILL.md`.
 
 ## Marketplace plugins
 

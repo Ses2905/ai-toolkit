@@ -1,0 +1,6 @@
+---
+description: PowerPoint layout specs, palettes, and ASCII wireframes. Use for ppt-visual, slide layout redesign, or visual concepts that are not yet a PPTX or HTML file.
+alwaysApply: false
+---
+
+ppt-visual: Follow `skills/ppt-visual/SKILL.md`. Output layout wireframes and design specs. Distinct from `ppt-master` (editable PPTX), `codex-ppt` (image-page PPTX), and HTML deck skills. Do not create `.pptx` files from this skill.

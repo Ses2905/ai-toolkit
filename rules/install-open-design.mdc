@@ -3,4 +3,4 @@ description: Installs Open Design from GitHub Releases and connects it to Cursor
 alwaysApply: false
 ---
 
-install-open-design: Follow `skills/install-open-design/SKILL.md` when the user wants Open Design, open-design.ai, or `od mcp install cursor`. Do not download desktop binaries, pipe install.sh, collect API keys, or start Docker unless they asked. Skip for backend-only work.
+install-open-design: Follow `skills/open-design/SKILL.md` when the user wants Open Design, open-design.ai, or `od mcp install cursor`. Do not download desktop binaries, pipe install.sh, collect API keys, or start Docker unless they asked. Skip for backend-only work.

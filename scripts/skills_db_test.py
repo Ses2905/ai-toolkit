@@ -168,6 +168,10 @@ class RepoScanTest(unittest.TestCase):
         cases = {
             "apple-design": "Design & Frontend",
             "emil-design-eng": "Design & Frontend",
+            "frontend-designer": "Design & Frontend",
+            "motion-design": "Motion & Animation",
+            "ppt-visual": "Presentations & Diagrams",
+            "presentation-art-director": "Presentations & Diagrams",
             "product-strategy-session": "Product & Discovery",
             "board-room-strategy": "Product & Discovery",
             "walmart-ads-terminology": "Product & Discovery",
@@ -176,6 +180,8 @@ class RepoScanTest(unittest.TestCase):
             "ui-ux-pro-max": "Design & Frontend",
             "hyperframes-animation": "Motion & Animation",
             "plan-the-work": "Engineering Workflow",
+            "work-kit": "Setup & Install",
+            "github-skills": "Setup & Install",
             "install-work-kit": "Setup & Install",
         }
         for name, cat in cases.items():

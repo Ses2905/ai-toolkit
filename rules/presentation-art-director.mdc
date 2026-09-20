@@ -1,0 +1,6 @@
+---
+description: Art-direct HTML presentation slides without destabilizing a frozen layout system. Use for presentation-art-director, slide-by-slide visual storytelling, or executive HTML deck polish.
+alwaysApply: false
+---
+
+presentation-art-director: Follow `skills/presentation-art-director/SKILL.md`. Propose before implementing. Preserve frozen geometry. Distinct from `html-ppt` (authoring a new themed deck), `ppt-visual` (PowerPoint specs, not HTML), and `slides` (Chart.js). Do not batch-implement or refactor global CSS for one slide.

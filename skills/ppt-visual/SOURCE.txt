@@ -1,0 +1,9 @@
+Source: https://aiuxplayground.com/skills/ppt-visual
+Repo: https://github.com/claude-office-skills/skills
+Upstream folder: ppt-visual
+Install name: ppt-visual
+Official CLI: npx skills add github.com/claude-office-skills/skills --skill ppt-visual
+Pinned: 9c4c7d5cd2813a8936bf2c9fdb174ea883b85a11
+License: MIT (Claude Office Skills Contributors)
+Related: skills/ppt-master (native PPTX files), skills/codex-ppt (full-slide images), skills/html-ppt (HTML decks)
+Note: Layout specs, palettes, and ASCII wireframes. Does not write .pptx files.

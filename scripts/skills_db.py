@@ -81,6 +81,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "ui-ux-pro-max": "Design & Frontend",
     "rad-spacing": "Design & Frontend",
     "huashu-design": "Design & Frontend",
+    "frontend-designer": "Design & Frontend",
     "walmart-ads-terminology": "Product & Discovery",
     # Motion & Animation
     "find-animation-opportunities": "Motion & Animation",
@@ -89,6 +90,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "hyperframes-animation": "Motion & Animation",
     "hyperframes-core": "Motion & Animation",
     "remotion-best-practices": "Motion & Animation",
+    "motion-design": "Motion & Animation",
     # Presentations & Diagrams
     "slides": "Presentations & Diagrams",
     "frontend-slides-editable": "Presentations & Diagrams",
@@ -99,6 +101,8 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "codex-ppt": "Presentations & Diagrams",
     "ppt-master": "Presentations & Diagrams",
     "guizang-ppt-skill": "Presentations & Diagrams",
+    "ppt-visual": "Presentations & Diagrams",
+    "presentation-art-director": "Presentations & Diagrams",
     "gpt-taste": "Design & Frontend",
     "action-title-writing": "Presentations & Diagrams",
     "data-callout-design": "Presentations & Diagrams",
@@ -135,7 +139,11 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "capture-a-skill": "Engineering Workflow",
     "capture-a-prompt": "Engineering Workflow",
     "pm-handoff": "Engineering Workflow",
-    # Setup & Install
+    # Setup & Install (folder names after the install-* rename, plus frontmatter ids)
+    "github-skills": "Setup & Install",
+    "impeccable": "Setup & Install",
+    "open-design": "Setup & Install",
+    "work-kit": "Setup & Install",
     "install-github-skills": "Setup & Install",
     "install-impeccable": "Setup & Install",
     "install-open-design": "Setup & Install",

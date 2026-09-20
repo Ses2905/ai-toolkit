@@ -20,7 +20,7 @@ Official catalog: [cursor.com/marketplace](https://cursor.com/marketplace)
 npx impeccable install --providers=cursor --scope=global
 ```
 
-Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/install-impeccable/SKILL.md`.
+Reload Cursor, then in each product repo run `/impeccable init`. Details: `skills/impeccable/SKILL.md`.
 
 GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/awesome-cursor-skills) are lists. From this repo:
 
@@ -28,9 +28,9 @@ GitHub catalogs such as [awesome-cursor-skills](https://github.com/spencerpauly/
 ./scripts/install-catalog-skills.sh --preset design-product
 ```
 
-That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/install-github-skills/SKILL.md`.
+That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visuals, motion, presentations, product). Do not dump the whole catalog. Details: `skills/github-skills/SKILL.md`.
 
-[Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/install-open-design/SKILL.md`.
+[Open Design](https://github.com/nexu-io/open-design/releases) is a local-first desktop studio (macOS/Windows), not a Customize plugin. Install the latest GitHub Release on the user's machine, then `od mcp install cursor`. Details: `skills/open-design/SKILL.md`.
 
 [React Bits](https://github.com/DavidHDev/react-bits) is a shadcn registry of animated React components. Add `@react-bits` to the app's `components.json`, then `npx shadcn@latest add @react-bits/<Name>-TS-TW`. Details: `skills/react-bits/SKILL.md`.
 
@@ -44,6 +44,12 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [HTML PPT](https://www.skills.sh/lewislulu/html-ppt-skill/html-ppt) authors themed static HTML presentations (36 themes, layouts, presenter mode). Invoke `/html-ppt`. Distinct from `/slides` and `/frontend-slides-editable`. Details: `skills/html-ppt/SKILL.md`.
 
+[PPT Visual](https://aiuxplayground.com/skills/ppt-visual) designs PowerPoint layouts, palettes, and ASCII wireframes. Invoke `/ppt-visual`. Distinct from `/ppt-master` and `/html-ppt`. Details: `skills/ppt-visual/SKILL.md`.
+
+[Presentation Art Director](skills/presentation-art-director/SKILL.md) art-directs existing frozen 16:9 HTML decks slide by slide. Invoke `/presentation-art-director`. Distinct from `/html-ppt`. Details: `skills/presentation-art-director/SKILL.md`.
+
+[Frontend Designer](https://github.com/kozz36/frontend-designer-skill) is production CSS architecture, tokens, container queries, and WCAG. Invoke `/frontend-designer`. Distinct from `/frontend-design`. Details: `skills/frontend-designer/SKILL.md`.
+
 [Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.
 
 [Board Room Strategy](skills/board-room-strategy/SKILL.md) orchestrates 25 skills from a messy executive ask to a decision-ready board deck (framing, diagnostics, choices, execution, narrative). Invoke `/board-room-strategy` or a sibling such as `/define-governing-question`. Distinct from `/product-strategy-session`. Details: `skills/board-room-strategy/SKILL.md`.
@@ -56,6 +62,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [Design Engineering](https://aiuxplayground.com/skills/emil-design-eng) is Emil Kowalski's UI polish, component, and motion bar. Invoke `/emil-design-eng`. Distinct from `/review-animations` and `/frontend-design`. Details: `skills/emil-design-eng/SKILL.md`.
 
+[Motion Design](https://github.com/LottieFiles/motion-design-skill) is LottieFiles' universal timing, easing, and choreography bar. Invoke `/motion-design`. Distinct from `/hyperframes-animation` and `/remotion-best-practices`. Details: `skills/motion-design/SKILL.md`.
+
 [Review Animations](https://www.skills.sh/emilkowalski/skills/review-animations) reviews motion code against Emil Kowalski's craft bar. Invoke `/review-animations`. Distinct from `/review-the-diff` and `/improve-animations`. Details: `skills/review-animations/SKILL.md`.
 
 [Improve Animations](https://www.skills.sh/emilkowalski/skills/improve-animations) audits a codebase's motion, then writes self-contained plans. Invoke `/improve-animations`. Read-only on source. Distinct from `/review-animations`. Details: `skills/improve-animations/SKILL.md`.
@@ -63,6 +71,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 [Find Animation Opportunities](https://www.skills.sh/emilkowalski/skills/find-animation-opportunities) finds places that should animate and rejects the rest. Invoke `/find-animation-opportunities`. Read-only. Distinct from `/improve-animations`. Details: `skills/find-animation-opportunities/SKILL.md`.
 
 [PM Handoff](https://aiuxplayground.com/skills/pm-handoff) compacts the current conversation into a handoff document for another agent. Upstream CLI name is `handoff`. Invoke `/pm-handoff`. Distinct from `/ship-the-change`. Details: `skills/pm-handoff/SKILL.md`.
+
+[Designer Skills](https://github.com/Owl-Listener/designer-skills) is MC Dean's 111-skill design-practice collection (research, systems, UI, interaction, ops). Install with `./scripts/install-catalog-skills.sh --preset designer-skills`. Not vendored wholesale into this plugin.
 
 ## Install if you do this work
 

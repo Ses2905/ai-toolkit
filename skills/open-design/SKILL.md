@@ -7,9 +7,9 @@ description: Installs Open Design from GitHub Releases and connects it to Cursor
 
 Do not vendor the Open Design desktop app or its 100+ bundled skills into work-kit. Install the official release on the user's machine, then wire Cursor with MCP.
 
-Apache-2.0. Source: [nexu-io/open-design](https://github.com/nexu-io/open-design). Releases: [github.com/nexu-io/open-design/releases](https://github.com/nexu-io/open-design/releases). Site: [open-design.ai](https://open-design.ai). Provenance: `skills/install-open-design/SOURCE.txt`.
+Apache-2.0. Source: [nexu-io/open-design](https://github.com/nexu-io/open-design). Releases: [github.com/nexu-io/open-design/releases](https://github.com/nexu-io/open-design/releases). Site: [open-design.ai](https://open-design.ai). Provenance: `skills/open-design/SOURCE.txt`.
 
-**In this repo:** `skills/install-open-design/SKILL.md`. User install of *this* helper: `~/.cursor/skills/install-open-design/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/install-open-design`.
+**In this repo:** `skills/open-design/SKILL.md`. User install of *this* helper: `~/.cursor/skills/open-design/` via `./scripts/install-local.sh` then `./scripts/sync-user-skills.sh`. Invoke with `/install-open-design`.
 
 Open Design is a local-first macOS/Windows studio. Cursor (and other CLIs) become the design engine for prototypes, landing pages, dashboards, decks, images, and video. It is not a Cursor marketplace plugin.
 

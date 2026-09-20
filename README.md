@@ -17,12 +17,12 @@ Install it once at **user** scope. Do not copy these files into each repo.
 ```bash
 git clone https://github.com/Ses2905/cursor-skills.git
 cd cursor-skills
-chmod +x scripts/*.sh
-./scripts/install-local.sh
-./scripts/sync-user-skills.sh
+bash scripts/install-global.sh
 ```
 
-That copies the plugin to `~/.cursor/plugins/local/work-kit` and every `skills/*/SKILL.md` folder into `~/.cursor/skills/` (Cursor's skill library). Then:
+Run that **inside this kit**, not inside the app repo you are working on. If `scripts/install-global.sh` is missing, you are on `main` before this script landed — use `bash scripts/install-local.sh` and `bash scripts/sync-user-skills.sh` instead, or check out the branch that added `install-global.sh`.
+
+That copies the plugin to `~/.cursor/plugins/local/work-kit`, every `skills/*/SKILL.md` folder into `~/.cursor/skills/`, the Owl-Listener designer-skills pack, and deletes the project-local `npx skills add` leftover (`.agents/`, `skills-lock.json`). Then:
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
@@ -47,8 +47,8 @@ That copies a real folder to `~/.cursor/plugins/local/work-kit` (Cursor ignores 
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
-3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
-4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+3. Invoke skills with `/plan-the-work`, `/debug-from-evidence`, `/review-the-diff`, `/ship-the-change`, `/capture-a-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/ppt-visual`, `/presentation-art-director`, `/frontend-designer`, `/motion-design`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
+4. Slash commands: `/plan`, `/debug`, `/review-diff`, `/ship`, `/new-skill`, `/install-impeccable`, `/install-github-skills`, `/install-open-design`, `/web-design-guidelines`, `/react-bits`, `/high-end-visual-design`, `/lark-slides`, `/slides`, `/frontend-slides-editable`, `/html-ppt`, `/product-strategy-session`, `/board-room-strategy`, `/html-diagram`, `/hyperframes-animation`, `/remotion-best-practices`, `/emil-design-eng`, `/review-animations`, `/improve-animations`, `/find-animation-opportunities`, `/pm-handoff`, `/codex-ppt`, `/ppt-master`, `/guizang-ppt-skill`, `/ppt-visual`, `/presentation-art-director`, `/frontend-designer`, `/motion-design`, `/huashu-design`, `/ui-ux-pro-max`, `/rad-spacing`, `/walmart-ads-terminology`
 
 On Teams/Enterprise, admins must allow **Dashboard → Settings → Security & Identity → Marketplace and Plugins → Allow Local Plugin Imports**.
 
@@ -70,7 +70,7 @@ Pushes `main` to [Ses2905/cursor-skills](https://github.com/Ses2905/cursor-skill
 ./scripts/install-catalog-skills.sh --preset design-product
 ```
 
-That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/install-github-skills/SKILL.md`. List first with `--list`.
+That installs design-system, visual QA, motion, presentation, copy, and product-shaping skills. Details: `skills/github-skills/SKILL.md`. List first with `--list`.
 
 ## Skills database (find a skill)
 
@@ -207,6 +207,14 @@ AI UX Playground `npx skills add` dumps into `.agents/skills/` and `skills-lock.
 | Rule | `ppt-master` | Agent-decides — PowerPoint files, not HTML decks |
 | Skill | `guizang-ppt-skill` | Magazine or Swiss single-file HTML PPT with presenter view |
 | Rule | `guizang-ppt-skill` | Agent-decides — 归藏 magazine/Swiss HTML, not html-ppt templates |
+| Skill | `ppt-visual` | PowerPoint layout specs, palettes, and ASCII wireframes |
+| Rule | `ppt-visual` | Agent-decides — visual specs, not PPTX or HTML files |
+| Skill | `presentation-art-director` | Art-direct frozen HTML decks slide by slide |
+| Rule | `presentation-art-director` | Agent-decides — visual polish, not a new deck system |
+| Skill | `frontend-designer` | Production CSS architecture, tokens, container queries, WCAG |
+| Rule | `frontend-designer` | Agent-decides — design-system implementation, not visual identity |
+| Skill | `motion-design` | Universal UI motion: timing, easing, choreography, Disney principles |
+| Rule | `motion-design` | Agent-decides — motion principles, not HyperFrames or Remotion |
 | Skill | `huashu-design` | HTML studio for prototypes, decks, and motion (three directions first) |
 | Rule | `huashu-design` | Agent-decides — 花叔 HTML design, not production backends |
 | Skill | `ui-ux-pro-max` | Searchable UI/UX styles, palettes, type, charts, and stacks |

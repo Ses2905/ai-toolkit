@@ -3,7 +3,7 @@ name: install-github-skills
 description: Pull the design-product skill preset from GitHub catalogs into ~/.cursor/skills
 ---
 
-Follow `skills/install-github-skills/SKILL.md`. Default command:
+Follow `skills/github-skills/SKILL.md`. Default command:
 
 ```bash
 ./scripts/install-catalog-skills.sh --preset design-product
