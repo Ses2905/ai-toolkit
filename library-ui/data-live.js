@@ -43,6 +43,7 @@
         best_use: s.best_use || "",
         watch_outs: s.watch_outs || "",
         command: s.command || "",
+        argument_hint: s.argument_hint || "",
         date_added: s.date_added || "",
         date_updated: s.date_updated || "",
         source: { type: "local", label: "this repo" },

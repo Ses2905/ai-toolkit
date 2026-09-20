@@ -80,6 +80,35 @@
 
   // Environments the library can install/sync into (from the integrations tier).
   const platforms = () => (D.integrations || []).map(x => x.name);
+  // Destinations an asset can be made available in. Kept as a reusable array so
+  // more targets can be added without touching the availability rendering.
+  const DESTINATIONS = ["Cursor", "Claude Code", "Codex", "ChatGPT"];
+  // Best-effort docs surfaces for "where my synced assets live in each tool".
+  // These are public documentation pages, not fabricated in-app deep links.
+  const TOOL_DOCS = {
+    "Cursor": { url: "https://docs.cursor.com/context/rules", label: "Open Cursor rules" },
+    "Claude Code": { url: "https://docs.anthropic.com/en/docs/claude-code/memory", label: "Open Claude Code memory" },
+    "Codex": { url: "https://platform.openai.com/docs", label: "Open Codex docs" },
+    "ChatGPT": { url: "https://platform.openai.com/docs", label: "Open OpenAI docs" },
+  };
+  // A contained code region with a Copy button that writes to the clipboard.
+  let SNIP_SEQ = 0;
+  function codeSnippet(text, label) {
+    const id = "snip-" + (++SNIP_SEQ);
+    return `<div class="snippet"><code id="${id}" class="snipcode">${esc(text)}</code><button class="btn sm snipcopy" data-action="copy-snippet" data-target="${id}" data-label="${esc(label || "")}" title="Copy">Copy</button></div>`;
+  }
+  function copySnippet(targetId, label) {
+    const el = document.getElementById(targetId); if (!el) return;
+    const text = el.textContent || "";
+    const done = () => toast((label ? label + " " : "") + "Copied");
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done)); }
+      else fallbackCopy(text, done);
+    } catch (_e) { fallbackCopy(text, done); }
+  }
+  function fallbackCopy(text, done) {
+    try { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); } catch (_e) { done(); }
+  }
 
   /* ---------- Shell ---------- */
   function shell() {
@@ -95,7 +124,6 @@
             ${item("library", "▤", "All", ITEMS.length)}
             <div class="sub">${subs}</div>
             <div class="group">Manage</div>
-            ${item("inbox", "▧", "Inbox", (D.inbox || []).filter(x => !x.read).length)}
             ${item("discover", "◎", "Discover")}
             ${item("projects", "▦", "Projects")}
             ${item("integrations", "⇄", "Integrations")}
@@ -107,9 +135,11 @@
             <button class="btn sm hamburger" id="ham">≡</button>
             <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search your toolkit…" aria-label="Search your toolkit" /><span class="kbd">⌘K</span></label>
             <span class="spacer"></span>
+            <button class="btn iconbtn bell" id="bell" aria-label="Notifications" aria-haspopup="true" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>${bellBadgeHtml()}</button>
             <button class="btn" id="new">+ New</button>
             <button class="btn primary" id="add">+ Add to Toolkit</button>
           </div></div>
+          <div id="notif" class="notif" hidden></div>
           <div id="view"></div>
         </div>
       </div>
@@ -121,7 +151,50 @@
     document.getElementById("new").onclick = openCreate;
     document.getElementById("ham").onclick = () => document.getElementById("sidebar").classList.toggle("show");
     document.getElementById("scrim").onclick = closeAll;
+    notifOpen = false;
+    document.getElementById("bell").onclick = (e) => { e.stopPropagation(); toggleNotif(); };
   }
+
+  /* ---------- Notification center (topbar bell) ---------- */
+  let notifOpen = false;
+  const unreadInbox = () => (D.inbox || []).filter(x => !x.read);
+  const bellBadgeHtml = () => { const n = unreadInbox().length; return n ? `<span class="badge">${n > 9 ? "9+" : n}</span>` : ""; };
+  function updateBellBadge() {
+    const b = document.getElementById("bell"); if (!b) return;
+    const n = unreadInbox().length;
+    let badge = b.querySelector(".badge");
+    if (n) { const txt = n > 9 ? "9+" : String(n); if (badge) badge.textContent = txt; else b.insertAdjacentHTML("beforeend", `<span class="badge">${txt}</span>`); }
+    else if (badge) badge.remove();
+  }
+  function notifPanelContent() {
+    const un = unreadInbox();
+    const head = `<div class="notif-head"><strong>Notifications</strong>${un.length ? `<span class="notif-count">${un.length} unread</span>` : ""}</div>`;
+    const body = un.length
+      ? `<div class="notif-list">${un.map(x => `<div class="notif-item">
+          <div class="ni-top"><span class="kind" data-k="${x.detected}"><span class="g">${(KIND[x.detected] || KIND.reference).glyph}</span></span><span class="ni-name">${esc(x.name)}</span></div>
+          <div class="ni-sub">Suggested: ${esc(x.detected)} · ${esc(catLabel(x.category))} — ${esc(x.reason)}</div>
+          <div class="ni-actions"><button class="btn sm primary" data-nact="review" data-name="${esc(x.name)}">Review</button><button class="btn sm" data-nact="mark-read" data-name="${esc(x.name)}">Mark read</button><button class="btn sm danger" data-nact="delete" data-name="${esc(x.name)}">Delete</button></div>
+        </div>`).join("")}</div>`
+      : `<div class="notif-empty"><p>You're all caught up — inbox zero.</p></div>`;
+    const foot = `<div class="notif-foot"><a href="#/inbox" data-nact="viewall">View all →</a></div>`;
+    return head + body + foot;
+  }
+  function renderNotifPanel() {
+    const p = document.getElementById("notif"); if (!p) return;
+    p.innerHTML = notifPanelContent();
+    p.querySelectorAll("[data-nact]").forEach(b => b.onclick = (e) => {
+      const act = b.dataset.nact, name = b.dataset.name;
+      if (act === "viewall") { closeNotif(); return; }
+      e.preventDefault();
+      if (act === "review") { closeNotif(); return openInboxReview(name); }
+      if (act === "mark-read") { const it = (D.inbox || []).find(x => x.name === name); if (it) { it.read = true; it.filedAs = undefined; addActivity("Marked read", name); } toast(name + " marked read"); return afterNotifMutate(); }
+      if (act === "delete") { D.inbox = (D.inbox || []).filter(x => x.name !== name); addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); return afterNotifMutate(); }
+    });
+  }
+  function afterNotifMutate() { updateBellBadge(); renderNotifPanel(); if (currentRoute().startsWith("inbox")) rerenderView(); }
+  function openNotif() { notifOpen = true; const p = document.getElementById("notif"); if (!p) return; p.hidden = false; renderNotifPanel(); const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "true"); }
+  function closeNotif() { notifOpen = false; const p = document.getElementById("notif"); if (p) p.hidden = true; const b = document.getElementById("bell"); if (b) b.setAttribute("aria-expanded", "false"); }
+  function toggleNotif() { notifOpen ? closeNotif() : openNotif(); }
 
   function setActiveNav(route) {
     document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("active", a.dataset.route === route));
@@ -210,33 +283,47 @@
     else list.sort((a, b) => (b.date_updated || "").localeCompare(a.date_updated || "") || a.title.localeCompare(b.title));
     return list;
   }
-  const platInitial = p => ({ "Cursor": "Cu", "Claude Code": "Cl", "Codex": "Cx" }[p] || String(p).slice(0, 2));
+  const platInitial = p => ({ "Cursor": "Cu", "Claude Code": "Cl", "Claude": "Cl", "Codex": "Cx", "ChatGPT": "Gp" }[p] || String(p).slice(0, 2));
+  // Monochrome brand marks (inherit currentColor so they take the palette).
+  const PLAT_LOGOS = {
+    "Cursor": '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M5 2.6l14.2 8.2a.6.6 0 0 1-.13 1.1l-6 1.72 2.98 5.86a.6.6 0 0 1-.27.8l-1.9.96a.6.6 0 0 1-.8-.27l-2.98-5.86-4.63 4.2a.6.6 0 0 1-1-.45V3.1a.6.6 0 0 1 .9-.5z"/></svg>',
+    "Claude Code": '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2.5v19M2.5 12h19M5.2 5.2l13.6 13.6M18.8 5.2L5.2 18.8"/></svg>',
+    "Codex": '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><circle cx="12" cy="4.6" r="2.3"/><circle cx="12" cy="19.4" r="2.3"/><circle cx="5.6" cy="8.3" r="2.3"/><circle cx="18.4" cy="8.3" r="2.3"/><circle cx="5.6" cy="15.7" r="2.3"/><circle cx="18.4" cy="15.7" r="2.3"/></svg>',
+    "ChatGPT": '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 16.5H9l-4.5 3.5v-3.5H4A1.5 1.5 0 0 1 2.5 15V7A1.5 1.5 0 0 1 4 5.5z"/></svg>',
+  };
+  PLAT_LOGOS["Claude"] = PLAT_LOGOS["Claude Code"];
+  const platLogo = p => PLAT_LOGOS[p] || `<i class="plchar">${esc(platInitial(p))}</i>`;
+
   function installDots(i) {
     const inn = i.installed_in || [];
     const pl = platforms();
-    const title = pl.map(p => `${p}: ${inn.includes(p) ? "installed" : "not installed"}`).join(" · ");
-    return `<span class="insti" title="${esc(title)}" aria-label="${esc(title)}">${pl.map(p => `<span class="idot ${inn.includes(p) ? "on" : ""}"><i>${esc(platInitial(p))}</i></span>`).join("")}</span>`;
+    return `<span class="insti">${pl.map(p => { const on = inn.includes(p); const t = `${p}: ${on ? "installed" : "not installed"}`; return `<span class="idot ${on ? "on" : ""}" title="${esc(t)}" aria-label="${esc(t)}">${platLogo(p)}</span>`; }).join("")}</span>`;
   }
-  function card(i) {
+  function card(i, showKind = true) {
+    const top = showKind ? `<div class="top">${kindTag(i.kind)}${installDots(i)}</div>` : `<div class="top solo">${installDots(i)}</div>`;
     return `<div class="card" data-item="${esc(i.id)}">
-      <div class="top">${kindTag(i.kind)}${installDots(i)}</div>
+      ${top}
       <div class="name">${esc(i.title)}</div>
       <div class="meta"><span class="tag"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
     </div>`;
   }
-  function listRow(i) {
+  function listRow(i, showKind = true) {
     return `<div class="row" data-item="${esc(i.id)}">
       <span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
-      <span class="nmwrap"><span class="nm">${esc(i.title)}</span><span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span></span>
+      <span class="nmwrap"><span class="nm">${esc(i.title)}</span>${showKind ? `<span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span>` : ""}</span>
       <span class="sub cat"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span>
       ${installDots(i)}
       <span class="sub date">${esc(i.date_updated || "")}</span>
     </div>`;
   }
+  const listHeaderRow = () => `<div class="row lhead" aria-hidden="true"><span></span><span>Name</span><span>Domain</span><span>Availability</span><span class="date">Updated</span></div>`;
   function libResults() {
     const list = filtered();
     if (!list.length) return `<div id="libresults"><div class="empty"><h3>Nothing matches</h3><p>Try clearing a filter or searching a different term.</p></div></div>`;
-    const body = state.view === "list" ? `<div class="list">${list.map(listRow).join("")}</div>` : `<div class="grid">${list.map(card).join("")}</div>`;
+    const showKind = state.kind === "all";
+    const body = state.view === "list"
+      ? `<div class="list sticky-head">${listHeaderRow()}${list.map(i => listRow(i, showKind)).join("")}</div>`
+      : `<div class="grid">${list.map(i => card(i, showKind)).join("")}</div>`;
     return `<div id="libresults"><div class="count-line">${list.length} of ${ITEMS.length} items</div>${body}</div>`;
   }
   function viewLibrary(kind) {
@@ -280,61 +367,186 @@
   }
 
   /* ---------- Item detail (drawer) ---------- */
-  function relRow(label, names) {
+  // Skills count as "enabled" once they're active in at least one project.
+  const isEnabled = i => i.kind === "skill" && Array.isArray(i.enabled_in) && i.enabled_in.length > 0;
+  const splitBest = s => String(s || "").split(/[;·,]/).map(t => t.trim()).filter(Boolean);
+  function resolveRel(n) {
+    return byTitle[n] || byId[n] || byId["skill:" + n] || byId["reference:" + n] || byId["workflow:" + n] || byId["tool:" + n] || null;
+  }
+  function relChip(n, withKind) {
+    const it = resolveRel(n);
+    const label = it ? it.title : n;
+    const kb = (withKind && it) ? `<span class="relk kind" data-k="${it.kind}"><span class="g">${KIND[it.kind].glyph}</span></span>` : "";
+    return it ? `<a class="relchip" href="#/item/${encodeURIComponent(it.id)}">${kb}${esc(label)}</a>` : `<span class="relchip disabled">${esc(label)}</span>`;
+  }
+  function relGroup(label, names, opts) {
     if (!names || !names.length) return "";
-    const links = names.map(n => { const it = byTitle[n] || byId["skill:" + n] || byId["reference:" + n]; return it ? `<a href="#/item/${encodeURIComponent(it.id)}">${esc(it.title)}</a>` : `<a>${esc(n)}</a>`; }).join("");
-    return `<div class="field"><h4>${label}</h4><div class="rellist">${links}</div></div>`;
+    const o = opts || {};
+    const note = o.note ? `<span class="rel-note">${esc(o.note)}</span>` : "";
+    return `<div class="field relgroup"><h4>${label}${note}</h4><div class="rellist">${names.map(n => relChip(n, o.withKind)).join("")}</div></div>`;
+  }
+  function availInGroup(i) {
+    const inn = i.installed_in || [];
+    if (!inn.length) return "";
+    return `<div class="field relgroup"><h4>Available in</h4><div class="rellist">${inn.map(p => `<span class="relchip plat"><span class="rlogo">${platLogo(p)}</span>${esc(p)}</span>`).join("")}</div></div>`;
+  }
+  function bestForField(i) {
+    const parts = splitBest(i.best_use);
+    if (!parts.length) return "";
+    return `<div class="field"><h4>Best for</h4><div class="chips bestfor">${parts.map(p => `<span class="chip xs">${esc(p)}</span>`).join("")}</div></div>`;
+  }
+  // Reusable Availability list across destinations (installed ✓ or Push).
+  function availabilityPanel(i) {
+    const inn = i.installed_in || [];
+    const rows = DESTINATIONS.map(p => {
+      const on = inn.includes(p);
+      return `<div class="instrow"><span class="idot ${on ? "on" : ""}">${platLogo(p)}</span><span class="ip-name">${esc(p)}</span><span class="ip-status ${on ? "on" : ""}">${on ? "Installed" : "Not installed"}</span>${on ? `<span class="ip-check" aria-hidden="true">✓</span>` : `<button class="btn sm" data-action="push-item" data-id="${esc(i.id)}" data-plat="${esc(p)}">Push</button>`}</div>`;
+    }).join("");
+    return `<div class="field"><h4>Availability</h4><div class="instlist">${rows}</div></div>`;
+  }
+  function overviewPane(i) {
+    const desc = i.description || "";
+    const summ = i.summary || "";
+    const whatBlock = (desc && desc !== summ) ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
+    const useWhen = i.best_use ? `<div class="field"><h4>Use when</h4><p>${esc(i.best_use)}</p></div>` : "";
+    return bestForField(i) + whatBlock + useWhen + availabilityPanel(i);
+  }
+  // Render an argument hint, highlighting placeholder tokens (<...> [...] {...}).
+  function renderArgHint(hint) {
+    const parts = String(hint).split(/(\s+)/).map(tok => {
+      if (/^[<\[{].*[>\]}]$/.test(tok.trim()) && tok.trim()) return `<span class="vartoken">${esc(tok)}</span>`;
+      return esc(tok);
+    });
+    return `<div class="varline">${parts.join("")}</div>`;
+  }
+  function pathLink(i, label) {
+    return `<a class="pathlink" href="${esc(pathOf(i))}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>`;
+  }
+  function howtoPane(i) {
+    const section = (label, body) => `<div class="field"><h4>${label}</h4>${body}</div>`;
+    if (i.kind === "workflow") {
+      return section("Step sequence", `<div class="steps">${workflowStepsInner(i)}</div>`);
+    }
+    if (i.kind === "prompt") {
+      const inv = i.command ? codeSnippet("/" + i.command, "Invocation") : `<p class="muted">Model-invoked (no slash command)</p>`;
+      const vars = i.argument_hint ? section("Variables", renderArgHint(i.argument_hint)) : "";
+      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
+      return section("Invocation", inv) + vars + what + section("Full prompt", `<div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full prompt")}</div>`);
+    }
+    if (i.kind === "tool") {
+      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
+      const usedBy = relGroup("Used by", i.used_by, { withKind: true });
+      return what + usedBy + section("Capabilities", `<p class="muted empty-note">No capability metadata yet.</p>`);
+    }
+    if (i.kind === "reference") {
+      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
+      const useWhen = i.best_use ? section("Use when", `<p>${esc(i.best_use)}</p>`) : "";
+      const related = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+      return what + useWhen + relGroup("Related", related, { withKind: true, note: "Same domain" });
+    }
+    // skill (default)
+    const inv = i.command ? codeSnippet("/" + i.command, "Invocation") : `<p class="muted">Model-invoked (no slash command)</p>`;
+    const vars = i.argument_hint ? section("Variables", renderArgHint(i.argument_hint)) : "";
+    const preview = i.description || i.summary || "";
+    const instrBody = preview
+      ? `<p class="instr-preview">${esc(preview)}</p><div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full instructions")}</div>`
+      : `<div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full instructions")}</div>`;
+    return section("Invocation", inv) + vars + section("Instructions", instrBody) + section("Usage examples", `<p class="muted empty-note">No usage examples yet.</p>`);
+  }
+  function relationshipsPane(i) {
+    const worksWith = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+    const groups = [
+      relGroup("Used by", i.used_by, { withKind: true }),
+      relGroup("Works with", worksWith, { withKind: true, note: "Related by domain" }),
+      relGroup("Depends on", i.depends_on, { withKind: true }),
+      relGroup("References", i.references, { withKind: true }),
+      availInGroup(i),
+    ].filter(Boolean);
+    if (!groups.length) return `<div class="rel-empty"><p>No relationships recorded yet.</p></div>`;
+    const mapCta = `<div class="rel-mapcta"><button class="btn sm" disabled title="Coming soon">View relationship map →</button></div>`;
+    return groups.join("") + mapCta;
+  }
+  function sourcePane(i) {
+    const label = (i.source && i.source.label) || "this repo";
+    const looksRepo = /github\.com|gitlab\.com|bitbucket\.org|^https?:\/\//i.test(label);
+    const originLink = looksRepo ? ` <a class="pathlink" href="${esc(/^https?:/i.test(label) ? label : "https://" + label)}" target="_blank" rel="noopener noreferrer">Open repository ↗</a>` : "";
+    const origin = `<div class="field"><h4>Origin</h4><p>${esc(label)}${originLink}</p></div>`;
+    const localPath = `<div class="field"><h4>Local path</h4>${codeSnippet(pathOf(i), "Path")}</div>`;
+    const hist = [];
+    if (i.date_updated) hist.push(`Updated ${esc(i.date_updated)}`);
+    if (i.date_added) hist.push(`Added ${esc(i.date_added)}`);
+    const history = hist.length ? `<div class="field"><h4>History</h4><p>${hist.join(" · ")}</p></div>` : "";
+    const advRows = [
+      `Id: <span class="mono">${esc(i.id)}</span>`,
+      `Kind: ${esc(i.kind)}`,
+      `Domain: ${esc(catLabel(i.category))}`,
+      i.status ? `Status: ${esc(i.status)}` : "",
+      i.command ? `Invocation: <span class="mono">/${esc(i.command)}</span>` : "",
+    ].filter(Boolean).map(r => `<p>${r}</p>`).join("");
+    const advanced = `<details class="advanced"><summary>Advanced · technical details</summary><div class="adv-body">${advRows}</div></details>`;
+    return origin + localPath + history + advanced;
   }
   function openItem(id) {
     const i = byId[id]; if (!i) { location.hash = "#/library"; return; }
     const dr = document.getElementById("drawer");
-    const isWf = i.kind === "workflow";
-    const overview = (isWf ? workflowSteps(i) : `
-      <div class="field"><h4>What it is</h4><p>${esc(i.description || i.summary)}</p></div>
-      ${i.best_use ? `<div class="field"><h4>Activate when</h4><p>${esc(i.best_use)}</p></div>` : ""}
-      ${relRow("Used by", i.used_by)}
-      ${relRow("Depends on", i.depends_on)}
-      ${relRow("References", i.references)}
-      ${relRow("Enabled in", i.enabled_in)}`) + installPanel(i);
-    const related = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 4).map(x => x.title);
-    const rels = `<div class="relmap">
-        ${i.depends_on && i.depends_on.length ? `<div class="up">${i.depends_on.map(esc).join(" · ")}<div class="arr">▲</div></div>` : ""}
-        <div class="center">${esc(i.title)}</div>
-        <div class="faint">${related.length ? "related · " + related.map(esc).join(" · ") : "no direct relations yet"}</div>
-        ${i.used_by && i.used_by.length ? `<div class="down"><div class="arr">▼</div>${i.used_by.map(esc).join(" · ")}</div>` : ""}
-      </div><p class="faint" style="margin-top:10px">USES · USED BY · DEPENDS ON · REFERENCES · ENABLED IN</p>`;
-    const source = `
-      <div class="field"><h4>Source</h4><p>${esc(i.source && i.source.label || "this repo")}</p></div>
-      <div class="field"><h4>Updated</h4><p>${esc(i.date_updated)} · added ${esc(i.date_added)}</p></div>
-      <div class="field"><h4>Invocation</h4><p>${i.command ? "<span class='mono'>/" + esc(i.command) + "</span>" : "model-invoked"}</p></div>
-      <details class="advanced"><summary>Advanced · technical details</summary><div class="adv-body">
-        <p>Path: <span class="mono">${esc(pathOf(i))}</span></p>
-        <p>Kind: ${esc(i.kind)} · Domain: ${esc(catLabel(i.category))} · Status: ${esc(i.status)}</p>
-      </div></details>`;
+    const enabled = isEnabled(i);
+    const enableCtrl = enabled
+      ? `<span class="enabled-state" title="Active in ${esc((i.enabled_in || []).join(", "))}">Enabled ✓</span>`
+      : `<button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button>`;
+    const metaParts = [];
+    if (enabled) metaParts.push("Enabled");
+    if (i.date_updated) metaParts.push("Updated " + i.date_updated);
+    const metaLine = metaParts.length ? `<div class="dmeta">${esc(metaParts.join(" · "))}</div>` : "";
     dr.innerHTML = `
       <div class="dhead">
         <div class="crumb">Library / ${KIND[i.kind].plural} / ${esc(i.title)}</div>
         ${kindTag(i.kind)}
         <h2>${esc(i.title)}</h2>
         <p class="muted">${esc(i.summary || i.description)}</p>
-        <div class="dactions"><button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn" data-action="rename-item" data-id="${esc(i.id)}">Rename</button><button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button><button class="btn" id="drclose">Close</button></div>
+        ${metaLine}
+        <div class="dactions">
+          <div class="dactions-l">
+            ${enableCtrl}
+            <button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button>
+            <div class="overflow">
+              <button class="btn iconbtn" id="dmore" aria-haspopup="true" aria-expanded="false" aria-label="More actions">•••</button>
+              <div class="ovmenu" id="ovmenu" hidden>
+                <button data-action="rename-item" data-id="${esc(i.id)}">Rename</button>
+                <button data-action="duplicate-item" data-id="${esc(i.id)}">Duplicate</button>
+                <button data-action="export-item" data-id="${esc(i.id)}">Export</button>
+                <button class="danger" data-action="delete-item" data-id="${esc(i.id)}">Delete</button>
+              </div>
+            </div>
+          </div>
+          <button class="iconx" id="drclose" aria-label="Close" title="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
       </div>
       <div class="dtabs">
         <button data-dt="ov" class="active">Overview</button>
+        <button data-dt="howto">How to Use</button>
         <button data-dt="rel">Relationships</button>
         <button data-dt="src">Source</button>
       </div>
-      <div class="dbody" id="dbody">${overview}</div>`;
+      <div class="dbody" id="dbody"></div>`;
     dr.setAttribute("aria-hidden", "false");
     dr.classList.add("show"); document.getElementById("scrim").classList.add("show");
-    const panes = { ov: overview, rel: rels, src: source };
+    const panes = { ov: overviewPane, howto: howtoPane, rel: relationshipsPane, src: sourcePane };
+    const wireActions = () => dr.querySelectorAll(".dbody [data-action]").forEach(x => x.onclick = (e) => { e.stopPropagation(); handleAction(x.dataset.action, x.dataset); });
+    const showPane = key => { document.getElementById("dbody").innerHTML = panes[key](i); wireActions(); };
     dr.querySelectorAll("[data-dt]").forEach(b => b.onclick = () => {
       dr.querySelectorAll("[data-dt]").forEach(x => x.classList.remove("active")); b.classList.add("active");
-      document.getElementById("dbody").innerHTML = panes[b.dataset.dt];
-      dr.querySelectorAll("[data-action]").forEach(x => x.onclick = () => handleAction(x.dataset.action, x.dataset));
+      showPane(b.dataset.dt);
     });
+    showPane("ov");
+    // Overflow menu (Rename / Duplicate / Export / Delete)
+    const more = dr.querySelector("#dmore"), menu = dr.querySelector("#ovmenu");
+    const closeMenu = () => { menu.hidden = true; more.setAttribute("aria-expanded", "false"); };
+    more.onclick = (e) => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; more.setAttribute("aria-expanded", String(open)); };
+    menu.querySelectorAll("[data-action]").forEach(x => x.onclick = (e) => { e.stopPropagation(); closeMenu(); handleAction(x.dataset.action, x.dataset); });
+    dr.addEventListener("click", e => { if (!e.target.closest(".overflow")) closeMenu(); });
     document.getElementById("drclose").onclick = () => history.length > 1 ? history.back() : (location.hash = "#/library");
-    dr.querySelectorAll("[data-action]").forEach(b => b.onclick = () => handleAction(b.dataset.action, b.dataset));
+    // Header actions (Enable/Use, Edit) live outside .dbody.
+    dr.querySelectorAll(".dactions-l > [data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
   }
   function pathOf(i) {
     if (i.kind === "skill") return `skills/${i.name}/SKILL.md`;
@@ -343,12 +555,11 @@
     if (i.kind === "reference") return `references/${i.name}.md`;
     return `tools/${i.name}/`;
   }
-  function workflowSteps(w) {
-    const steps = (w.steps || []).map((s, idx) => {
+  function workflowStepsInner(w) {
+    return (w.steps || []).map((s, idx) => {
       const uses = (s.uses || []).map(n => { const it = byTitle[byTitleKey(n)] || byId["skill:" + n]; return `<a class="tag" href="#/item/${encodeURIComponent(it ? it.id : "skill:" + n)}">${esc(it ? it.title : n)}</a>`; }).join("");
       return `${idx ? '<div class="stepconn"></div>' : ""}<div class="step"><div class="sn"><span class="num">${idx + 1}</span><strong>${esc(s.name)}</strong></div>${uses ? `<div class="uses">${uses}</div>` : ""}</div>`;
     }).join("");
-    return `<div class="field"><h4>What it is</h4><p>${esc(w.description || w.summary)}</p></div><div class="field"><h4>Steps</h4><div class="steps">${steps}</div></div>`;
   }
   function byTitleKey(name) { const it = byId["skill:" + name]; return it ? it.title : name; }
 
@@ -391,10 +602,14 @@
     const c = D.counts || {};
     const byKind = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${KIND[k].plural.toLowerCase()}`).join(" · ");
     const total = ITEMS.length;
-    const rows = (D.integrations || []).map(x => `<div class="row"><span class="kind"><span class="g">⇄</span></span>
+    const rows = (D.integrations || []).map(x => {
+      const doc = TOOL_DOCS[x.name];
+      const openLink = (x.status === "connected" && doc) ? `<a class="btn sm openin" href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer" title="${esc(doc.label)} (opens in a new tab)">${esc(doc.label)} ↗</a>` : "";
+      return `<div class="row"><span class="kind integ-logo"><span class="g">${platLogo(x.name)}</span></span>
       <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
-      <span>${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`).join("");
+      <span class="integ-actions">${openLink}${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`;
+    }).join("");
     return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your toolkit across AI coding environments. The toolkit is the source of truth; each agent syncs from it — skills, prompts, workflows, tools + references.</p></div><div class="list">${rows}</div></div>`;
   }
   function viewInbox() {
@@ -442,7 +657,7 @@
   function overlay(html) { document.getElementById("overlay").innerHTML = html; }
   function closeOverlay() { document.getElementById("overlay").innerHTML = ""; }
   function closeDrawerOnly() { const dr = document.getElementById("drawer"); if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); } document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show"); }
-  function closeAll() { closeDrawerOnly(); closeOverlay(); }
+  function closeAll() { closeDrawerOnly(); closeOverlay(); closeNotif(); }
 
   const add = { step: "source", src: "github" };
   function openAdd() { add.step = "source"; renderAdd(); }
@@ -565,6 +780,10 @@
       case "unread-inbox": return setInboxRead(ds.name, false);
       case "delete-inbox": return deleteInbox(ds.name);
       case "change-home": return openChangeHome();
+      case "copy-snippet": return copySnippet(ds.target, ds.label);
+      case "duplicate-item": return toast("Duplicate isn't wired up in this prototype");
+      case "export-item": return toast("Export isn't wired up in this prototype");
+      case "delete-item": return toast("Delete isn't wired up in this prototype");
       default: return undefined;
     }
   }
@@ -594,15 +813,6 @@
     ov.querySelector("#th-home").focus();
   }
 
-  /* Installed-in panel (drawer) + push to an environment it's not in yet. */
-  function installPanel(i) {
-    const inn = i.installed_in || [];
-    const rows = platforms().map(p => {
-      const on = inn.includes(p);
-      return `<div class="instrow"><span class="idot ${on ? "on" : ""}"><i>${esc(platInitial(p))}</i></span><span class="ip-name">${esc(p)}</span><span class="ip-status ${on ? "on" : ""}">${on ? "Installed" : "Not installed"}</span>${on ? "" : `<button class="btn sm" data-action="push-item" data-id="${esc(i.id)}" data-plat="${esc(p)}">Push</button>`}</div>`;
-    }).join("");
-    return `<div class="field"><h4>Installed in</h4><div class="instlist">${rows}</div></div>`;
-  }
   function pushItem(id, plat) {
     const it = byId[id]; if (!it) return;
     it.installed_in = it.installed_in || [];
@@ -754,6 +964,11 @@
     else if (e.key === "Escape") closeAll();
   });
   window.addEventListener("hashchange", router);
+  document.addEventListener("click", e => {
+    if (!notifOpen) return;
+    if (e.target.closest("#notif") || e.target.closest("#bell")) return;
+    closeNotif();
+  });
 
   (async function boot() {
     await loadLiveData(); // falls back to the bundled snapshot on failure
