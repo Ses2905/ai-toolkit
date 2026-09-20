@@ -133,6 +133,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "review-the-diff": "Engineering Workflow",
     "ship-the-change": "Engineering Workflow",
     "capture-a-skill": "Engineering Workflow",
+    "capture-a-prompt": "Engineering Workflow",
     "pm-handoff": "Engineering Workflow",
     # Setup & Install
     "install-github-skills": "Setup & Install",
