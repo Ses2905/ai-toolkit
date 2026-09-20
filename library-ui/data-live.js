@@ -125,9 +125,9 @@
     }
 
     const tools = [
-      ["ai-lib", "ai-lib Installer", "agent-tools", "Classifies and routes external sources into the library."],
-      ["skills-db", "Skills Catalog", "agent-tools", "Generates the searchable Library index."],
-      ["library-add", "Add to Library", "agent-tools", "The single add-path (/add-to-library)."],
+      ["ai-lib", "ai-lib Installer", "Setup & Install", "Classifies and routes external sources into the toolkit."],
+      ["skills-db", "Skills Catalog", "Engineering Workflow", "Generates the searchable toolkit index."],
+      ["library-add", "Add to Library", "Setup & Install", "The single add-path (/add-to-library)."],
     ];
     for (const [nm, tt, c, d] of tools) {
       items.push({

@@ -221,8 +221,10 @@ select, option, input, textarea { font-family: var(--ui); }
 select.f { font-size: 13px; }
 .filterbar { gap: 12px; row-gap: 10px; }
 
-/* Clean list row: name + kind pill · category · install · updated (desc lives in the flyout) */
-.list .row { grid-template-columns: 22px minmax(0, 1.7fr) 1fr auto auto; }
+/* Clean list row: name + kind pill · category · install · updated (desc lives in the flyout).
+   A dedicated min-width date track + extra left gap keeps the availability/install
+   column from crowding the Updated date. */
+.list .row { grid-template-columns: 22px minmax(0, 1.7fr) 1fr auto minmax(96px, max-content); column-gap: 12px; }
 .nmwrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .nmwrap .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpill { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); flex: none;
@@ -230,7 +232,7 @@ select.f { font-size: 13px; }
 .kpill[data-k="prompt"] { color: #6b4d1a; } .kpill[data-k="workflow"] { color: #1d5b73; }
 .kpill[data-k="reference"] { color: #4a5568; } .kpill[data-k="tool"] { color: #5a3a7a; }
 .list .row .cat { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.list .row .date { text-align: right; white-space: nowrap; }
+.list .row .date { text-align: right; white-space: nowrap; padding-left: 20px; }
 
 /* Install indicator: one dot per environment (filled = installed) */
 .insti { display: inline-flex; gap: 4px; }
@@ -275,6 +277,19 @@ select.f { font-size: 13px; }
 .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; margin-top: 30px; align-items: start; }
 .home-grid .section { margin-top: 0; }
 @media (max-width: 860px) { .home-grid { grid-template-columns: 1fr; } }
+.section .lead { margin: -4px 0 12px; }
+
+/* Discover-more: curated outbound resource links */
+.reslist { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); overflow: hidden; }
+.res-row { display: grid; grid-template-columns: 22px 1fr; align-items: center; gap: 12px; padding: 12px 15px; border-top: 1px solid var(--line);
+  color: var(--ink); transition: background .15s var(--ease); }
+.res-row:first-child { border-top: 0; }
+.res-row:hover { background: var(--surface-2); }
+.res-ic { text-align: center; color: var(--faint); }
+.res-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.res-name { font-weight: 650; display: inline-flex; align-items: center; gap: 7px; }
+.res-name .ext { color: var(--accent); font-weight: 700; font-size: 13px; }
+.res-sub { color: var(--muted); font-size: 12.5px; }
 
 /* Inbox rows: actions cluster + read state */
 .list .row.inbox-row { grid-template-columns: 22px 1fr auto; align-items: center; }
@@ -347,6 +362,9 @@ select.f { font-size: 13px; }
 .ovmenu button:hover { background: var(--surface-2); }
 .ovmenu button.danger { color: var(--danger); }
 .ovmenu button.danger:hover { background: var(--danger-wash); }
+.ovmenu-right { left: auto; right: 0; min-width: 264px; }
+.ovmenu .mi-sub { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 1px; }
+.att-actions { margin-left: auto; display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 .iconx { border: 1px solid transparent; background: transparent; color: var(--muted); border-radius: var(--r-sm);
   width: 34px; height: 34px; display: grid; place-items: center; flex: none; }
 .iconx:hover { background: var(--surface-2); color: var(--ink); }
