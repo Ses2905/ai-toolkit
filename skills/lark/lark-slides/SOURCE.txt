@@ -1,0 +1,7 @@
+Source: https://www.skills.sh/larksuite/cli/lark-slides
+Repo: https://github.com/larksuite/cli
+Path: skills/lark-slides
+Pinned: cb5a3d704379552dc61e37898e5f74798783190d (v1.0.96)
+License: MIT (Lark Technologies Pte. Ltd.)
+CLI: npm i -g @larksuite/cli  →  lark-cli
+Depends on: skills/lark-shared (auth, identity, high-risk writes)
