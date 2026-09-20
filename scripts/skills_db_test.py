@@ -168,6 +168,9 @@ class RepoScanTest(unittest.TestCase):
         cases = {
             "apple-design": "Design & Frontend",
             "emil-design-eng": "Design & Frontend",
+            "frontend-designer": "Design & Frontend",
+            "motion-design": "Motion & Animation",
+            "ppt-visual": "Presentations & Diagrams",
             "product-strategy-session": "Product & Discovery",
             "board-room-strategy": "Product & Discovery",
             "walmart-ads-terminology": "Product & Discovery",

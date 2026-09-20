@@ -109,6 +109,31 @@
       "ref": "main",
       "root": "",
       "license": "MIT"
+    },
+    "claude-office-skills": {
+      "git": "https://github.com/claude-office-skills/skills.git",
+      "ref": "9c4c7d5cd2813a8936bf2c9fdb174ea883b85a11",
+      "root": "",
+      "license": "MIT"
+    },
+    "owl-listener-designer-skills": {
+      "git": "https://github.com/Owl-Listener/designer-skills.git",
+      "ref": "9a6930cf84a822eb458624bd11c61aac5bbdf224",
+      "root": "",
+      "nested_skills": "*/skills/*",
+      "license": "MIT"
+    },
+    "kozz36-frontend-designer": {
+      "git": "https://github.com/kozz36/frontend-designer-skill.git",
+      "ref": "a1ca0df80260fc93dca89501802972eae49c29d4",
+      "root": "skills",
+      "license": "Apache-2.0"
+    },
+    "lottiefiles-motion-design": {
+      "git": "https://github.com/LottieFiles/motion-design-skill.git",
+      "ref": "f9a8a041b85185ee4881b3471d3415e939aac772",
+      "root": "skills",
+      "license": "MIT"
     }
   },
   "presets": {
@@ -626,6 +651,37 @@
         {
           "source": "nextlevelbuilder-ui-ux-pro-max",
           "path": "ui-ux-pro-max"
+        }
+      ]
+    },
+    "ppt-visual": {
+      "description": "PowerPoint layout specs, palettes, and ASCII wireframes (claude-office-skills/skills, MIT).",
+      "skills": [
+        {
+          "source": "claude-office-skills",
+          "path": "ppt-visual"
+        }
+      ]
+    },
+    "designer-skills": {
+      "description": "Owl-Listener design-practice collection (111 skills across 9 plugins, MIT).",
+      "expand": "owl-listener-designer-skills"
+    },
+    "frontend-designer": {
+      "description": "Framework-agnostic frontend design systems: CSS layers, OKLCH tokens, container queries, WCAG 2.2 (kozz36/frontend-designer-skill, Apache-2.0).",
+      "skills": [
+        {
+          "source": "kozz36-frontend-designer",
+          "path": "frontend-designer"
+        }
+      ]
+    },
+    "motion-design": {
+      "description": "Universal motion principles: timing, easing, choreography, Disney principles for UI (LottieFiles/motion-design-skill, MIT).",
+      "skills": [
+        {
+          "source": "lottiefiles-motion-design",
+          "path": "motion-design"
         }
       ]
     }

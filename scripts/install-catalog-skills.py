@@ -58,6 +58,14 @@ def skill_entries(catalog: dict, preset_name: str, cache: Path) -> list[tuple[st
         spec = catalog["sources"][source_id]
         repo = sync_repo(cache, source_id, spec)
         root = repo / spec.get("root", "")
+        nested = spec.get("nested_skills")
+        if nested:
+            glob_pat = nested if isinstance(nested, str) else "*/skills/*"
+            for skill_dir in sorted(
+                p for p in root.glob(glob_pat) if p.is_dir() and (p / "SKILL.md").is_file()
+            ):
+                entries.append((skill_dir.name, skill_dir))
+            return entries
         for skill_dir in sorted(p for p in root.iterdir() if p.is_dir() and (p / "SKILL.md").is_file()):
             entries.append((skill_dir.name, skill_dir))
         return entries

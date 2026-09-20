@@ -98,6 +98,18 @@ Sources and the full mapping live in [catalog/presets.json](../../catalog/preset
 
 # UI/UX intelligence database (nextlevelbuilder ui-ux-pro-max, not the slides sibling)
 ./scripts/install-catalog-skills.sh --preset ui-ux-pro-max
+
+# PowerPoint layout specs (claude-office-skills ppt-visual)
+./scripts/install-catalog-skills.sh --preset ppt-visual
+
+# Owl-Listener design-practice collection (111 nested plugin skills)
+./scripts/install-catalog-skills.sh --preset designer-skills
+
+# Production frontend design systems (kozz36/frontend-designer-skill)
+./scripts/install-catalog-skills.sh --preset frontend-designer
+
+# LottieFiles universal motion principles
+./scripts/install-catalog-skills.sh --preset motion-design
 ```
 
 Installs go to `~/.cursor/skills/<skill-name>/` unless `--dest` is set.
@@ -125,3 +137,5 @@ Copy into that repo's `.cursor/skills/<skill-name>/` and commit it. Do not vendo
 ## Do not commit Playground dumps
 
 `npx skills add` from [AI UX Playground](https://aiuxplayground.com) copies into `.agents/skills/` and writes `skills-lock.json`. That is a local leftover, not the plugin catalog. Work Kit vendors chosen skills under `skills/<name>/`. `.agents/` and `skills-lock.json` are gitignored. Do not keep a second copy of taste (`gpt-taste`) next to `skills/taste-skill`.
+
+Owl-Listener [designer-skills](https://github.com/Owl-Listener/designer-skills) is a 111-skill nested plugin collection (`*/skills/*/SKILL.md`). Install it with `--preset designer-skills` into `~/.cursor/skills/`; do not dump the whole pack into this plugin's `skills/`. Unique single-skill pins from other catalogs (`ppt-visual`, `frontend-designer`, `motion-design`) stay vendored here.

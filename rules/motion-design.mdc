@@ -1,0 +1,7 @@
+---
+description: Universal motion design principles — timing, easing, choreography, Disney principles adapted for UI. Use for motion-design, micro-interactions, or animation personality.
+alwaysApply: false
+globs: "**/*.{css,scss,tsx,jsx,vue,svelte,js,ts}"
+---
+
+motion-design: Follow `skills/motion-design/SKILL.md`. Apply the three pillars before picking a runtime. Distinct from `hyperframes-animation` (HyperFrames/GSAP), `remotion-best-practices` (Remotion video), `review-animations` (motion diffs), and `emil-design-eng` (UI craft). Respect reduced-motion. Do not apply to backend-only work.
