@@ -422,6 +422,12 @@ select.f { font-size: 13px; }
   .page { padding: 20px 16px 64px; }
   .topbar-inner { padding: 10px 12px; gap: 8px; }
 
+  /* The kind/view pill groups can exceed the viewport; let them scroll inside
+     their track rather than widening the page. */
+  .filterbar { max-width: 100%; }
+  .tabs { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+
   /* Topbar: shrink the search, drop the ⌘K hint, and reduce "+ Add" to "+". */
   .topsearch { min-width: 0; padding: 8px 10px; }
   .topsearch .kbd { display: none; }
