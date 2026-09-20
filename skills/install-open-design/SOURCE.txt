@@ -1,6 +1,0 @@
-Source: https://github.com/nexu-io/open-design/releases
-Repo: https://github.com/nexu-io/open-design
-Latest checked: open-design-v0.22.2 (73953213a6fec2c8092e8e77d229a3074aa828a9)
-License: Apache-2.0
-Cursor connect: od mcp install cursor
-Download page: https://open-design.ai/download/
