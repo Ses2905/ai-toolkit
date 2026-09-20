@@ -59,6 +59,14 @@
     store.renames[origId] = { title };
     persistStore();
   }
+  // Custom (user-added) integrations: persisted as definitions so they can be
+  // re-added to D.integrations after every catalog rebuild. Their connect/sync
+  // state still flows through store.integrations (keyed by name) like built-ins.
+  function persistCustomIntegration(def) {
+    store.customIntegrations = store.customIntegrations || [];
+    const exists = store.customIntegrations.some(c => c && c.name && c.name.toLowerCase() === def.name.toLowerCase());
+    if (!exists) { store.customIntegrations.push(def); persistStore(); }
+  }
   // Re-apply persisted user mutations onto a freshly built D, merging by stable
   // ids/names so it stays correct if the catalog changes underneath us.
   function applyPersistedState() {
@@ -68,6 +76,20 @@
       for (const origId of Object.keys(store.renames)) {
         const r = store.renames[origId];
         if (r && r.title) applyRename(origId, r.title);
+      }
+    }
+    // Re-add user-defined integrations first, so the status merge below (and
+    // platforms() everywhere) treats them exactly like the built-ins.
+    if (Array.isArray(store.customIntegrations)) {
+      D.integrations = D.integrations || [];
+      for (const def of store.customIntegrations) {
+        if (!def || !def.name) continue;
+        if (D.integrations.some(x => x.name.toLowerCase() === def.name.toLowerCase())) continue;
+        D.integrations.push({
+          id: def.id || kebab(def.name) || def.name, name: def.name,
+          status: "not configured", count: 0, last_synced: null,
+          custom: true, docUrl: def.docUrl || "", icon: def.icon || "",
+        });
       }
     }
     if (store.integrations && Array.isArray(D.integrations)) {
@@ -221,7 +243,7 @@
     document.getElementById("app").innerHTML = `
       <div class="shell">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v11"/><path d="M12 8a4 4 0 0 0-4-4H3.6A1.6 1.6 0 0 0 2 5.6V17a1.6 1.6 0 0 0 1.6 1.6H8a3.4 3.4 0 0 1 4 1.8"/><path d="M12 8a4 4 0 0 1 4-4h4.4A1.6 1.6 0 0 1 22 5.6V17a1.6 1.6 0 0 1-1.6 1.6H16a3.4 3.4 0 0 0-4 1.8"/><path d="M18.4 1l.55 1.45L20.4 3l-1.45.55L18.4 5l-.55-1.45L16.4 3l1.45-.55z" fill="currentColor" stroke="none"/></svg></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
+          <div class="brand"><span class="mark" aria-hidden="true"><img class="brandimg" src="icons/brand-chatbot.png" alt="" /></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
           <nav class="nav">
             ${item("home", "⌂", "Home")}
             <div class="group">AI Toolkit</div>
@@ -411,15 +433,27 @@
     return list;
   }
   const platInitial = p => ({ "Cursor": "Cu", "Claude Code": "Cl", "Claude": "Cl", "Codex": "Cx", "ChatGPT": "Gp" }[p] || String(p).slice(0, 2));
-  // Monochrome brand marks (inherit currentColor so they take the palette).
-  const PLAT_LOGOS = {
-    "Cursor": '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M5 2.6l14.2 8.2a.6.6 0 0 1-.13 1.1l-6 1.72 2.98 5.86a.6.6 0 0 1-.27.8l-1.9.96a.6.6 0 0 1-.8-.27l-2.98-5.86-4.63 4.2a.6.6 0 0 1-1-.45V3.1a.6.6 0 0 1 .9-.5z"/></svg>',
-    "Claude Code": '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2.5v19M2.5 12h19M5.2 5.2l13.6 13.6M18.8 5.2L5.2 18.8"/></svg>',
-    "Codex": '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><circle cx="12" cy="4.6" r="2.3"/><circle cx="12" cy="19.4" r="2.3"/><circle cx="5.6" cy="8.3" r="2.3"/><circle cx="18.4" cy="8.3" r="2.3"/><circle cx="5.6" cy="15.7" r="2.3"/><circle cx="18.4" cy="15.7" r="2.3"/></svg>',
-    "ChatGPT": '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 16.5H9l-4.5 3.5v-3.5H4A1.5 1.5 0 0 1 2.5 15V7A1.5 1.5 0 0 1 4 5.5z"/></svg>',
+  // Real, full-color brand marks (committed PNGs served as static assets so the
+  // relative paths resolve at the Pages subpath). Rendered as-is — no monochrome
+  // filter — since each carries its own brand color.
+  const PLAT_IMG = {
+    "Cursor": "cursor.png",
+    "Claude Code": "claude.png",
+    "Claude": "claude.png",
+    "Codex": "openai.png",
+    "ChatGPT": "openai.png",
+    "Lovable": "lovable.png",
+    "GitHub": "github.png",
   };
-  PLAT_LOGOS["Claude"] = PLAT_LOGOS["Claude Code"];
-  const platLogo = p => PLAT_LOGOS[p] || `<i class="plchar">${esc(platInitial(p))}</i>`;
+  // A custom (user-added) integration can carry its own bundled-icon filename.
+  const customIconFile = p => { const it = (D.integrations || []).find(x => x.name === p); return it && it.icon ? it.icon : null; };
+  const iconImg = (p, file) => `<img class="plogo" src="icons/${file}" alt="${esc(p)}" title="${esc(p)}" loading="lazy" />`;
+  // Resolve a platform/integration name to its brand logo: real PNG when we have
+  // one (built-in or a custom integration's chosen icon), else a clean monogram.
+  const platLogo = p => {
+    const file = PLAT_IMG[p] || customIconFile(p);
+    return file ? iconImg(p, file) : `<i class="plchar" title="${esc(p)}">${esc(platInitial(p))}</i>`;
+  };
 
   function installDots(i) {
     const inn = i.installed_in || [];
@@ -745,7 +779,7 @@
       <label class="topsearch" style="max-width:none"><span>⌕</span><input placeholder="Search skills, prompts, workflows + tools to add…"/></label>
       <div class="section"><h2>Browse by domain</h2><div class="chips">${colls}</div></div>
       <div class="section"><h2>From sources</h2><div class="list">
-        <div class="row" data-add><span class="kind" data-k="tool"><span class="g">⚙</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected + routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
+        <div class="row" data-add><span class="kind integ-logo"><span class="g">${iconImg("GitHub", "github.png")}</span></span><span><div class="nm">GitHub</div><div class="sub">Install a repo by URL — inspected + routed automatically</div></span><span class="sub">source</span><span class="btn sm">Add</span></div>
         <div class="row"><span class="kind"><span class="g">◎</span></span><span><div class="nm">Community catalogs</div><div class="sub">Curated catalogs (coming soon)</div></span><span class="sub">registry</span><span class="sub faint">soon</span></div>
       </div></div>
       <div class="empty" style="margin-top:24px"><h3>Discovery feed coming soon</h3><p>When registries are connected, recommended skills, prompts and workflows will appear here.</p><button class="btn primary" data-add>+ Add from GitHub</button></div>
@@ -777,14 +811,14 @@
     const byKind = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${KIND[k].plural.toLowerCase()}`).join(" · ");
     const total = ITEMS.length;
     const rows = (D.integrations || []).map(x => {
-      const doc = TOOL_DOCS[x.name];
+      const doc = TOOL_DOCS[x.name] || (x.docUrl ? { url: x.docUrl, label: "Docs" } : null);
       const openLink = (x.status === "connected" && doc) ? `<a class="btn sm openin" href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer" title="${esc(doc.label)} (opens in a new tab)">${esc(doc.label)} ↗</a>` : "";
       return `<div class="row"><span class="kind integ-logo"><span class="g">${platLogo(x.name)}</span></span>
-      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : "Not configured"}</div></span>
+      <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : (x.custom ? "Custom integration · not configured" : "Not configured")}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
       <span class="integ-actions">${openLink}${x.status === "connected" ? `<button class="btn sm" data-action="sync-integration" data-name="${esc(x.name)}">Sync</button>` : `<button class="btn sm primary" data-action="setup-integration" data-name="${esc(x.name)}">Set up</button>`}</span></div>`;
     }).join("");
-    return `<div class="page"><div class="page-head"><h1>Integrations</h1><p>Use your toolkit across AI coding environments. The toolkit is the source of truth; each agent syncs from it — skills, prompts, workflows, tools + references.</p></div><div class="list">${rows}</div></div>`;
+    return `<div class="page"><div class="page-head page-head-row"><div><h1>Integrations</h1><p>Use your toolkit across AI coding environments. The toolkit is the source of truth; each agent syncs from it — skills, prompts, workflows, tools + references.</p></div><button class="btn primary" data-action="add-integration">+ Add integration</button></div><div class="list">${rows}</div></div>`;
   }
   function viewInbox() {
     const all = D.inbox || [];
@@ -874,7 +908,7 @@
     let body = "", foot = "", title = "Add to Toolkit";
     if (add.step === "source") {
       body = `<p class="muted">Where is it coming from?</p><div class="srcgrid">
-        ${[["github", "GitHub URL", "Install a public repo"], ["zip", "Upload ZIP", "A downloaded archive"], ["local", "Local File / Folder", "Something on disk"], ["paste", "Paste Content", "A prompt or skill you copied"]].map(([k, t, d]) => `<button class="srcopt" data-src="${k}"><div class="t">${t}</div><div class="d">${d}</div></button>`).join("")}
+        ${[["github", "GitHub URL", "Install a public repo"], ["zip", "Upload ZIP", "A downloaded archive"], ["local", "Local File / Folder", "Something on disk"], ["paste", "Paste Content", "A prompt or skill you copied"]].map(([k, t, d]) => `<button class="srcopt" data-src="${k}">${k === "github" ? `<span class="srcopt-ic">${iconImg("GitHub", "github.png")}</span>` : ""}<div class="t">${t}</div><div class="d">${d}</div></button>`).join("")}
       </div>`;
       foot = `<button class="btn" data-x>Cancel</button><span></span>`;
     } else if (add.step === "input") {
@@ -977,6 +1011,7 @@
     switch (action) {
       case "sync-integration": return syncIntegration(ds.name);
       case "setup-integration": return setupIntegration(ds.name);
+      case "add-integration": return openAddIntegration();
       case "review-inbox": return openInboxReview(ds.name);
       case "review-issue": return openIssueReview(+ds.i);
       case "resolve-issue": return resolveIssue(+ds.i);
@@ -1102,6 +1137,45 @@
     it.status = "connected"; it.count = ITEMS.filter(x => x.kind === "skill").length; it.last_synced = "just now";
     persistIntegration(name, { status: "connected", count: it.count, last_synced: it.last_synced });
     addActivity("Connected", name); toast(name + " connected"); rerenderView();
+  }
+  // Register a NEW AI tool as an integration/push destination. Persists a
+  // definition to the state store so it survives reloads (re-added by
+  // applyPersistedState). Bundled icons are optional; default is a monogram.
+  const CUSTOM_ICON_CHOICES = [
+    ["", "Generic (initials)"],
+    ["cursor.png", "Cursor"],
+    ["claude.png", "Claude"],
+    ["openai.png", "OpenAI / Codex"],
+    ["lovable.png", "Lovable"],
+    ["github.png", "GitHub"],
+  ];
+  function openAddIntegration() {
+    const iconOpts = CUSTOM_ICON_CHOICES.map(([f, label]) => `<option value="${esc(f)}">${esc(label)}</option>`).join("");
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Add integration</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <p class="muted">Register another AI tool as a sync destination. It behaves like the built-ins — appears here with Set up/Sync and as a push target in item flyouts.</p>
+      <div class="field"><h4>Name</h4><input class="input" id="ai-name" placeholder="e.g. Gemini CLI" autocomplete="off" /></div>
+      <div class="field"><h4>Docs / reference URL <span class="faint">(optional)</span></h4><input class="input" id="ai-url" placeholder="https://…" autocomplete="off" /></div>
+      <div class="field"><h4>Icon <span class="faint">(optional)</span></h4><select class="f" id="ai-icon">${iconOpts}</select></div>
+      <p class="ai-err" id="ai-err" hidden></p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="ai-save">Add integration</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    const nameEl = ov.querySelector("#ai-name"), urlEl = ov.querySelector("#ai-url"), iconEl = ov.querySelector("#ai-icon"), errEl = ov.querySelector("#ai-err");
+    const showErr = m => { errEl.textContent = m; errEl.hidden = false; };
+    const save = () => {
+      const name = (nameEl.value || "").trim();
+      if (!name) { showErr("Enter a name for the integration."); nameEl.focus(); return; }
+      if ((D.integrations || []).some(x => x.name.toLowerCase() === name.toLowerCase())) { showErr("An integration named “" + name + "” already exists."); nameEl.focus(); return; }
+      const def = { id: kebab(name) || name.toLowerCase(), name: name, docUrl: (urlEl.value || "").trim(), icon: iconEl.value || "" };
+      D.integrations = D.integrations || [];
+      D.integrations.push({ id: def.id, name: def.name, status: "not configured", count: 0, last_synced: null, custom: true, docUrl: def.docUrl, icon: def.icon });
+      persistCustomIntegration(def);
+      addActivity("Added integration", name);
+      closeOverlay(); toast(name + " added"); rebuildAll();
+    };
+    ov.querySelector("#ai-save").onclick = save;
+    nameEl.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); save(); } };
+    nameEl.focus();
   }
   function disableCap(projId, name) {
     const p = (D.projects || []).find(x => x.id === projId); if (!p) return;

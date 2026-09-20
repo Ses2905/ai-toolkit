@@ -172,6 +172,7 @@
       { id: "cursor", name: "Cursor", status: "connected", count: skillCount, last_synced: "12 min ago" },
       { id: "claude-code", name: "Claude Code", status: "connected", count: 28, last_synced: "yesterday" },
       { id: "codex", name: "Codex", status: "not configured", count: 0, last_synced: null },
+      { id: "lovable", name: "Lovable", status: "not configured", count: 0, last_synced: null },
     ];
     const inbox = [
       { name: "animation-patterns", detected: "reference", category: "Presentations & Diagrams",
