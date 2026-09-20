@@ -18,11 +18,10 @@ Install it once at **user** scope. Do not copy these files into each repo.
 git clone https://github.com/Ses2905/cursor-skills.git
 cd cursor-skills
 chmod +x scripts/*.sh
-./scripts/install-local.sh
-./scripts/sync-user-skills.sh
+./scripts/install-global.sh
 ```
 
-That copies the plugin to `~/.cursor/plugins/local/work-kit` and every `skills/*/SKILL.md` folder into `~/.cursor/skills/` (Cursor's skill library). Then:
+That copies the plugin to `~/.cursor/plugins/local/work-kit`, every `skills/*/SKILL.md` folder into `~/.cursor/skills/`, the Owl-Listener designer-skills pack, and deletes the project-local `npx skills add` leftover (`.agents/`, `skills-lock.json`). Then:
 
 1. Command Palette → **Developer: Reload Window**
 2. Open **Customize**, filter **User**, confirm **Work Kit**
