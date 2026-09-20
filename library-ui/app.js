@@ -153,6 +153,9 @@
   // Naming conventions: "&" becomes "+" everywhere; kebab domains render Title Case.
   const plusify = s => String(s == null ? "" : s).replace(/&/g, "+");
   const titleCase = s => String(s).replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  // "1 workflow" / "2 workflows" — naive but correct for our plural nouns (drop
+  // the trailing "s" for a count of exactly 1).
+  const plural = (n, word) => `${n} ${n === 1 ? String(word).replace(/s$/, "") : word}`;
   const catLabel = c => plusify(/\s/.test(c) ? c : titleCase(c));
 
   // Domain (category) definitions surfaced as hover tooltips.
@@ -176,9 +179,6 @@
 
   // Environments the library can install/sync into (from the integrations tier).
   const platforms = () => (D.integrations || []).map(x => x.name);
-  // Destinations an asset can be made available in. Kept as a reusable array so
-  // more targets can be added without touching the availability rendering.
-  const DESTINATIONS = ["Cursor", "Claude Code", "Codex", "ChatGPT"];
   // Curated, real outbound resources for finding new skills/prompts/workflows.
   // These are honest external links — not fabricated "recommended for you" items.
   const DISCOVER_LINKS = [
@@ -236,12 +236,12 @@
         </aside>
         <div class="main">
           <div class="topbar"><div class="topbar-inner">
-            <button class="btn sm hamburger" id="ham">≡</button>
+            <button class="btn sm hamburger" id="ham" aria-label="Menu" aria-controls="sidebar" aria-expanded="false">≡</button>
             <label class="topsearch"><span>⌕</span><input id="q" type="search" placeholder="Search your toolkit…" aria-label="Search your toolkit" /><span class="kbd">⌘K</span></label>
             <span class="spacer"></span>
             <button class="btn iconbtn bell" id="bell" aria-label="Notifications" aria-haspopup="true" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>${bellBadgeHtml()}</button>
             <div class="overflow addwrap" id="addwrap">
-              <button class="btn primary" id="addbtn" aria-haspopup="true" aria-expanded="false">+ Add</button>
+              <button class="btn primary" id="addbtn" aria-haspopup="true" aria-expanded="false" aria-label="Add to Toolkit"><span aria-hidden="true">+</span><span class="addlabel">Add</span></button>
               <div class="ovmenu ovmenu-right" id="addmenu" hidden>
                 <button data-addopt="import"><strong>Add to Toolkit</strong><span class="mi-sub">Import from GitHub, ZIP, file, or paste</span></button>
                 <button data-addopt="new"><strong>New item</strong><span class="mi-sub">Create a skill, prompt, workflow… from scratch</span></button>
@@ -253,13 +253,13 @@
         </div>
       </div>
       <div class="scrim" id="scrim"></div>
-      <div class="drawer" id="drawer" aria-hidden="true"></div>
+      <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-hidden="true"></div>
       <div id="overlay"></div>`;
     document.getElementById("q").addEventListener("input", e => { location.hash = "#/search?q=" + encodeURIComponent(e.target.value); });
     const addbtn = document.getElementById("addbtn"), addmenu = document.getElementById("addmenu");
     addbtn.onclick = e => { e.stopPropagation(); const open = addmenu.hidden; addmenu.hidden = !open; addbtn.setAttribute("aria-expanded", String(open)); };
     addmenu.querySelectorAll("[data-addopt]").forEach(b => b.onclick = e => { e.stopPropagation(); closeAddMenu(); (b.dataset.addopt === "import" ? openAdd : openCreate)(); });
-    document.getElementById("ham").onclick = () => document.getElementById("sidebar").classList.toggle("show");
+    document.getElementById("ham").onclick = () => { const shown = document.getElementById("sidebar").classList.toggle("show"); document.getElementById("ham").setAttribute("aria-expanded", String(shown)); };
     document.getElementById("scrim").onclick = closeAll;
     notifOpen = false;
     document.getElementById("bell").onclick = (e) => { e.stopPropagation(); toggleNotif(); };
@@ -337,16 +337,32 @@
     window.scrollTo(0, 0);
   }
 
+  // Wire a click handler and, for non-interactive elements (plain <div>s used as
+  // clickable rows/cards), make them keyboard-operable: expose them as buttons
+  // and activate on Enter/Space. We only fire when the element itself is focused
+  // (e.target === el) so inner controls (e.g. a row's own Disable button) keep
+  // working without the row swallowing their keystrokes.
+  const INTERACTIVE = { BUTTON: 1, A: 1, INPUT: 1, SELECT: 1, TEXTAREA: 1 };
+  function activatable(el, fn) {
+    el.onclick = fn;
+    if (INTERACTIVE[el.tagName]) return;
+    if (!el.hasAttribute("role")) el.setAttribute("role", "button");
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+    el.onkeydown = (e) => {
+      if (e.target !== el) return;
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); fn(e); }
+    };
+  }
   function wireView() {
-    document.querySelectorAll("[data-item]").forEach(el => el.onclick = () => { location.hash = "#/item/" + encodeURIComponent(el.dataset.item); });
+    document.querySelectorAll("[data-item]").forEach(el => activatable(el, () => { location.hash = "#/item/" + encodeURIComponent(el.dataset.item); }));
     document.querySelectorAll("[data-kindtab]").forEach(b => b.onclick = () => { location.hash = "#/library/" + b.dataset.kindtab; });
     document.querySelectorAll("[data-filter]").forEach(sel => sel.onchange = () => { state[sel.dataset.filter] = sel.value; rerenderLibrary(); });
     document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { state.view = b.dataset.view; rerenderLibrary(); });
     document.querySelectorAll("[data-clearf]").forEach(b => b.onclick = () => { state[b.dataset.clearf] = b.dataset.clearf === "kind" ? "all" : "All"; if (b.dataset.clearf === "kind") location.hash = "#/library/all"; else rerenderLibrary(); });
     const ls = document.getElementById("libsearch");
     if (ls) ls.oninput = () => { state.q = ls.value; rerenderList(); };
-    document.querySelectorAll("[data-nav]").forEach(b => b.onclick = () => { location.hash = "#/" + b.dataset.nav; });
-    document.querySelectorAll("[data-add]").forEach(b => b.onclick = openAdd);
+    document.querySelectorAll("[data-nav]").forEach(b => activatable(b, () => { location.hash = "#/" + b.dataset.nav; }));
+    document.querySelectorAll("[data-add]").forEach(b => activatable(b, openAdd));
     document.querySelectorAll("[data-create]").forEach(b => b.onclick = openCreate);
     document.querySelectorAll("[data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
   }
@@ -466,7 +482,7 @@
   function viewSearch(q) {
     const qq = (q || "").toLowerCase().trim();
     const hits = qq ? ITEMS.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(qq)) : [];
-    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${hits.length} items across your toolkit.` : "Type to search skills, prompts, workflows, tools + references."}</p></div>`;
+    const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${plural(hits.length, "items")} across your toolkit.` : "Type to search skills, prompts, workflows, tools + references."}</p></div>`;
     if (!qq) return `<div class="page">${head}</div>`;
     if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>Nothing in your toolkit matches “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Toolkit</button></div></div>`;
     const groups = KIND_ORDER.map(k => {
@@ -480,7 +496,33 @@
   /* ---------- Item detail (drawer) ---------- */
   // Skills count as "enabled" once they're active in at least one project.
   const isEnabled = i => i.kind === "skill" && Array.isArray(i.enabled_in) && i.enabled_in.length > 0;
-  const splitBest = s => String(s || "").split(/[;·,]/).map(t => t.trim()).filter(Boolean);
+  // Only treat best_use as a chip list when it's clearly a short, delimited
+  // list — never shred free prose into fragments. Split on ";" (deliberate list
+  // separator) or on "," when there are no parentheses; then require ≥2
+  // segments and reject anything that looks like a full clause (long text) or
+  // carries a stray parenthesis. Otherwise it renders as a normal sentence.
+  function bestChips(s) {
+    s = String(s || "").trim();
+    if (!s) return null;
+    let parts;
+    if (s.includes(";")) parts = s.split(";");
+    else if (!/[()]/.test(s) && s.includes(",")) parts = s.split(",");
+    else return null;
+    parts = parts.map(t => t.trim().replace(/[.;,]+$/, "")).filter(Boolean);
+    if (parts.length < 2) return null;
+    if (parts.some(p => p.length > 24 || /[()]/.test(p))) return null;
+    return parts;
+  }
+  // Normalize prose for duplicate detection (whitespace/case-insensitive).
+  const normText = s => String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
+  // True when two blurbs are effectively the same text — equal, or one wholly
+  // contains the other (so we don't repeat the summary as "What it does"/"Use when").
+  function sameText(a, b) {
+    a = normText(a); b = normText(b);
+    if (!a || !b) return false;
+    if (a === b) return true;
+    return a.length >= 20 && b.length >= 20 && (a.includes(b) || b.includes(a));
+  }
   function resolveRel(n) {
     return byTitle[n] || byId[n] || byId["skill:" + n] || byId["reference:" + n] || byId["workflow:" + n] || byId["tool:" + n] || null;
   }
@@ -502,25 +544,41 @@
     return `<div class="field relgroup"><h4>Available in</h4><div class="rellist">${inn.map(p => `<span class="relchip plat"><span class="rlogo">${platLogo(p)}</span>${esc(p)}</span>`).join("")}</div></div>`;
   }
   function bestForField(i) {
-    const parts = splitBest(i.best_use);
-    if (!parts.length) return "";
+    const parts = bestChips(i.best_use);
+    if (!parts) return "";
     return `<div class="field"><h4>Best for</h4><div class="chips bestfor">${parts.map(p => `<span class="chip xs">${esc(p)}</span>`).join("")}</div></div>`;
   }
   // Reusable Availability list across destinations (installed ✓ or Push).
+  // Destinations derive from the SAME source as Integrations (platforms() →
+  // D.integrations), so we never offer a push target with no integration.
   function availabilityPanel(i) {
     const inn = i.installed_in || [];
-    const rows = DESTINATIONS.map(p => {
+    const rows = platforms().map(p => {
       const on = inn.includes(p);
       return `<div class="instrow"><span class="idot ${on ? "on" : ""}">${platLogo(p)}</span><span class="ip-name">${esc(p)}</span><span class="ip-status ${on ? "on" : ""}">${on ? "Installed" : "Not installed"}</span>${on ? `<span class="ip-check" aria-hidden="true">✓</span>` : `<button class="btn sm" data-action="push-item" data-id="${esc(i.id)}" data-plat="${esc(p)}">Push</button>`}</div>`;
     }).join("");
     return `<div class="field"><h4>Availability</h4><div class="instlist">${rows}</div></div>`;
   }
+  // True when `hay` clearly embeds `needle` (used to spot a summary/best_use that
+  // has just been concatenated into the description).
+  const containsText = (hay, needle) => { hay = normText(hay); needle = normText(needle); return needle.length >= 15 && hay.includes(needle); };
   function overviewPane(i) {
     const desc = i.description || "";
     const summ = i.summary || "";
-    const whatBlock = (desc && desc !== summ) ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
-    const useWhen = i.best_use ? `<div class="field"><h4>Use when</h4><p>${esc(i.best_use)}</p></div>` : "";
-    return bestForField(i) + whatBlock + useWhen + availabilityPanel(i);
+    const bu = i.best_use || "";
+    // best_use is the most distinctive blurb, so surface it (as short "Best for"
+    // chips when it's a real list, else a "Use when" sentence) — but skip it when
+    // it just repeats the summary the drawer header already shows.
+    const chips = bestForField(i);
+    let useBlock = "";
+    if (chips) useBlock = chips;
+    else if (bu && !sameText(bu, summ)) useBlock = `<div class="field"><h4>Use when</h4><p>${esc(bu)}</p></div>`;
+    // "What it does" only when the description adds something beyond the summary
+    // and best_use — not when it's the summary again, or just summary + best_use.
+    const descIsConcat = containsText(desc, summ) && bu && containsText(desc, bu);
+    const whatBlock = (desc && !sameText(desc, summ) && !sameText(desc, bu) && !descIsConcat)
+      ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
+    return whatBlock + useBlock + availabilityPanel(i);
   }
   // Render an argument hint, highlighting placeholder tokens (<...> [...] {...}).
   function renderArgHint(hint) {
@@ -600,6 +658,8 @@
   function openItem(id) {
     const i = byId[id]; if (!i) { location.hash = "#/library"; return; }
     const dr = document.getElementById("drawer");
+    // Remember what opened the drawer so focus can return there on close.
+    if (!dr.classList.contains("show")) drawerReturnFocus = document.activeElement;
     const enabled = isEnabled(i);
     const enableCtrl = enabled
       ? `<span class="enabled-state" title="Active in ${esc((i.enabled_in || []).join(", "))}">Enabled ✓</span>`
@@ -640,6 +700,7 @@
       </div>
       <div class="dbody" id="dbody"></div>`;
     dr.setAttribute("aria-hidden", "false");
+    dr.setAttribute("aria-label", i.title);
     dr.classList.add("show"); document.getElementById("scrim").classList.add("show");
     const panes = { ov: overviewPane, howto: howtoPane, rel: relationshipsPane, src: sourcePane };
     const wireActions = () => dr.querySelectorAll(".dbody [data-action]").forEach(x => x.onclick = (e) => { e.stopPropagation(); handleAction(x.dataset.action, x.dataset); });
@@ -658,6 +719,8 @@
     document.getElementById("drclose").onclick = () => history.length > 1 ? history.back() : (location.hash = "#/library");
     // Header actions (Enable/Use, Edit) live outside .dbody.
     dr.querySelectorAll(".dactions-l > [data-action]").forEach(b => b.onclick = (e) => { e.stopPropagation(); handleAction(b.dataset.action, b.dataset); });
+    // Move focus into the panel so keyboard/AT users land inside the dialog.
+    const closeBtn = document.getElementById("drclose"); if (closeBtn) closeBtn.focus();
   }
   function pathOf(i) {
     if (i.kind === "skill") return `skills/${i.name}/SKILL.md`;
@@ -690,7 +753,7 @@
   }
   function viewProjects() {
     const rows = (D.projects || []).map(p => `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
-      <span><div class="nm">${esc(p.name)}</div><div class="sub">${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references</div></span>
+      <span><div class="nm">${esc(p.name)}</div><div class="sub">${plural(p.skills.length, "skills")} · ${plural(p.workflows.length, "workflows")} · ${plural(p.references.length, "references")}</div></span>
       <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} agents synced</span><span class="btn sm">Open</span></div>`).join("");
     return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your toolkit are active in each project, and which agents they're synced to.</p></div><div class="list">${rows}</div></div>`;
   }
@@ -702,7 +765,7 @@
     const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div><div class="sub">${v === "synced" ? "This project's items are live in " + esc(k) : "Not synced to " + esc(k) + " yet"}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm ${v === "synced" ? "" : "primary"}" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
     return `<div class="page">
       <div class="crumb" style="margin-bottom:8px"><a href="#/projects">Projects</a> / ${esc(p.name)}</div>
-      <div class="page-head"><h1>${esc(p.name)}</h1><p>${p.skills.length} skills · ${p.workflows.length} workflows · ${p.references.length} references enabled.</p></div>
+      <div class="page-head"><h1>${esc(p.name)}</h1><p>${plural(p.skills.length, "skills")} · ${plural(p.workflows.length, "workflows")} · ${plural(p.references.length, "references")} enabled.</p></div>
       <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skill">+ Enable from toolkit</button></div></div>
       <div class="section"><h2>Workflows</h2><div class="chips">${wfs || '<span class="faint">None yet</span>'}</div></div>
       <div class="section"><h2>References</h2><div class="chips">${refs || '<span class="faint">None yet</span>'}</div></div>
@@ -769,9 +832,40 @@
   }
 
   /* ---------- Overlays: Add / Create / Palette ---------- */
-  function overlay(html) { document.getElementById("overlay").innerHTML = html; }
-  function closeOverlay() { document.getElementById("overlay").innerHTML = ""; }
-  function closeDrawerOnly() { const dr = document.getElementById("drawer"); if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); } document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show"); }
+  // Focus to restore when the drawer / an overlay closes (light focus management).
+  let drawerReturnFocus = null, overlayReturnFocus = null;
+  function overlay(html) {
+    const host = document.getElementById("overlay");
+    // Capture the trigger only on first open, not on internal re-renders.
+    if (!host.innerHTML.trim()) overlayReturnFocus = document.activeElement;
+    host.innerHTML = html;
+    const box = host.querySelector(".box");
+    if (box) {
+      const dlg = box.closest(".modal, .palette") || box;
+      dlg.setAttribute("role", "dialog");
+      dlg.setAttribute("aria-modal", "true");
+      // If a specific opener didn't already move focus inside, land on the first
+      // focusable control (close button / input) so keyboard users start inside.
+      requestAnimationFrame(() => {
+        if (host.contains(document.activeElement) && document.activeElement !== document.body) return;
+        const t = box.querySelector("input, textarea, select, button, [href]");
+        if (t) t.focus();
+      });
+    }
+  }
+  function closeOverlay() {
+    document.getElementById("overlay").innerHTML = "";
+    if (overlayReturnFocus && document.contains(overlayReturnFocus)) { try { overlayReturnFocus.focus(); } catch (e) { /* element gone */ } }
+    overlayReturnFocus = null;
+  }
+  function closeDrawerOnly() {
+    const dr = document.getElementById("drawer");
+    const wasOpen = dr && dr.classList.contains("show");
+    if (dr) { dr.classList.remove("show"); dr.setAttribute("aria-hidden", "true"); }
+    document.getElementById("scrim") && document.getElementById("scrim").classList.remove("show");
+    if (wasOpen && drawerReturnFocus && document.contains(drawerReturnFocus)) { try { drawerReturnFocus.focus(); } catch (e) { /* element gone */ } }
+    drawerReturnFocus = null;
+  }
   function closeAll() { closeDrawerOnly(); closeOverlay(); closeNotif(); closeAddMenu(); }
 
   const add = { step: "source", src: "github" };
