@@ -26,17 +26,17 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 81,
+  "total": 82,
   "counts_by_category": {
     "Product & Discovery": 28,
     "Design & Frontend": 15,
     "Motion & Animation": 7,
-    "Presentations & Diagrams": 10,
+    "Presentations & Diagrams": 11,
     "Engineering Workflow": 17,
     "Setup & Install": 4
   },
   "counts_by_kind": {
-    "skill": 55,
+    "skill": 56,
     "prompt": 26
   },
   "skills": [
@@ -1104,6 +1104,50 @@
       "tags": []
     },
     {
+      "name": "presentation-art-director",
+      "source_root": "skills",
+      "category": "Presentations & Diagrams",
+      "type": "",
+      "theme": "",
+      "description": "Art-direct and refine HTML presentation decks without destabilizing an established layout system. Use for slide-by-slide visual storytelling, diagrams, data-storytelling, quote treatments, architecture/topology visuals, before/after journeys, decision models, and executive presentation polish, especially when working in Cursor/Claude Code on a fixed 16:9 HTML deck with frozen CSS geometry. Propose visual structure first, preserve narrative and shared layout rules, scope implementation locally, and require screenshot/QA approval before moving to the next slide.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Art-direct and refine HTML presentation decks without destabilizing an established layout system.",
+      "best_use": "Use for slide-by-slide visual storytelling, diagrams, data-storytelling, quote treatments, architecture/topology visuals, before/after journeys, decision models, and executive presentation polish, especially when working in Cursor/Claude Code on a fixed 16:9 HTML deck with frozen CSS geometry. Propose visual structure first, preserve narrative and shared layout rules, scope implementation locally, and require screenshot/QA approval before moving to the next slide.",
+      "watch_outs": "",
+      "date_added": "2026-09-20",
+      "date_updated": "2026-09-20",
+      "command": "presentation-art-director",
+      "has_command": true,
+      "has_rule": true,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 7,
+      "skill_md_bytes": 6780,
+      "in_catalog": false,
+      "in_readme": true,
+      "score": 54,
+      "score_breakdown": {
+        "command": 12,
+        "rule": 8,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 13,
+        "breadth": 7,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 5
+      },
+      "rank_overall": 25,
+      "rank_in_category": 8,
+      "kind": "skill",
+      "tags": []
+    },
+    {
       "name": "slides",
       "source_root": "skills",
       "category": "Presentations & Diagrams",
@@ -1142,8 +1186,8 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 25,
-      "rank_in_category": 8,
+      "rank_overall": 26,
+      "rank_in_category": 9,
       "kind": "skill",
       "tags": []
     },
@@ -1190,7 +1234,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 26,
+      "rank_overall": 27,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": [
@@ -1237,7 +1281,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 27,
+      "rank_overall": 28,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -1281,8 +1325,8 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 28,
-      "rank_in_category": 9,
+      "rank_overall": 29,
+      "rank_in_category": 10,
       "kind": "skill",
       "tags": []
     },
@@ -1325,7 +1369,7 @@
         "catalog": 5,
         "readme": 5
       },
-      "rank_overall": 29,
+      "rank_overall": 30,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": []
@@ -1369,7 +1413,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 30,
+      "rank_overall": 31,
       "rank_in_category": 7,
       "kind": "skill",
       "tags": []
@@ -1413,7 +1457,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 31,
+      "rank_overall": 32,
       "rank_in_category": 11,
       "kind": "skill",
       "tags": []
@@ -1457,7 +1501,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 32,
+      "rank_overall": 33,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": []
@@ -1501,7 +1545,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 33,
+      "rank_overall": 34,
       "rank_in_category": 12,
       "kind": "skill",
       "tags": []
@@ -1549,7 +1593,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 34,
+      "rank_overall": 35,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": [
@@ -1600,7 +1644,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 35,
+      "rank_overall": 36,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": [
@@ -1651,7 +1695,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 36,
+      "rank_overall": 37,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": [
@@ -1672,7 +1716,7 @@
       "best_use": "Use when the user asks to install awesome-cursor-skills, copy SKILL.md folders from GitHub, or add design, motion, presentation, or product-management skills.",
       "watch_outs": "",
       "date_added": "2026-09-16",
-      "date_updated": "2026-09-18",
+      "date_updated": "2026-09-20",
       "command": "install-github-skills",
       "has_command": true,
       "has_rule": false,
@@ -1698,7 +1742,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 37,
+      "rank_overall": 38,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -1742,7 +1786,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 38,
+      "rank_overall": 39,
       "rank_in_category": 13,
       "kind": "skill",
       "tags": []
@@ -1786,7 +1830,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 39,
+      "rank_overall": 40,
       "rank_in_category": 14,
       "kind": "skill",
       "tags": []
@@ -1834,7 +1878,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 40,
+      "rank_overall": 41,
       "rank_in_category": 7,
       "kind": "skill",
       "tags": [
@@ -1885,7 +1929,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 41,
+      "rank_overall": 42,
       "rank_in_category": 8,
       "kind": "skill",
       "tags": [
@@ -1936,7 +1980,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 42,
+      "rank_overall": 43,
       "rank_in_category": 9,
       "kind": "skill",
       "tags": [
@@ -1987,7 +2031,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 43,
+      "rank_overall": 44,
       "rank_in_category": 10,
       "kind": "skill",
       "tags": [
@@ -2038,7 +2082,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 44,
+      "rank_overall": 45,
       "rank_in_category": 11,
       "kind": "skill",
       "tags": [
@@ -2089,7 +2133,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 45,
+      "rank_overall": 46,
       "rank_in_category": 12,
       "kind": "skill",
       "tags": [
@@ -2140,7 +2184,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 46,
+      "rank_overall": 47,
       "rank_in_category": 13,
       "kind": "skill",
       "tags": [
@@ -2187,7 +2231,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -2231,7 +2275,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 48,
+      "rank_overall": 49,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -2275,7 +2319,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 49,
+      "rank_overall": 50,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -2319,7 +2363,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 50,
+      "rank_overall": 51,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -2363,7 +2407,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 51,
+      "rank_overall": 52,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": []
@@ -2407,7 +2451,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 52,
+      "rank_overall": 53,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": []
@@ -2451,7 +2495,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 53,
+      "rank_overall": 54,
       "rank_in_category": 7,
       "kind": "prompt",
       "tags": [
@@ -2498,7 +2542,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 54,
+      "rank_overall": 55,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -2545,7 +2589,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 55,
+      "rank_overall": 56,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -2592,7 +2636,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 56,
+      "rank_overall": 57,
       "rank_in_category": 8,
       "kind": "prompt",
       "tags": [
@@ -2639,8 +2683,8 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 57,
-      "rank_in_category": 10,
+      "rank_overall": 58,
+      "rank_in_category": 11,
       "kind": "skill",
       "tags": []
     },
@@ -2683,7 +2727,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 58,
+      "rank_overall": 59,
       "rank_in_category": 9,
       "kind": "skill",
       "tags": [
@@ -2729,7 +2773,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 59,
+      "rank_overall": 60,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -2776,7 +2820,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 60,
+      "rank_overall": 61,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -2823,7 +2867,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 61,
+      "rank_overall": 62,
       "rank_in_category": 10,
       "kind": "prompt",
       "tags": [
@@ -2870,7 +2914,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 62,
+      "rank_overall": 63,
       "rank_in_category": 11,
       "kind": "prompt",
       "tags": [
@@ -2917,7 +2961,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 63,
+      "rank_overall": 64,
       "rank_in_category": 18,
       "kind": "prompt",
       "tags": [
@@ -2964,7 +3008,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 64,
+      "rank_overall": 65,
       "rank_in_category": 12,
       "kind": "prompt",
       "tags": [
@@ -3011,7 +3055,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 65,
+      "rank_overall": 66,
       "rank_in_category": 19,
       "kind": "prompt",
       "tags": [
@@ -3058,7 +3102,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 66,
+      "rank_overall": 67,
       "rank_in_category": 20,
       "kind": "prompt",
       "tags": [
@@ -3105,7 +3149,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 67,
+      "rank_overall": 68,
       "rank_in_category": 13,
       "kind": "prompt",
       "tags": [
@@ -3152,7 +3196,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 68,
+      "rank_overall": 69,
       "rank_in_category": 21,
       "kind": "prompt",
       "tags": [
@@ -3199,7 +3243,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 69,
+      "rank_overall": 70,
       "rank_in_category": 22,
       "kind": "prompt",
       "tags": [
@@ -3246,7 +3290,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 70,
+      "rank_overall": 71,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -3293,7 +3337,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 71,
+      "rank_overall": 72,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3340,7 +3384,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 72,
+      "rank_overall": 73,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -3387,7 +3431,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 73,
+      "rank_overall": 74,
       "rank_in_category": 23,
       "kind": "prompt",
       "tags": [
@@ -3434,7 +3478,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 74,
+      "rank_overall": 75,
       "rank_in_category": 24,
       "kind": "prompt",
       "tags": [
@@ -3481,7 +3525,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 75,
+      "rank_overall": 76,
       "rank_in_category": 25,
       "kind": "prompt",
       "tags": [
@@ -3527,7 +3571,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 76,
+      "rank_overall": 77,
       "rank_in_category": 26,
       "kind": "prompt",
       "tags": [
@@ -3573,7 +3617,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 77,
+      "rank_overall": 78,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3619,7 +3663,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 78,
+      "rank_overall": 79,
       "rank_in_category": 27,
       "kind": "prompt",
       "tags": [
@@ -3665,7 +3709,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 79,
+      "rank_overall": 80,
       "rank_in_category": 28,
       "kind": "prompt",
       "tags": [
@@ -3711,7 +3755,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 80,
+      "rank_overall": 81,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -3731,7 +3775,7 @@
       "best_use": "Use when the user asks how to install work-kit, set up plugins globally, or leverage skills across all projects.",
       "watch_outs": "",
       "date_added": "2026-09-16",
-      "date_updated": "2026-09-18",
+      "date_updated": "2026-09-20",
       "command": "",
       "has_command": false,
       "has_rule": false,
@@ -3740,7 +3784,7 @@
       "has_examples": false,
       "has_docs": false,
       "file_count": 1,
-      "skill_md_bytes": 2769,
+      "skill_md_bytes": 2799,
       "in_catalog": false,
       "in_readme": true,
       "score": 17,
@@ -3757,7 +3801,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 81,
+      "rank_overall": 82,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []

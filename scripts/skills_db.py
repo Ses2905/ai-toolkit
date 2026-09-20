@@ -102,6 +102,7 @@ CATEGORY_BY_NAME: dict[str, str] = {
     "ppt-master": "Presentations & Diagrams",
     "guizang-ppt-skill": "Presentations & Diagrams",
     "ppt-visual": "Presentations & Diagrams",
+    "presentation-art-director": "Presentations & Diagrams",
     "gpt-taste": "Design & Frontend",
     "action-title-writing": "Presentations & Diagrams",
     "data-callout-design": "Presentations & Diagrams",

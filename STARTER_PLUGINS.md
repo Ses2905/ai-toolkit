@@ -46,6 +46,8 @@ That copies selected `SKILL.md` folders into `~/.cursor/skills/` (design, visual
 
 [PPT Visual](https://aiuxplayground.com/skills/ppt-visual) designs PowerPoint layouts, palettes, and ASCII wireframes. Invoke `/ppt-visual`. Distinct from `/ppt-master` and `/html-ppt`. Details: `skills/ppt-visual/SKILL.md`.
 
+[Presentation Art Director](skills/presentation-art-director/SKILL.md) art-directs existing frozen 16:9 HTML decks slide by slide. Invoke `/presentation-art-director`. Distinct from `/html-ppt`. Details: `skills/presentation-art-director/SKILL.md`.
+
 [Frontend Designer](https://github.com/kozz36/frontend-designer-skill) is production CSS architecture, tokens, container queries, and WCAG. Invoke `/frontend-designer`. Distinct from `/frontend-design`. Details: `skills/frontend-designer/SKILL.md`.
 
 [Product Strategy Session](https://www.skills.sh/deanpeters/product-manager-skills/product-strategy-session) orchestrates Dean Peters PM skills (positioning, discovery, roadmap). License: CC BY-NC-SA 4.0. Invoke `/product-strategy-session`. Details: `skills/product-strategy-session/SKILL.md`.

@@ -171,6 +171,7 @@ class RepoScanTest(unittest.TestCase):
             "frontend-designer": "Design & Frontend",
             "motion-design": "Motion & Animation",
             "ppt-visual": "Presentations & Diagrams",
+            "presentation-art-director": "Presentations & Diagrams",
             "product-strategy-session": "Product & Discovery",
             "board-room-strategy": "Product & Discovery",
             "walmart-ads-terminology": "Product & Discovery",

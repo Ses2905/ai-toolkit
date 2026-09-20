@@ -1,0 +1,6 @@
+Source: uploaded zip presentation-art-director.zip
+Install name: presentation-art-director
+Official CLI: npx skills add ./presentation-art-director --skill presentation-art-director
+License: unspecified in the zip (retain upstream notices if added later)
+Related: skills/html-ppt (themed HTML authoring), skills/frontend-slides-editable (single-file editor), skills/slides (Chart.js), skills/ppt-visual (PPT layout specs)
+Note: Art-directs existing frozen 16:9 HTML decks slide-by-slide. Does not replace html-ppt templates or write PPTX.
