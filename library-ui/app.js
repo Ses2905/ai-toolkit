@@ -13,6 +13,103 @@
   let dataSource = "snapshot"; // "live" once the real catalog is loaded
   let toolkitHome = (() => { try { return localStorage.getItem("ai-toolkit-home"); } catch (e) { return null; } })() || "$AI_TOOLKIT_HOME (~/.ai-toolkit)";
 
+  /* ---------- Persistence layer ----------
+     The library data is rebuilt from the catalog on every load, so any user
+     action (setting up/syncing an integration, pushing an item, syncing a
+     project, triaging the inbox, renaming) would otherwise reset on reload.
+     We keep a single versioned localStorage store of those mutations, keyed by
+     stable ids/names, and re-apply it after the catalog loads. All access is
+     guarded so a corrupt/blocked store never breaks the live-catalog load or
+     the snapshot fallback. Write-through: action handlers call persist* below. */
+  const STORE_KEY = "ai-toolkit-state-v1";
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  let store = loadStore();
+  function persistStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* ignore quota/denied */ } }
+  function persistIntegration(name, patch) {
+    store.integrations = store.integrations || {};
+    store.integrations[name] = Object.assign({}, store.integrations[name], patch);
+    persistStore();
+  }
+  function persistItemInstall(id, plat) {
+    store.installs = store.installs || {};
+    const arr = store.installs[id] = store.installs[id] || [];
+    if (!arr.includes(plat)) arr.push(plat);
+    persistStore();
+  }
+  function persistProjectIntegration(projId, name, stateVal) {
+    store.projectIntegrations = store.projectIntegrations || {};
+    const p = store.projectIntegrations[projId] = store.projectIntegrations[projId] || {};
+    p[name] = stateVal;
+    persistStore();
+  }
+  function persistInbox(name, patch) {
+    store.inbox = store.inbox || {};
+    store.inbox[name] = Object.assign({}, store.inbox[name], patch);
+    persistStore();
+  }
+  function persistRename(origId, title) {
+    store.renames = store.renames || {};
+    store.renames[origId] = { title };
+    persistStore();
+  }
+  // Re-apply persisted user mutations onto a freshly built D, merging by stable
+  // ids/names so it stays correct if the catalog changes underneath us.
+  function applyPersistedState() {
+    if (!store || typeof store !== "object") return;
+    // Renames first, so id-keyed installs below line up with post-rename ids.
+    if (store.renames && typeof store.renames === "object") {
+      for (const origId of Object.keys(store.renames)) {
+        const r = store.renames[origId];
+        if (r && r.title) applyRename(origId, r.title);
+      }
+    }
+    if (store.integrations && Array.isArray(D.integrations)) {
+      for (const integ of D.integrations) {
+        const saved = store.integrations[integ.name];
+        if (!saved) continue;
+        if (saved.status) integ.status = saved.status;
+        if ("last_synced" in saved) integ.last_synced = saved.last_synced;
+        if (typeof saved.count === "number") integ.count = saved.count;
+      }
+    }
+    if (store.installs && typeof store.installs === "object") {
+      for (const id of Object.keys(store.installs)) {
+        const it = byId[id];
+        if (!it || !Array.isArray(store.installs[id])) continue;
+        it.installed_in = it.installed_in || [];
+        for (const plat of store.installs[id]) if (!it.installed_in.includes(plat)) it.installed_in.push(plat);
+      }
+    }
+    if (store.projectIntegrations && Array.isArray(D.projects)) {
+      for (const p of D.projects) {
+        const saved = store.projectIntegrations[p.id];
+        if (!saved) continue;
+        p.integrations = p.integrations || {};
+        for (const k of Object.keys(saved)) p.integrations[k] = saved[k];
+      }
+    }
+    if (store.inbox && Array.isArray(D.inbox)) {
+      const kept = [];
+      for (const it of D.inbox) {
+        const saved = store.inbox[it.name];
+        if (saved) {
+          if (saved.deleted) continue;
+          if ("read" in saved) it.read = saved.read;
+          if ("filedAs" in saved) it.filedAs = saved.filedAs;
+        }
+        kept.push(it);
+      }
+      D.inbox = kept;
+    }
+  }
+
   function setData(data, source) {
     D = data || EMPTY;
     ITEMS = D.items || [];
@@ -83,6 +180,14 @@
   // Destinations an asset can be made available in. Kept as a reusable array so
   // more targets can be added without touching the availability rendering.
   const DESTINATIONS = ["Cursor", "Claude Code", "Codex", "ChatGPT"];
+  // Curated, real outbound resources for finding new skills/prompts/workflows.
+  // These are honest external links — not fabricated "recommended for you" items.
+  const DISCOVER_LINKS = [
+    { name: "Cursor Directory", url: "https://cursor.directory", desc: "Community-curated rules, MCP servers and prompts for Cursor." },
+    { name: "awesome-cursorrules", url: "https://github.com/PatrickJS/awesome-cursorrules", desc: "A large, curated collection of .cursorrules files to adapt." },
+    { name: "Anthropic Cookbook", url: "https://github.com/anthropics/anthropic-cookbook", desc: "Official Claude recipes, prompt patterns and agent skills." },
+    { name: "OpenAI Cookbook", url: "https://github.com/openai/openai-cookbook", desc: "Example code and guides for building with OpenAI models." },
+  ];
   // Best-effort docs surfaces for "where my synced assets live in each tool".
   // These are public documentation pages, not fabricated in-app deep links.
   const TOOL_DOCS = {
@@ -117,7 +222,7 @@
     document.getElementById("app").innerHTML = `
       <div class="shell">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v12H3z"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/><path d="M11 13h2v2h-2z" fill="currentColor" stroke="none"/></svg></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
+          <div class="brand"><span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v11"/><path d="M12 8a4 4 0 0 0-4-4H3.6A1.6 1.6 0 0 0 2 5.6V17a1.6 1.6 0 0 0 1.6 1.6H8a3.4 3.4 0 0 1 4 1.8"/><path d="M12 8a4 4 0 0 1 4-4h4.4A1.6 1.6 0 0 1 22 5.6V17a1.6 1.6 0 0 1-1.6 1.6H16a3.4 3.4 0 0 0-4 1.8"/><path d="M18.4 1l.55 1.45L20.4 3l-1.45.55L18.4 5l-.55-1.45L16.4 3l1.45-.55z" fill="currentColor" stroke="none"/></svg></span> AI Toolkit<span class="src-pill" data-src="${dataSource}" title="${dataSource === "live" ? "Reading the live catalog" : "Using the bundled snapshot"}">${dataSource}</span></div>
           <nav class="nav">
             ${item("home", "⌂", "Home")}
             <div class="group">AI Toolkit</div>
@@ -187,8 +292,8 @@
       if (act === "viewall") { closeNotif(); return; }
       e.preventDefault();
       if (act === "review") { closeNotif(); return openInboxReview(name); }
-      if (act === "mark-read") { const it = (D.inbox || []).find(x => x.name === name); if (it) { it.read = true; it.filedAs = undefined; addActivity("Marked read", name); } toast(name + " marked read"); return afterNotifMutate(); }
-      if (act === "delete") { D.inbox = (D.inbox || []).filter(x => x.name !== name); addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); return afterNotifMutate(); }
+      if (act === "mark-read") { const it = (D.inbox || []).find(x => x.name === name); if (it) { it.read = true; it.filedAs = undefined; persistInbox(name, { read: true, filedAs: undefined }); addActivity("Marked read", name); } toast(name + " marked read"); return afterNotifMutate(); }
+      if (act === "delete") { D.inbox = (D.inbox || []).filter(x => x.name !== name); persistInbox(name, { deleted: true }); addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); return afterNotifMutate(); }
     });
   }
   function afterNotifMutate() { updateBellBadge(); renderNotifPanel(); if (currentRoute().startsWith("inbox")) rerenderView(); }
@@ -255,21 +360,21 @@
     if ((D.updates || []).length) att.push([`${D.updates.length} upstream update${D.updates.length > 1 ? "s" : ""} available`, "health"]);
     (D.health.issues || []).forEach(i => att.push([`${i.type}: ${i.detail}`, "health"]));
     const attHtml = att.length ? att.map(([t, r]) => `<div class="att"><span class="dot"></span><span>${esc(t)}</span><button class="btn sm go" data-nav="${r}">Review</button></div>`).join("") : `<div class="att info"><span class="dot"></span><span>Everything looks healthy — nothing needs your attention.</span></div>`;
-    const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("");
     const cols = (D.collections || []).slice(0, 10).map(x => `<button class="chip" data-nav="library/all"${tipAttr(x.name)}>${esc(catLabel(x.name))}<span class="c">${x.count}</span></button>`).join("");
+    const resources = DISCOVER_LINKS.map(r => `<a class="res-row" href="${esc(r.url)}" target="_blank" rel="noopener">
+        <span class="res-ic" aria-hidden="true">◎</span>
+        <span class="res-main"><span class="res-name">${esc(r.name)}<span class="ext" aria-hidden="true">↗</span></span><span class="res-sub">${esc(r.desc)}</span></span>
+      </a>`).join("");
     return `
       <div class="page home">
         <div class="page-head"><h1>Your AI Toolkit</h1><p>Everything you can compose — skills, prompts, workflows, tools and references — in one place.</p></div>
         <div class="home-hero">
           <label class="topsearch home-search"><span>⌕</span><input placeholder="Search your toolkit…" onkeydown="if(event.key==='Enter'){location.hash='#/search?q='+encodeURIComponent(this.value)}"/></label>
-          <div class="home-cta"><button class="btn primary" data-add>+ Add to Toolkit</button><button class="btn" data-nav="discover">Discover</button></div>
         </div>
+        <div class="section"><h2>Discover more</h2><p class="muted lead">Places to discover new skills, prompts and workflows to add.</p><div class="reslist">${resources}</div></div>
         <div class="section"><h2>AI Toolkit summary</h2><div class="statgrid">${stats}</div></div>
-        <div class="home-grid">
-          <div class="section"><h2>Needs attention</h2><div class="attention">${attHtml}</div></div>
-          <div class="section"><h2>Browse by domain</h2><div class="chips">${cols}</div></div>
-        </div>
-        <div class="section"><h2>Recent activity</h2><div class="actlist">${recent}</div><div style="margin-top:12px"><button class="btn sm" data-nav="activity">View all activity</button></div></div>
+        <div class="section"><h2>Needs attention</h2><div class="attention">${attHtml}</div></div>
+        <div class="section"><h2>Browse by domain</h2><div class="chips">${cols}</div></div>
       </div>`;
   }
 
@@ -791,11 +896,13 @@
   function setInboxRead(name, read) {
     const it = (D.inbox || []).find(x => x.name === name); if (!it) return;
     it.read = read; if (!read) it.filedAs = undefined;
+    persistInbox(name, { read: read, filedAs: read ? it.filedAs : undefined });
     addActivity(read ? "Marked read" : "Marked unread", name);
     toast(name + (read ? " marked read" : " moved back to unread")); rebuildAll();
   }
   function deleteInbox(name) {
     D.inbox = (D.inbox || []).filter(x => x.name !== name);
+    persistInbox(name, { deleted: true });
     addActivity("Deleted", name + " (inbox)"); toast("Deleted " + name); rebuildAll();
   }
   function openChangeHome() {
@@ -817,6 +924,7 @@
     const it = byId[id]; if (!it) return;
     it.installed_in = it.installed_in || [];
     if (!it.installed_in.includes(plat)) it.installed_in.push(plat);
+    persistItemInstall(id, plat);
     addActivity("Installed", it.title + " → " + plat);
     toast("Pushed " + it.title + " to " + plat);
     openItem(id); // refresh drawer so status + push buttons update
@@ -825,9 +933,12 @@
   /* Rename an item — propagates the new name across every in-memory reference,
      then re-syncs the environments it's installed in. (Persisting to disk /
      the real tool integrations needs a backend; this is the front-end path.) */
-  function renameItem(id, newTitle) {
-    const it = byId[id]; if (!it) return;
-    newTitle = newTitle.trim(); if (!newTitle || newTitle === it.title) { if (newTitle === it.title) location.hash = "#/item/" + encodeURIComponent(id); return; }
+  // Core in-memory rename + reference propagation. Returns { oldTitle, newId }
+  // or null when nothing changed. Kept side-effect-free (no UI/persist/history)
+  // so it can also run at boot when re-applying persisted renames.
+  function applyRename(id, newTitle) {
+    const it = byId[id]; if (!it) return null;
+    newTitle = String(newTitle).trim(); if (!newTitle || newTitle === it.title) return null;
     const oldTitle = it.title, oldName = it.name, newName = kebab(newTitle) || oldName, newId = it.kind + ":" + newName;
     it.title = newTitle; it.name = newName; it.id = newId;
     const swap = (arr, from, to) => { if (arr) arr.forEach((v, ix) => { if (v === from) arr[ix] = to; }); };
@@ -839,10 +950,19 @@
     (D.projects || []).forEach(p => { swap(p.skills, oldName, newName); swap(p.workflows, oldTitle, newTitle); swap(p.references, oldTitle, newTitle); });
     byId = Object.fromEntries(ITEMS.map(x => [x.id, x]));
     byTitle = Object.fromEntries(ITEMS.map(x => [x.title, x]));
-    addActivity("Renamed", oldTitle + " → " + newTitle);
-    const where = (it.installed_in || []).join(", ");
-    toast("Renamed to “" + newTitle + "”" + (where ? " · re-synced " + where : ""));
-    location.hash = "#/item/" + encodeURIComponent(newId); // reopen drawer at new id
+    return { oldTitle, newId };
+  }
+  function renameItem(id, newTitle) {
+    const before = byId[id]; if (!before) return;
+    const t = String(newTitle).trim();
+    if (!t || t === before.title) { if (t === before.title) location.hash = "#/item/" + encodeURIComponent(id); return; }
+    const res = applyRename(id, t); if (!res) return;
+    persistRename(id, t);
+    addActivity("Renamed", res.oldTitle + " → " + t);
+    const it = byId[res.newId];
+    const where = (it && it.installed_in || []).join(", ");
+    toast("Renamed to “" + t + "”" + (where ? " · re-synced " + where : ""));
+    location.hash = "#/item/" + encodeURIComponent(res.newId); // reopen drawer at new id
   }
   function openRename(id) {
     const it = byId[id]; if (!it) return;
@@ -866,6 +986,7 @@
     toast("Syncing " + name + "…");
     setTimeout(() => {
       it.last_synced = "just now"; addActivity("Synced", name);
+      persistIntegration(name, { status: it.status, last_synced: it.last_synced, count: it.count });
       toast(name + " synced");
       if (currentRoute().startsWith("integrations")) rerenderView();
     }, 700);
@@ -873,6 +994,7 @@
   function setupIntegration(name) {
     const it = (D.integrations || []).find(x => x.name === name); if (!it) return;
     it.status = "connected"; it.count = ITEMS.filter(x => x.kind === "skill").length; it.last_synced = "just now";
+    persistIntegration(name, { status: "connected", count: it.count, last_synced: it.last_synced });
     addActivity("Connected", name); toast(name + " connected"); rerenderView();
   }
   function disableCap(projId, name) {
@@ -883,7 +1005,7 @@
   }
   function syncProjectIntegration(projId, name) {
     const p = (D.projects || []).find(x => x.id === projId); if (!p) return;
-    p.integrations[name] = "synced"; addActivity("Synced", name + " · " + p.name); toast(name + " synced"); rerenderView();
+    p.integrations[name] = "synced"; persistProjectIntegration(projId, name, "synced"); addActivity("Synced", name + " · " + p.name); toast(name + " synced"); rerenderView();
   }
   function enableItem(id) {
     const it = byId[id]; if (!it) return;
@@ -914,6 +1036,7 @@
     ov.querySelector("[data-del]").onclick = () => { closeOverlay(); deleteInbox(name); };
     ov.querySelector("[data-file]").onclick = () => {
       it.read = true; it.filedAs = chosen;
+      persistInbox(name, { read: true, filedAs: chosen });
       addActivity("Filed", name + " → " + chosen); closeOverlay(); toast("Filed " + name + " as " + chosen + " · re-synced"); rebuildAll();
     };
   }
@@ -972,6 +1095,7 @@
 
   (async function boot() {
     await loadLiveData(); // falls back to the bundled snapshot on failure
+    applyPersistedState(); // re-apply persisted user mutations before first render
     shell();
     router();
     initTooltips();
