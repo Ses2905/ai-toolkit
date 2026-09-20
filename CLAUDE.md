@@ -21,7 +21,7 @@ Agent-facing entry points for this library. (See `AGENTS.md` for conventions and
 ```bash
 # User-global Cursor install (plugin + ~/.cursor/skills + catalog packs, then
 # delete the project-local npx leftover)
-./scripts/install-global.sh
+bash scripts/install-global.sh
 
 # Skills catalog (search / browse / rank) — interactive app + static build
 ./scripts/skills-db.sh serve          # http://127.0.0.1:8765

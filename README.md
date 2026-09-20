@@ -17,9 +17,10 @@ Install it once at **user** scope. Do not copy these files into each repo.
 ```bash
 git clone https://github.com/Ses2905/cursor-skills.git
 cd cursor-skills
-chmod +x scripts/*.sh
-./scripts/install-global.sh
+bash scripts/install-global.sh
 ```
+
+Run that **inside this kit**, not inside the app repo you are working on. If `scripts/install-global.sh` is missing, you are on `main` before this script landed — use `bash scripts/install-local.sh` and `bash scripts/sync-user-skills.sh` instead, or check out the branch that added `install-global.sh`.
 
 That copies the plugin to `~/.cursor/plugins/local/work-kit`, every `skills/*/SKILL.md` folder into `~/.cursor/skills/`, the Owl-Listener designer-skills pack, and deletes the project-local `npx skills add` leftover (`.agents/`, `skills-lock.json`). Then:
 

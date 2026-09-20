@@ -12,7 +12,7 @@ Public GitHub home: [github.com/Ses2905/cursor-skills](https://github.com/Ses290
 ```bash
 git clone https://github.com/Ses2905/cursor-skills.git
 cd cursor-skills
-./scripts/install-global.sh
+bash scripts/install-global.sh
 ```
 
 That one command installs the local plugin, copies every vendored skill into `~/.cursor/skills/`, installs the Owl-Listener `designer-skills` pack, and deletes the project-local `npx skills add` leftover (`.agents/`, `skills-lock.json`).

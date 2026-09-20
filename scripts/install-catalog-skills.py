@@ -26,17 +26,33 @@ def run(cmd: list[str], cwd: Path | None = None) -> None:
     subprocess.run(cmd, cwd=cwd, check=True)
 
 
+def is_commit_sha(ref: str) -> bool:
+    """True when *ref* is a hex object id, not a branch/tag name."""
+    return bool(ref) and 7 <= len(ref) <= 40 and all(
+        c in "0123456789abcdef" for c in ref.lower()
+    )
+
+
 def sync_repo(cache: Path, source_id: str, spec: dict) -> Path:
     dest = cache / source_id
     dest.parent.mkdir(parents=True, exist_ok=True)
     url = spec["git"]
     ref = spec.get("ref", "main")
+    # Commit SHAs are not remote branch names. Cloning with --branch <sha>
+    # prints `fatal: Remote branch ... not found` and looks like a failed
+    # install even though the retry succeeds.
     if (dest / ".git").is_dir():
         run(["git", "-C", str(dest), "fetch", "--depth", "1", "origin", ref])
         run(["git", "-C", str(dest), "checkout", "-q", "FETCH_HEAD"])
+        return dest
+
+    if dest.exists():
+        shutil.rmtree(dest)
+    if is_commit_sha(ref):
+        run(["git", "clone", "--depth", "1", url, str(dest)])
+        run(["git", "-C", str(dest), "fetch", "--depth", "1", "origin", ref])
+        run(["git", "-C", str(dest), "checkout", "-q", "FETCH_HEAD"])
     else:
-        if dest.exists():
-            shutil.rmtree(dest)
         try:
             run(["git", "clone", "--depth", "1", "--branch", ref, url, str(dest)])
         except subprocess.CalledProcessError:
