@@ -170,6 +170,21 @@
   };
   const KIND_ORDER = ["skill", "prompt", "workflow", "tool", "reference", "template"];
 
+  // Reference SUBTYPES (AI Toolkit expansion). These are NOT top-level nav —
+  // References stays the home for all of them. The map drives a subtle subtype
+  // pill and subtype-aware detail sections; unknown subtypes degrade to nothing.
+  const SUBTYPE = {
+    "design-system":        { label: "Design System",       glyph: "◈", desc: "Shared visual rules — foundations, components and tokens." },
+    "template":             { label: "Template",            glyph: "▤", desc: "A reusable starting structure you copy and fill in." },
+    "design-pattern":       { label: "Pattern",             glyph: "❖", desc: "A reusable solution — anatomy, rules, do/don't and variants." },
+    "html-css-foundation":  { label: "HTML/CSS Foundation", glyph: "⧉", desc: "Reusable layout + implementation logic to inherit, not rewrite." },
+  };
+  const subtypeMeta = i => (i && i.kind === "reference" && i.subtype) ? SUBTYPE[i.subtype] : null;
+  function subtypePill(i) {
+    const s = subtypeMeta(i); if (!s) return "";
+    return `<span class="subpill" data-sub="${esc(i.subtype)}" title="${esc(s.desc)}"><span class="sg" aria-hidden="true">${s.glyph}</span>${esc(s.label)}</span>`;
+  }
+
   const esc = s => (s == null ? "" : String(s)).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const kebab = s => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   // Naming conventions: "&" becomes "+" everywhere; kebab domains render Title Case.
@@ -197,7 +212,9 @@
   const kindsPresent = () => KIND_ORDER.filter(k => ITEMS.some(i => i.kind === k));
   const cats = () => Array.from(new Set(ITEMS.map(i => i.category))).sort();
 
-  const state = { kind: "all", cat: "All", source: "All", sort: "name", view: "list", q: "" };
+  const state = { kind: "all", cat: "All", source: "All", subtype: "All", sort: "name", view: "list", q: "" };
+  // Distinct reference subtypes actually present (drives the optional filter).
+  const subtypesPresent = () => Array.from(new Set(ITEMS.filter(i => i.kind === "reference" && i.subtype).map(i => i.subtype)));
 
   // Environments the library can install/sync into (from the integrations tier).
   const platforms = () => (D.integrations || []).map(x => x.name);
@@ -234,6 +251,24 @@
   }
   function fallbackCopy(text, done) {
     try { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); } catch (_e) { done(); }
+  }
+  // A multi-line, copyable code region that wraps (no horizontal scroll).
+  function codeBlock(text, label) {
+    const id = "cb-" + (++SNIP_SEQ);
+    return `<div class="codeblock"><div class="cb-head"><span class="cb-label">${esc(label || "Code")}</span><button class="btn sm snipcopy" data-action="copy-snippet" data-target="${id}" data-label="${esc(label || "")}" title="Copy">Copy</button></div><pre class="cb-pre"><code id="${id}">${esc(text)}</code></pre></div>`;
+  }
+  // Preview-first block for visual assets: image/thumbnail, gallery and/or code.
+  // Omits gracefully when a preview has none of them.
+  function previewBlock(p, opts) {
+    if (!p) return "";
+    const o = opts || {};
+    let out = "";
+    const hero = p.image || p.thumb;
+    if (hero) out += `<div class="prev-img"><img src="${esc(hero)}" alt="" loading="lazy" /></div>`;
+    if (Array.isArray(p.gallery) && p.gallery.length) out += `<div class="prev-gallery">${p.gallery.map(g => `<img src="${esc(g)}" alt="" loading="lazy" />`).join("")}</div>`;
+    if (p.code && !o.skipCode) out += codeBlock(p.code, o.codeLabel || "Code preview");
+    if (!out) return "";
+    return `<div class="field"><h4>${esc(o.heading || "Preview")}</h4>${out}</div>`;
   }
 
   /* ---------- Shell ---------- */
@@ -427,7 +462,14 @@
     let list = ITEMS.slice();
     if (state.kind !== "all") list = list.filter(i => i.kind === state.kind);
     if (state.cat !== "All") list = list.filter(i => i.category === state.cat);
-    if (state.q.trim()) { const q = state.q.toLowerCase(); list = list.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(q)); }
+    if (state.subtype !== "All") list = list.filter(i => i.subtype === state.subtype);
+    if (state.q.trim()) {
+      const q = state.q.toLowerCase();
+      list = list.filter(i => {
+        const sub = (i.subtype && SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype || "";
+        return (i.title + " " + i.name + " " + i.summary + " " + i.category + " " + sub).toLowerCase().includes(q);
+      });
+    }
     if (state.sort === "name") list.sort((a, b) => a.title.localeCompare(b.title));
     else list.sort((a, b) => (b.date_updated || "").localeCompare(a.date_updated || "") || a.title.localeCompare(b.title));
     return list;
@@ -464,20 +506,20 @@
     const top = showKind ? `<div class="top">${kindTag(i.kind)}${installDots(i)}</div>` : `<div class="top solo">${installDots(i)}</div>`;
     return `<div class="card" data-item="${esc(i.id)}">
       ${top}
-      <div class="name">${esc(i.title)}</div>
+      <div class="name">${esc(i.title)}${subtypePill(i)}</div>
       <div class="meta"><span class="tag"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
     </div>`;
   }
   function listRow(i, showKind = true) {
     return `<div class="row" data-item="${esc(i.id)}">
       <span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
-      <span class="nmwrap"><span class="nm">${esc(i.title)}</span>${showKind ? `<span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span>` : ""}</span>
+      <span class="nmwrap"><span class="nm">${esc(i.title)}</span>${showKind ? `<span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span>` : ""}${subtypePill(i)}</span>
       <span class="sub cat"${tipAttr(i.category)}>${esc(catLabel(i.category))}</span>
       ${installDots(i)}
       <span class="sub date">${esc(i.date_updated || "")}</span>
     </div>`;
   }
-  const listHeaderRow = () => `<div class="row lhead" aria-hidden="true"><span></span><span>Name</span><span>Domain</span><span>Availability</span><span class="date">Updated</span></div>`;
+  const listHeaderRow = () => `<div class="row lhead" aria-hidden="true"><span></span><span class="nm">Name</span><span class="cat">Domain</span><span class="avail">Availability</span><span class="date">Updated</span></div>`;
   function libResults() {
     const list = filtered();
     if (!list.length) return `<div id="libresults"><div class="empty"><h3>Nothing matches</h3><p>Try clearing a filter or searching a different term.</p></div></div>`;
@@ -491,9 +533,18 @@
     state.kind = kind || "all";
     const tabs = ["all", ...kindsPresent()].map(k => `<button data-kindtab="${k}" class="${state.kind === k ? "active" : ""}">${k === "all" ? "All" : KIND[k].plural}</button>`).join("");
     const catOpts = ['<option value="All">All domains</option>'].concat(cats().map(c => `<option value="${esc(c)}" ${state.cat === c ? "selected" : ""}>${esc(catLabel(c))}</option>`)).join("");
+    // Subtype filter is only relevant on All / References, and only when
+    // subtype'd references actually exist — otherwise it stays out of the way.
+    const subs = subtypesPresent();
+    const showSubFilter = subs.length && (state.kind === "all" || state.kind === "reference");
+    if (!showSubFilter && state.subtype !== "All") state.subtype = "All";
+    const subOpts = showSubFilter
+      ? ['<option value="All">All subtypes</option>'].concat(subs.map(s => `<option value="${esc(s)}" ${state.subtype === s ? "selected" : ""}>${esc((SUBTYPE[s] && SUBTYPE[s].label) || s)}</option>`)).join("")
+      : "";
     const chips = [];
     if (state.kind !== "all") chips.push(`<span class="chipf">${KIND[state.kind].plural}<button data-clearf="kind">×</button></span>`);
     if (state.cat !== "All") chips.push(`<span class="chipf">${esc(catLabel(state.cat))}<button data-clearf="cat">×</button></span>`);
+    if (showSubFilter && state.subtype !== "All") chips.push(`<span class="chipf">${esc((SUBTYPE[state.subtype] && SUBTYPE[state.subtype].label) || state.subtype)}<button data-clearf="subtype">×</button></span>`);
     const active = state.kind !== "all" && KIND[state.kind];
     const heading = active ? KIND[state.kind].plural : "AI Toolkit";
     const subtitle = active ? KIND[state.kind].desc : "Browse and manage everything you've installed.";
@@ -503,6 +554,7 @@
       <div class="filterbar"><div class="tabs">${tabs}</div></div>
       <div class="filterbar">
         <select class="f" data-filter="cat">${catOpts}</select>
+        ${showSubFilter ? `<select class="f" data-filter="subtype">${subOpts}</select>` : ""}
         <select class="f" data-filter="sort"><option value="recent" ${state.sort==="recent"?"selected":""}>Recently updated</option><option value="name" ${state.sort==="name"?"selected":""}>Name</option></select>
         ${chips.join("")}
         <span class="spacer"></span>
@@ -515,7 +567,10 @@
   /* ---------- Search (grouped) ---------- */
   function viewSearch(q) {
     const qq = (q || "").toLowerCase().trim();
-    const hits = qq ? ITEMS.filter(i => (i.title + " " + i.name + " " + i.summary + " " + i.category).toLowerCase().includes(qq)) : [];
+    const hits = qq ? ITEMS.filter(i => {
+      const sub = (i.subtype && SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype || "";
+      return (i.title + " " + i.name + " " + i.summary + " " + i.category + " " + sub).toLowerCase().includes(qq);
+    }) : [];
     const head = `<div class="page-head"><h1>Search</h1><p>${qq ? `Results for “${esc(q)}” — ${plural(hits.length, "items")} across your toolkit.` : "Type to search skills, prompts, workflows, tools + references."}</p></div>`;
     if (!qq) return `<div class="page">${head}</div>`;
     if (!hits.length) return `<div class="page">${head}<div class="empty"><h3>Nothing found</h3><p>Nothing in your toolkit matches “${esc(q)}”. Try a broader term, or add something new.</p><button class="btn primary" data-add>+ Add to Toolkit</button></div></div>`;
@@ -612,7 +667,9 @@
     const descIsConcat = containsText(desc, summ) && bu && containsText(desc, bu);
     const whatBlock = (desc && !sameText(desc, summ) && !sameText(desc, bu) && !descIsConcat)
       ? `<div class="field"><h4>What it does</h4><p>${esc(desc)}</p></div>` : "";
-    return whatBlock + useBlock + availabilityPanel(i);
+    // Preview-first for visual assets: show the thumbnail/gallery/code up top.
+    const preview = previewBlock(i.preview);
+    return preview + whatBlock + useBlock + availabilityPanel(i);
   }
   // Render an argument hint, highlighting placeholder tokens (<...> [...] {...}).
   function renderArgHint(hint) {
@@ -641,12 +698,7 @@
       const usedBy = relGroup("Used by", i.used_by, { withKind: true });
       return what + usedBy + section("Capabilities", `<p class="muted empty-note">No capability metadata yet.</p>`);
     }
-    if (i.kind === "reference") {
-      const what = i.description ? section("What it does", `<p>${esc(i.description)}</p>`) : "";
-      const useWhen = i.best_use ? section("Use when", `<p>${esc(i.best_use)}</p>`) : "";
-      const related = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
-      return what + useWhen + relGroup("Related", related, { withKind: true, note: "Same domain" });
-    }
+    if (i.kind === "reference") return referenceHowto(i, section);
     // skill (default)
     const inv = i.command ? codeSnippet("/" + i.command, "Invocation") : `<p class="muted">Model-invoked (no slash command)</p>`;
     const vars = i.argument_hint ? section("Variables", renderArgHint(i.argument_hint)) : "";
@@ -656,13 +708,74 @@
       : `<div class="pathrow">${codeSnippet(pathOf(i), "Path")}${pathLink(i, "View full instructions")}</div>`;
     return section("Invocation", inv) + vars + section("Instructions", instrBody) + section("Usage examples", `<p class="muted empty-note">No usage examples yet.</p>`);
   }
+  // Subtype-aware "How to Use" for reference items. Each branch reuses section()
+  // and omits any section whose data is absent, so partial assets still read well.
+  function referenceHowto(i, section) {
+    const p = (label, txt) => txt ? section(label, `<p>${esc(txt)}</p>`) : "";
+    const ul = (label, arr) => (arr && arr.length) ? section(label, `<ul class="dlist">${arr.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`) : "";
+    const relatedByDomain = () => ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+    switch (i.subtype) {
+      case "design-system": {
+        const found = (i.foundations && i.foundations.length)
+          ? section("Foundations", `<dl class="deflist">${i.foundations.map(([k, v]) => `<div class="dl-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`) : "";
+        const comps = (i.components && i.components.length)
+          ? section("Components", `<dl class="deflist">${i.components.map(([k, v]) => `<div class="dl-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`) : "";
+        const tokens = i.tokens ? section("Tokens", `<p>${esc(i.tokens)}</p>${i.preview && i.preview.code ? codeBlock(i.preview.code, "Token preview") : ""}`) : "";
+        const impl = p("Implementation", i.implementation);
+        return (found + comps + tokens + impl) || `<p class="muted empty-note">No structured documentation yet.</p>`;
+      }
+      case "template": {
+        const preview = previewBlock(i.preview, { heading: "Preview", codeLabel: "Template markup" });
+        const best = p("Best for", i.bestFor);
+        const fmt = p("Format", i.outputFormat);
+        const vars = (i.variables && i.variables.length)
+          ? section("Variables", `<div class="varline">${i.variables.map(v => `<span class="vartoken">${esc(v)}</span>`).join(" ")}</div>`) : "";
+        const inputs = ul("Required inputs", i.inputs);
+        const usage = p("Usage", i.usage);
+        const actions = section("Actions", `<div class="tpl-actions"><button class="btn sm primary" data-action="use-template" data-id="${esc(i.id)}">Use</button><button class="btn sm" data-action="duplicate-template" data-id="${esc(i.id)}">Duplicate</button></div>`);
+        return preview + best + fmt + vars + inputs + usage + actions;
+      }
+      case "design-pattern": {
+        const useWhen = p("Use when", i.useWhen);
+        const anatomy = ul("Anatomy", i.anatomy);
+        const rules = ul("Rules", i.rules);
+        const dodont = (i.dos && i.dos.length || i.donts && i.donts.length)
+          ? section("Do / Don't", `<div class="dodont"><div class="do"><h5>Do</h5><ul class="dlist">${(i.dos || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div><div class="dont"><h5>Don't</h5><ul class="dlist">${(i.donts || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>`) : "";
+        const variants = ul("Variants", i.variants);
+        const impl = (i.preview && i.preview.code) ? section("Implementation", codeBlock(i.preview.code, "Implementation"))
+          : p("Implementation", i.implementation);
+        return useWhen + anatomy + rules + dodont + variants + impl;
+      }
+      case "html-css-foundation": {
+        const overview = p("Overview", i.overview || i.description);
+        const principles = ul("Core principles", i.principles);
+        const frame = p("Master content frame", i.masterFrame);
+        const extras = p("Typography", i.typography) + p("Spacing", i.spacing) + p("Dividers", i.dividers) + p("Responsive", i.responsive);
+        const code = (i.preview && i.preview.code) ? section("Code example", codeBlock(i.preview.code, "HTML + CSS")) : "";
+        const related = relGroup("Related", (i.used_by && i.used_by.length ? i.used_by : relatedByDomain()), { withKind: true });
+        return overview + principles + frame + extras + code + related;
+      }
+      default: {
+        const what = p("What it does", i.description);
+        const useWhen = p("Use when", i.best_use);
+        return what + useWhen + relGroup("Related", relatedByDomain(), { withKind: true, note: "Same domain" });
+      }
+    }
+  }
   function relationshipsPane(i) {
     const worksWith = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 5).map(x => x.title);
+    const rel = i.relationships || {};
+    const belongsTo = rel.belongsTo || i.belongs_to;
+    const uses = rel.uses || i.uses;
+    const storedWorks = rel.worksWith || i.works_with;
     const groups = [
+      relGroup("Belongs to", belongsTo, { withKind: true }),
+      relGroup("Uses", uses, { withKind: true }),
       relGroup("Used by", i.used_by, { withKind: true }),
-      relGroup("Works with", worksWith, { withKind: true, note: "Related by domain" }),
+      relGroup("Works with", (storedWorks && storedWorks.length) ? storedWorks : worksWith, { withKind: true, note: (storedWorks && storedWorks.length) ? "" : "Related by domain" }),
       relGroup("Depends on", i.depends_on, { withKind: true }),
       relGroup("References", i.references, { withKind: true }),
+      relGroup("Enabled in", i.enabled_in),
       availInGroup(i),
     ].filter(Boolean);
     if (!groups.length) return `<div class="rel-empty"><p>No relationships recorded yet.</p></div>`;
@@ -670,24 +783,34 @@
     return groups.join("") + mapCta;
   }
   function sourcePane(i) {
-    const label = (i.source && i.source.label) || "this repo";
-    const looksRepo = /github\.com|gitlab\.com|bitbucket\.org|^https?:\/\//i.test(label);
-    const originLink = looksRepo ? ` <a class="pathlink" href="${esc(/^https?:/i.test(label) ? label : "https://" + label)}" target="_blank" rel="noopener noreferrer">Open repository ↗</a>` : "";
-    const origin = `<div class="field"><h4>Origin</h4><p>${esc(label)}${originLink}</p></div>`;
-    const localPath = `<div class="field"><h4>Local path</h4>${codeSnippet(pathOf(i), "Path")}</div>`;
+    const src = i.source || {};
+    const label = src.label || "this repo";
+    const originUrl = src.url || ( /github\.com|gitlab\.com|bitbucket\.org|^https?:\/\//i.test(label) ? (/^https?:/i.test(label) ? label : "https://" + label) : "");
+    const originLink = originUrl ? ` <a class="pathlink" href="${esc(originUrl)}" target="_blank" rel="noopener noreferrer">Open repository ↗</a>` : "";
+    const originBits = [esc(label)];
+    if (src.author) originBits.push("Author " + esc(src.author));
+    if (src.repository) originBits.push(esc(src.repository));
+    const origin = `<div class="field"><h4>Origin</h4><p>${originBits.join(" · ")}${originLink}</p></div>`;
+    const localPath = `<div class="field"><h4>Local path</h4>${codeSnippet(src.localPath || pathOf(i), "Path")}</div>`;
     const hist = [];
     if (i.date_updated) hist.push(`Updated ${esc(i.date_updated)}`);
     if (i.date_added) hist.push(`Added ${esc(i.date_added)}`);
     const history = hist.length ? `<div class="field"><h4>History</h4><p>${hist.join(" · ")}</p></div>` : "";
-    const advRows = [
+    const techRows = [
       `Id: <span class="mono">${esc(i.id)}</span>`,
       `Kind: ${esc(i.kind)}`,
+      i.subtype ? `Subtype: ${esc((SUBTYPE[i.subtype] && SUBTYPE[i.subtype].label) || i.subtype)}` : "",
       `Domain: ${esc(catLabel(i.category))}`,
+      src.type ? `Source type: ${esc(src.type)}` : "",
+      src.license ? `License: ${esc(src.license)}` : "",
+      (src.version || i.version) ? `Version: ${esc(src.version || i.version)}` : "",
+      src.lastSynced ? `Last synced: ${esc(src.lastSynced)}` : "",
+      src.hasLocalChanges ? "Local changes: yes" : "",
       i.status ? `Status: ${esc(i.status)}` : "",
       i.command ? `Invocation: <span class="mono">/${esc(i.command)}</span>` : "",
     ].filter(Boolean).map(r => `<p>${r}</p>`).join("");
-    const advanced = `<details class="advanced"><summary>Advanced · technical details</summary><div class="adv-body">${advRows}</div></details>`;
-    return origin + localPath + history + advanced;
+    const tech = `<div class="field"><h4>Tech details</h4><div class="adv-body">${techRows}</div></div>`;
+    return origin + localPath + tech + history;
   }
   function openItem(id) {
     const i = byId[id]; if (!i) { location.hash = "#/library"; return; }
@@ -705,7 +828,7 @@
     dr.innerHTML = `
       <div class="dhead">
         <div class="crumb">Library / ${KIND[i.kind].plural} / ${esc(i.title)}</div>
-        ${kindTag(i.kind)}
+        <div class="dkindrow">${kindTag(i.kind)}${subtypePill(i)}</div>
         <h2>${esc(i.title)}</h2>
         <p class="muted">${esc(i.summary || i.description)}</p>
         ${metaLine}
@@ -786,22 +909,31 @@
     </div>`;
   }
   function viewProjects() {
-    const rows = (D.projects || []).map(p => `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
-      <span><div class="nm">${esc(p.name)}</div><div class="sub">${plural(p.skills.length, "skills")} · ${plural(p.workflows.length, "workflows")} · ${plural(p.references.length, "references")}</div></span>
-      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} agents synced</span><span class="btn sm">Open</span></div>`).join("");
-    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your toolkit are active in each project, and which agents they're synced to.</p></div><div class="list">${rows}</div></div>`;
+    const rows = (D.projects || []).map(p => {
+      const bits = [plural((p.skills || []).length, "skills"), plural((p.workflows || []).length, "workflows"), plural((p.references || []).length, "references")];
+      if ((p.prompts || []).length) bits.push(plural(p.prompts.length, "prompts"));
+      if (p.updated) bits.push("updated " + p.updated);
+      return `<div class="row" data-nav="project/${encodeURIComponent(p.id)}"><span class="kind"><span class="g">▦</span></span>
+      <span><div class="nm">${esc(p.name)}</div><div class="sub">${esc(bits.join(" · "))}</div></span>
+      <span class="sub">${Object.values(p.integrations).filter(v => v === "synced").length}/${Object.keys(p.integrations).length} agents synced</span><span class="btn sm">Open</span></div>`;
+    }).join("");
+    return `<div class="page"><div class="page-head"><h1>Projects</h1><p>What parts of your toolkit are active in each project, and which agents they're synced to. These are example projects — they reference toolkit assets rather than duplicating them.</p></div><div class="list">${rows}</div></div>`;
   }
   function viewProject(id) {
     const p = (D.projects || []).find(x => x.id === id); if (!p) return viewProjects();
-    const caps = p.skills.map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><button class="btn sm" data-action="disable-cap" data-proj="${esc(p.id)}" data-name="${esc(n)}">Disable</button></div>`; }).join("");
-    const wfs = p.workflows.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const refs = p.references.map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
-    const integ = Object.entries(p.integrations).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div><div class="sub">${v === "synced" ? "This project's items are live in " + esc(k) : "Not synced to " + esc(k) + " yet"}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm ${v === "synced" ? "" : "primary"}" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const caps = (p.skills || []).map(n => { const it = byId["skill:" + n]; return `<div class="row" ${it ? `data-item="skill:${esc(n)}"` : ""}><span class="kind" data-k="skill"><span class="g">◇</span></span><span><div class="nm">${esc(it ? it.title : n)}</div></span><span class="sub">enabled</span><button class="btn sm" data-action="disable-cap" data-proj="${esc(p.id)}" data-name="${esc(n)}">Disable</button></div>`; }).join("");
+    const wfs = (p.workflows || []).map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
+    const refs = (p.references || []).map(n => `<span class="tag">${esc(n)}</span>`).join(" ");
+    const prompts = (p.prompts || []).map(n => { const it = byId["prompt:" + n]; return `<span class="tag">${esc(it ? it.title : n)}</span>`; }).join(" ");
+    const integ = Object.entries(p.integrations || {}).map(([k, v]) => `<div class="row"><span class="kind"><span class="g">⇄</span></span><span><div class="nm">${esc(k)}</div><div class="sub">${v === "synced" ? "This project's items are live in " + esc(k) : "Not synced to " + esc(k) + " yet"}</div></span><span class="sub">${v === "synced" ? "Synced" : "Not synced"}</span><button class="btn sm ${v === "synced" ? "" : "primary"}" data-action="sync-project-integration" data-proj="${esc(p.id)}" data-name="${esc(k)}">${v === "synced" ? "Re-sync" : "Sync"}</button></div>`).join("");
+    const countBits = [plural((p.skills || []).length, "skills"), plural((p.workflows || []).length, "workflows"), plural((p.references || []).length, "references")];
+    if ((p.prompts || []).length) countBits.push(plural(p.prompts.length, "prompts"));
     return `<div class="page">
       <div class="crumb" style="margin-bottom:8px"><a href="#/projects">Projects</a> / ${esc(p.name)}</div>
-      <div class="page-head"><h1>${esc(p.name)}</h1><p>${plural(p.skills.length, "skills")} · ${plural(p.workflows.length, "workflows")} · ${plural(p.references.length, "references")} enabled.</p></div>
+      <div class="page-head"><h1>${esc(p.name)}</h1><p>${esc(countBits.join(" · "))} enabled${p.updated ? " · updated " + esc(p.updated) : ""}.</p></div>
       <div class="section"><h2>Enabled capabilities</h2><div class="list">${caps}</div><div style="margin-top:10px"><button class="btn" data-nav="library/skill">+ Enable from toolkit</button></div></div>
       <div class="section"><h2>Workflows</h2><div class="chips">${wfs || '<span class="faint">None yet</span>'}</div></div>
+      ${(p.prompts || []).length ? `<div class="section"><h2>Prompts</h2><div class="chips">${prompts}</div></div>` : ""}
       <div class="section"><h2>References</h2><div class="chips">${refs || '<span class="faint">None yet</span>'}</div></div>
       <div class="section"><div class="sec-head"><h2>Sync to agents</h2></div><p class="muted" style="margin:-4px 0 12px">Your toolkit is the source of truth. Sync copies this project's enabled items into each agent (Cursor, Claude Code, Codex).</p><div class="list">${integ}</div></div>
     </div>`;
@@ -812,7 +944,7 @@
     const total = ITEMS.length;
     const rows = (D.integrations || []).map(x => {
       const doc = TOOL_DOCS[x.name] || (x.docUrl ? { url: x.docUrl, label: "Docs" } : null);
-      const openLink = (x.status === "connected" && doc) ? `<a class="btn sm openin" href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer" title="${esc(doc.label)} (opens in a new tab)">${esc(doc.label)} ↗</a>` : "";
+      const openLink = (x.status === "connected" && doc) ? `<a class="btn sm openin" href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer" title="${esc(doc.label)} (opens in a new tab)">Open</a>` : "";
       return `<div class="row"><span class="kind integ-logo"><span class="g">${platLogo(x.name)}</span></span>
       <span><div class="nm">${esc(x.name)}</div><div class="sub">${x.status === "connected" ? `${total} items synced — ${byKind} · last synced ${esc(x.last_synced)}` : (x.custom ? "Custom integration · not configured" : "Not configured")}</div></span>
       <span class="sub">${x.status === "connected" ? "Connected" : "—"}</span>
@@ -1027,11 +1159,25 @@
       case "delete-inbox": return deleteInbox(ds.name);
       case "change-home": return openChangeHome();
       case "copy-snippet": return copySnippet(ds.target, ds.label);
+      case "use-template": return useTemplate(ds.id);
+      case "duplicate-template": return duplicateTemplate(ds.id);
       case "duplicate-item": return toast("Duplicate isn't wired up in this prototype");
       case "export-item": return toast("Export isn't wired up in this prototype");
       case "delete-item": return toast("Delete isn't wired up in this prototype");
       default: return undefined;
     }
+  }
+
+  // Template actions (front-end prototype): confirm intent via a toast + log.
+  function useTemplate(id) {
+    const it = byId[id]; if (!it) return;
+    addActivity("Used template", it.title);
+    toast("Started from “" + it.title + "” — fill the variables to compose your deck");
+  }
+  function duplicateTemplate(id) {
+    const it = byId[id]; if (!it) return;
+    addActivity("Duplicated", it.title);
+    toast("Duplicated “" + it.title + "” — a working copy is ready to edit");
   }
 
   function setInboxRead(name, read) {
@@ -1086,6 +1232,9 @@
     ITEMS.forEach(x => {
       swap(x.depends_on, oldName, newName); swap(x.uses_list, oldName, newName);
       swap(x.used_by, oldTitle, newTitle); swap(x.references, oldTitle, newTitle);
+      // Typed subtype relationships (title-keyed). relationships is a by-reference
+      // view of these same arrays, so swapping in place keeps it in sync.
+      swap(x.belongs_to, oldTitle, newTitle); swap(x.uses, oldTitle, newTitle); swap(x.works_with, oldTitle, newTitle);
       if (x.steps) x.steps.forEach(s => swap(s.uses, oldName, newName));
     });
     (D.projects || []).forEach(p => { swap(p.skills, oldName, newName); swap(p.workflows, oldTitle, newTitle); swap(p.references, oldTitle, newTitle); });
