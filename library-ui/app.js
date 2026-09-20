@@ -41,21 +41,25 @@
   }
 
   const KIND = {
-    skill:     { label: "Skill",     glyph: "◇", plural: "Skills",     blurb: "Reusable capability" },
-    prompt:    { label: "Prompt",    glyph: "▤", plural: "Prompts",    blurb: "Task instruction" },
-    workflow:  { label: "Workflow",  glyph: "→", plural: "Workflows",  blurb: "Multi-step process" },
-    reference: { label: "Reference", glyph: "▱", plural: "References",  blurb: "Supporting knowledge" },
-    template:  { label: "Template",  glyph: "□", plural: "Templates",   blurb: "Reusable starting point" },
-    tool:      { label: "Tool",      glyph: "⚙", plural: "Tools",       blurb: "Executable capability" },
+    skill:     { label: "Skill",     glyph: "◇", plural: "Skills",     blurb: "Reusable capability",       desc: "Reusable capabilities an agent invokes by name to do a focused job well." },
+    prompt:    { label: "Prompt",    glyph: "▤", plural: "Prompts",    blurb: "Task instruction",          desc: "One-shot task instructions you run with a slash command." },
+    workflow:  { label: "Workflow",  glyph: "→", plural: "Workflows",  blurb: "Multi-step process",        desc: "Multi-step processes that chain skills and prompts into an outcome." },
+    tool:      { label: "Tool",      glyph: "⚙", plural: "Tools",       blurb: "Executable capability",     desc: "Executable helpers that install, index, and route library content." },
+    reference: { label: "Reference", glyph: "▱", plural: "References",  blurb: "Supporting knowledge",      desc: "Supporting knowledge and patterns your skills and prompts draw on." },
+    template:  { label: "Template",  glyph: "□", plural: "Templates",   blurb: "Reusable starting point",   desc: "Reusable starting points you copy and fill in." },
   };
-  const KIND_ORDER = ["skill", "prompt", "workflow", "reference", "template", "tool"];
+  const KIND_ORDER = ["skill", "prompt", "workflow", "tool", "reference", "template"];
 
   const esc = s => (s == null ? "" : String(s)).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const kebab = s => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   const h = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const kindsPresent = () => KIND_ORDER.filter(k => ITEMS.some(i => i.kind === k));
   const cats = () => Array.from(new Set(ITEMS.map(i => i.category))).sort();
 
-  const state = { kind: "all", cat: "All", source: "All", sort: "recent", view: "cards", q: "" };
+  const state = { kind: "all", cat: "All", source: "All", sort: "name", view: "list", q: "" };
+
+  // Environments the library can install/sync into (from the integrations tier).
+  const platforms = () => (D.integrations || []).map(x => x.name);
 
   /* ---------- Shell ---------- */
   function shell() {
@@ -71,11 +75,10 @@
             ${item("library", "▤", "All", ITEMS.length)}
             <div class="sub">${subs}</div>
             <div class="group">Manage</div>
+            ${item("inbox", "▧", "Inbox", (D.inbox || []).length)}
             ${item("discover", "◎", "Discover")}
             ${item("projects", "▦", "Projects")}
             ${item("integrations", "⇄", "Integrations")}
-            ${item("inbox", "▧", "Inbox", (D.inbox || []).length)}
-            ${item("activity", "≡", "Activity")}
             ${item("settings", "⚙", "Settings")}
           </nav>
         </aside>
@@ -182,18 +185,28 @@
     else list.sort((a, b) => (b.date_updated || "").localeCompare(a.date_updated || "") || a.title.localeCompare(b.title));
     return list;
   }
+  const platInitial = p => ({ "Cursor": "Cu", "Claude Code": "Cl", "Codex": "Cx" }[p] || String(p).slice(0, 2));
+  function installDots(i) {
+    const inn = i.installed_in || [];
+    const pl = platforms();
+    const title = pl.map(p => `${p}: ${inn.includes(p) ? "installed" : "not installed"}`).join(" · ");
+    return `<span class="insti" title="${esc(title)}" aria-label="${esc(title)}">${pl.map(p => `<span class="idot ${inn.includes(p) ? "on" : ""}"><i>${esc(platInitial(p))}</i></span>`).join("")}</span>`;
+  }
   function card(i) {
     return `<div class="card" data-item="${esc(i.id)}">
-      <div class="top">${kindTag(i.kind)}<span class="status">${esc(i.status || "installed")}</span></div>
+      <div class="top">${kindTag(i.kind)}${installDots(i)}</div>
       <div class="name">${esc(i.title)}</div>
-      <div class="desc">${esc(i.summary || i.description)}</div>
-      <div class="meta"><span class="tag">${esc(i.category)}</span><span>${i.used_by && i.used_by.length ? "Used by " + i.used_by.length : (i.command ? "/" + esc(i.command) : "")}</span></div>
+      <div class="meta"><span class="tag">${esc(i.category)}</span><span>${i.command ? "/" + esc(i.command) : (i.used_by && i.used_by.length ? "Used by " + i.used_by.length : "")}</span></div>
     </div>`;
   }
   function listRow(i) {
-    return `<div class="row" data-item="${esc(i.id)}"><span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
-      <span><div class="nm">${esc(i.title)}</div><div class="sub">${esc(i.summary || i.description).slice(0,90)}</div></span>
-      <span class="sub">${esc(i.category)}</span><span class="sub">${esc(i.date_updated || "")}</span></div>`;
+    return `<div class="row" data-item="${esc(i.id)}">
+      <span class="kind" data-k="${i.kind}"><span class="g">${KIND[i.kind].glyph}</span></span>
+      <span class="nmwrap"><span class="nm">${esc(i.title)}</span><span class="kpill" data-k="${i.kind}">${KIND[i.kind].label}</span></span>
+      <span class="sub cat">${esc(i.category)}</span>
+      ${installDots(i)}
+      <span class="sub date">${esc(i.date_updated || "")}</span>
+    </div>`;
   }
   function libResults() {
     const list = filtered();
@@ -208,8 +221,11 @@
     const chips = [];
     if (state.kind !== "all") chips.push(`<span class="chipf">${KIND[state.kind].plural}<button data-clearf="kind">×</button></span>`);
     if (state.cat !== "All") chips.push(`<span class="chipf">${esc(state.cat)}<button data-clearf="cat">×</button></span>`);
+    const active = state.kind !== "all" && KIND[state.kind];
+    const heading = active ? KIND[state.kind].plural : "Library";
+    const subtitle = active ? KIND[state.kind].desc : "Browse and manage everything you've installed.";
     return `<div class="page">
-      <div class="page-head"><h1>Library</h1><p>Browse and manage everything you've installed.</p></div>
+      <div class="page-head"><h1>${esc(heading)}</h1><p>${esc(subtitle)}</p></div>
       <label class="topsearch" style="max-width:none"><span>⌕</span><input id="libsearch" placeholder="Search the library…" value="${esc(state.q)}"/></label>
       <div class="filterbar"><div class="tabs">${tabs}</div></div>
       <div class="filterbar">
@@ -248,13 +264,13 @@
     const i = byId[id]; if (!i) { location.hash = "#/library"; return; }
     const dr = document.getElementById("drawer");
     const isWf = i.kind === "workflow";
-    const overview = isWf ? workflowSteps(i) : `
+    const overview = (isWf ? workflowSteps(i) : `
       <div class="field"><h4>What it is</h4><p>${esc(i.description || i.summary)}</p></div>
       ${i.best_use ? `<div class="field"><h4>Activate when</h4><p>${esc(i.best_use)}</p></div>` : ""}
       ${relRow("Used by", i.used_by)}
       ${relRow("Depends on", i.depends_on)}
       ${relRow("References", i.references)}
-      ${relRow("Enabled in", i.enabled_in)}`;
+      ${relRow("Enabled in", i.enabled_in)}`) + installPanel(i);
     const related = ITEMS.filter(x => x.category === i.category && x.id !== i.id).slice(0, 4).map(x => x.title);
     const rels = `<div class="relmap">
         ${i.depends_on && i.depends_on.length ? `<div class="up">${i.depends_on.map(esc).join(" · ")}<div class="arr">▲</div></div>` : ""}
@@ -276,7 +292,7 @@
         ${kindTag(i.kind)}
         <h2>${esc(i.title)}</h2>
         <p class="muted">${esc(i.summary || i.description)}</p>
-        <div class="dactions"><button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button><button class="btn" id="drclose">Close</button></div>
+        <div class="dactions"><button class="btn primary" data-action="enable-item" data-id="${esc(i.id)}">${i.kind === "skill" ? "Enable" : "Use"}</button><button class="btn" data-action="rename-item" data-id="${esc(i.id)}">Rename</button><button class="btn" data-action="edit-item" data-id="${esc(i.id)}">Edit</button><button class="btn" id="drclose">Close</button></div>
       </div>
       <div class="dtabs">
         <button data-dt="ov" class="active">Overview</button>
@@ -290,6 +306,7 @@
     dr.querySelectorAll("[data-dt]").forEach(b => b.onclick = () => {
       dr.querySelectorAll("[data-dt]").forEach(x => x.classList.remove("active")); b.classList.add("active");
       document.getElementById("dbody").innerHTML = panes[b.dataset.dt];
+      dr.querySelectorAll("[data-action]").forEach(x => x.onclick = () => handleAction(x.dataset.action, x.dataset));
     });
     document.getElementById("drclose").onclick = () => history.length > 1 ? history.back() : (location.hash = "#/library");
     dr.querySelectorAll("[data-action]").forEach(b => b.onclick = () => handleAction(b.dataset.action, b.dataset));
@@ -373,9 +390,16 @@
       <details class="advanced" style="margin-top:16px"><summary>Advanced · doctor output</summary><div class="adv-body mono">$ ai-lib doctor<br/>registry: ok · integrations: ok · references: 1 broken · duplicates: 1 candidate</div></details></div>`;
   }
   function viewSettings() {
-    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Library location and defaults.</p></div>
-      <div class="section"><h2>Global library</h2><div class="list"><div class="row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div></div></div>
-      <div class="section"><h2>Appearance</h2><div class="list"><div class="row"><span class="kind"><span class="g">◐</span></span><span><div class="nm">Theme</div><div class="sub">Neutral (wireframe)</div></span><span></span><span class="faint">later</span></div></div></div></div>`;
+    const recent = (D.activity || []).slice(0, 6).map(a => `<div class="a"><strong>${esc(a.action)}</strong><span>${esc(a.target)}</span><span class="w">${esc(a.when)}</span></div>`).join("") || `<div class="a"><span class="faint">No activity yet.</span></div>`;
+    const c = D.counts || {};
+    const totals = KIND_ORDER.filter(k => c[k]).map(k => `${c[k]} ${c[k] === 1 ? KIND[k].label.toLowerCase() : KIND[k].plural.toLowerCase()}`).join(" · ");
+    return `<div class="page"><div class="page-head"><h1>Settings</h1><p>Where your library lives, what's in it, and what's changed.</p></div>
+      <div class="section"><h2>Global library</h2><div class="list">
+        <div class="row settings-row"><span class="kind"><span class="g">⌂</span></span><span><div class="nm">Library home</div><div class="sub mono">$AI_LIBRARY_HOME (~/.ai-library)</div></span><span></span><button class="btn sm" data-action="change-home">Change</button></div>
+        <div class="row settings-row"><span class="kind"><span class="g">▤</span></span><span><div class="nm">Contents</div><div class="sub">${esc(totals || "empty")}</div></span><span></span><button class="btn sm" data-nav="library">Open library</button></div>
+      </div></div>
+      <div class="section"><div class="sec-head"><h2>Activity</h2><button class="btn sm" data-nav="activity">View all</button></div><div class="actlist">${recent}</div></div>
+    </div>`;
   }
 
   /* ---------- Overlays: Add / Create / Palette ---------- */
@@ -499,9 +523,68 @@
       case "sync-project-integration": return syncProjectIntegration(ds.proj, ds.name);
       case "enable-item": return enableItem(ds.id);
       case "edit-item": return openCreate();
+      case "rename-item": return openRename(ds.id);
+      case "push-item": return pushItem(ds.id, ds.plat);
       case "change-home": return toast("Choose a library folder…");
       default: return undefined;
     }
+  }
+
+  /* Installed-in panel (drawer) + push to an environment it's not in yet. */
+  function installPanel(i) {
+    const inn = i.installed_in || [];
+    const rows = platforms().map(p => {
+      const on = inn.includes(p);
+      return `<div class="instrow"><span class="idot ${on ? "on" : ""}"><i>${esc(platInitial(p))}</i></span><span class="ip-name">${esc(p)}</span><span class="ip-status ${on ? "on" : ""}">${on ? "Installed" : "Not installed"}</span>${on ? "" : `<button class="btn sm" data-action="push-item" data-id="${esc(i.id)}" data-plat="${esc(p)}">Push</button>`}</div>`;
+    }).join("");
+    return `<div class="field"><h4>Installed in</h4><div class="instlist">${rows}</div></div>`;
+  }
+  function pushItem(id, plat) {
+    const it = byId[id]; if (!it) return;
+    it.installed_in = it.installed_in || [];
+    if (!it.installed_in.includes(plat)) it.installed_in.push(plat);
+    addActivity("Installed", it.title + " → " + plat);
+    toast("Pushed " + it.title + " to " + plat);
+    openItem(id); // refresh drawer so status + push buttons update
+  }
+
+  /* Rename an item — propagates the new name across every in-memory reference,
+     then re-syncs the environments it's installed in. (Persisting to disk /
+     the real tool integrations needs a backend; this is the front-end path.) */
+  function renameItem(id, newTitle) {
+    const it = byId[id]; if (!it) return;
+    newTitle = newTitle.trim(); if (!newTitle || newTitle === it.title) { if (newTitle === it.title) location.hash = "#/item/" + encodeURIComponent(id); return; }
+    const oldTitle = it.title, oldName = it.name, newName = kebab(newTitle) || oldName, newId = it.kind + ":" + newName;
+    it.title = newTitle; it.name = newName; it.id = newId;
+    const swap = (arr, from, to) => { if (arr) arr.forEach((v, ix) => { if (v === from) arr[ix] = to; }); };
+    ITEMS.forEach(x => {
+      swap(x.depends_on, oldName, newName); swap(x.uses_list, oldName, newName);
+      swap(x.used_by, oldTitle, newTitle); swap(x.references, oldTitle, newTitle);
+      if (x.steps) x.steps.forEach(s => swap(s.uses, oldName, newName));
+    });
+    (D.projects || []).forEach(p => { swap(p.skills, oldName, newName); swap(p.workflows, oldTitle, newTitle); swap(p.references, oldTitle, newTitle); });
+    byId = Object.fromEntries(ITEMS.map(x => [x.id, x]));
+    byTitle = Object.fromEntries(ITEMS.map(x => [x.title, x]));
+    addActivity("Renamed", oldTitle + " → " + newTitle);
+    const where = (it.installed_in || []).join(", ");
+    toast("Renamed to “" + newTitle + "”" + (where ? " · re-synced " + where : ""));
+    location.hash = "#/item/" + encodeURIComponent(newId); // reopen drawer at new id
+  }
+  function openRename(id) {
+    const it = byId[id]; if (!it) return;
+    const label = KIND[it.kind] ? KIND[it.kind].label.toLowerCase() : "item";
+    const where = (it.installed_in && it.installed_in.length) ? it.installed_in.join(", ") : "no environments yet";
+    overlay(`<div class="modal"><div class="box"><div class="mhead"><h2>Rename ${esc(label)}</h2><button class="btn sm" data-x>×</button></div><div class="mbody">
+      <div class="field"><h4>Display name</h4><input class="input" id="rn-name" value="${esc(it.title)}" autocomplete="off" /></div>
+      <p class="muted">Updates every reference to this ${esc(label)} and re-syncs the environments it's installed in (${esc(where)}). The on-disk id becomes <span class="mono" id="rn-id"></span>.</p>
+    </div><div class="mfoot"><button class="btn" data-x>Cancel</button><button class="btn primary" id="rn-save">Rename &amp; sync</button></div></div></div>`);
+    const ov = document.getElementById("overlay");
+    const input = ov.querySelector("#rn-name"), idEl = ov.querySelector("#rn-id");
+    const upd = () => { idEl.textContent = it.kind + ":" + (kebab(input.value) || "…"); };
+    input.oninput = upd; upd();
+    ov.querySelectorAll("[data-x]").forEach(b => b.onclick = closeOverlay);
+    ov.querySelector("#rn-save").onclick = () => { const v = input.value; closeOverlay(); renameItem(id, v); };
+    input.focus(); input.select();
   }
 
   function syncIntegration(name) {

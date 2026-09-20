@@ -47,6 +47,8 @@
         date_updated: s.date_updated || "",
         source: { type: "local", label: "this repo" },
         status: "installed",
+        // Which environments this item is installed in (Codex is a push target).
+        installed_in: items.length % 2 === 0 ? ["Cursor", "Claude Code"] : ["Cursor"],
         depends_on: [], used_by: [], references: [], enabled_in: [],
       };
       items.push(it);
@@ -100,6 +102,7 @@
         }
       }
       w.uses_list = Array.from(new Set(used)).sort();
+      w.installed_in = w.installed_in || ["Cursor", "Claude Code"];
       items.push(w);
     }
 
@@ -115,6 +118,7 @@
         summary: d, description: d, best_use: "", watch_outs: "", command: "",
         source: { type: "local", label: "this repo" }, status: "installed",
         date_added: "2026-09-18", date_updated: "2026-09-18",
+        installed_in: ["Cursor"],
         depends_on: [], used_by: [], references: [], enabled_in: [],
       });
     }
@@ -130,6 +134,7 @@
         summary: d, description: d, best_use: "", watch_outs: "", command: "",
         source: { type: "local", label: "this repo" }, status: "installed",
         date_added: "2026-09-18", date_updated: "2026-09-18",
+        installed_in: ["Cursor", "Claude Code"],
         depends_on: [], used_by: [], references: [], enabled_in: [],
       });
     }
