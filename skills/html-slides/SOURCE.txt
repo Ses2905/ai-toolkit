@@ -1,0 +1,8 @@
+Source: https://github.com/bluedusk/html-slides
+Repo: https://github.com/bluedusk/html-slides
+Upstream folder: / (repo root; skills/html-slides/SKILL.md is a symlink to root SKILL.md)
+Install name: html-slides
+Plugin version: 0.9.4 (.claude-plugin/plugin.json)
+Pinned: d8289f4c317905cc5d0ca265d32b791e6cb387b7
+License: see LICENSE
+Vendored: SKILL.md, LICENSE, assets/, references/, scripts/. Omitted: eval/, examples/, .github/, plugin manifests.
