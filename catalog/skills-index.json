@@ -27,18 +27,18 @@
     "readme": 5
   },
   "score_max_raw": 93,
-  "total": 97,
+  "total": 99,
   "counts_by_category": {
     "Product & Discovery": 28,
     "Design & Frontend": 19,
-    "Motion & Animation": 8,
+    "Motion & Animation": 10,
     "Presentations & Diagrams": 18,
     "Engineering Workflow": 18,
     "Setup & Install": 4,
     "Uncategorized": 2
   },
   "counts_by_kind": {
-    "skill": 71,
+    "skill": 73,
     "prompt": 26
   },
   "skills": [
@@ -1882,6 +1882,50 @@
       "tags": []
     },
     {
+      "name": "slidev",
+      "source_root": "skills",
+      "category": "Motion & Animation",
+      "type": "",
+      "theme": "",
+      "description": "Create and present web-based slidedecks for developers using Slidev with Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, code walkthroughs, teaching materials, or developer decks.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Create and present web-based slidedecks for developers using Slidev with Markdown, Vue components, code highlighting, animations, and interactive features.",
+      "best_use": "Use when building technical presentations, conference talks, code walkthroughs, teaching materials, or developer decks.",
+      "watch_outs": "",
+      "date_added": "2026-10-03",
+      "date_updated": "2026-10-03",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 56,
+      "skill_md_bytes": 8896,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 37,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 17,
+        "breadth": 12,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 42,
+      "rank_in_category": 9,
+      "kind": "skill",
+      "tags": []
+    },
+    {
       "name": "user-story-mapping-workshop",
       "source_root": "skills",
       "category": "Product & Discovery",
@@ -1924,7 +1968,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 42,
+      "rank_overall": 43,
       "rank_in_category": 7,
       "kind": "skill",
       "tags": [
@@ -1975,7 +2019,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 43,
+      "rank_overall": 44,
       "rank_in_category": 8,
       "kind": "skill",
       "tags": [
@@ -2026,7 +2070,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 44,
+      "rank_overall": 45,
       "rank_in_category": 9,
       "kind": "skill",
       "tags": [
@@ -2077,7 +2121,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 45,
+      "rank_overall": 46,
       "rank_in_category": 10,
       "kind": "skill",
       "tags": [
@@ -2128,7 +2172,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 46,
+      "rank_overall": 47,
       "rank_in_category": 11,
       "kind": "skill",
       "tags": [
@@ -2179,7 +2223,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 47,
+      "rank_overall": 48,
       "rank_in_category": 12,
       "kind": "skill",
       "tags": [
@@ -2226,8 +2270,52 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 48,
+      "rank_overall": 49,
       "rank_in_category": 1,
+      "kind": "skill",
+      "tags": []
+    },
+    {
+      "name": "slide-wright",
+      "source_root": "skills",
+      "category": "Motion & Animation",
+      "type": "",
+      "theme": "",
+      "description": "Create beautiful, animated web presentations from a topic, rough notes, or an outline, and edit decks afterward — adding, removing, or revising slides. Generates a custom theme and a short two-slide preview, then builds the full deck only once the user confirms the direction; edits to an existing deck skip that flow and apply in place. Use when the user wants to make slides, a presentation, a talk deck, a pitch deck, or to add/remove/change a slide in one that already exists.",
+      "argument_hint": "",
+      "best_for": [],
+      "summary": "Create beautiful, animated web presentations from a topic, rough notes, or an outline, and edit decks afterward — adding, removing, or revising slides. Generates a custom theme and a short two-slide preview, then builds the full deck only once the user confirms the direction; edits to an existing deck skip that flow and apply in place.",
+      "best_use": "Use when the user wants to make slides, a presentation, a talk deck, a pitch deck, or to add/remove/change a slide in one that already exists.",
+      "watch_outs": "",
+      "date_added": "2026-10-03",
+      "date_updated": "2026-10-03",
+      "command": "",
+      "has_command": false,
+      "has_rule": false,
+      "has_scripts": false,
+      "has_tests": false,
+      "has_examples": false,
+      "has_docs": false,
+      "file_count": 9,
+      "skill_md_bytes": 8595,
+      "in_catalog": false,
+      "in_readme": false,
+      "score": 33,
+      "score_breakdown": {
+        "command": 0,
+        "rule": 0,
+        "scripts": 0,
+        "tests": 0,
+        "examples": 0,
+        "docs": 0,
+        "doc_depth": 17,
+        "breadth": 9,
+        "metadata": 5,
+        "catalog": 0,
+        "readme": 0
+      },
+      "rank_overall": 50,
+      "rank_in_category": 10,
       "kind": "skill",
       "tags": []
     },
@@ -2274,7 +2362,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 49,
+      "rank_overall": 51,
       "rank_in_category": 13,
       "kind": "skill",
       "tags": [
@@ -2321,7 +2409,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 50,
+      "rank_overall": 52,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -2365,7 +2453,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 51,
+      "rank_overall": 53,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -2409,7 +2497,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 52,
+      "rank_overall": 54,
       "rank_in_category": 13,
       "kind": "skill",
       "tags": []
@@ -2453,7 +2541,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 53,
+      "rank_overall": 55,
       "rank_in_category": 14,
       "kind": "skill",
       "tags": []
@@ -2497,7 +2585,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 54,
+      "rank_overall": 56,
       "rank_in_category": 15,
       "kind": "skill",
       "tags": []
@@ -2541,7 +2629,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 55,
+      "rank_overall": 57,
       "rank_in_category": 16,
       "kind": "skill",
       "tags": []
@@ -2585,7 +2673,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 56,
+      "rank_overall": 58,
       "rank_in_category": 1,
       "kind": "skill",
       "tags": []
@@ -2629,7 +2717,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 57,
+      "rank_overall": 59,
       "rank_in_category": 17,
       "kind": "skill",
       "tags": []
@@ -2673,7 +2761,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 58,
+      "rank_overall": 60,
       "rank_in_category": 15,
       "kind": "skill",
       "tags": []
@@ -2717,7 +2805,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 59,
+      "rank_overall": 61,
       "rank_in_category": 16,
       "kind": "skill",
       "tags": []
@@ -2761,7 +2849,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 60,
+      "rank_overall": 62,
       "rank_in_category": 17,
       "kind": "skill",
       "tags": []
@@ -2805,7 +2893,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 61,
+      "rank_overall": 63,
       "rank_in_category": 2,
       "kind": "skill",
       "tags": []
@@ -2849,7 +2937,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 62,
+      "rank_overall": 64,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -2893,7 +2981,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 63,
+      "rank_overall": 65,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -2937,7 +3025,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 64,
+      "rank_overall": 66,
       "rank_in_category": 5,
       "kind": "skill",
       "tags": []
@@ -2981,7 +3069,7 @@
         "catalog": 0,
         "readme": 5
       },
-      "rank_overall": 65,
+      "rank_overall": 67,
       "rank_in_category": 6,
       "kind": "skill",
       "tags": []
@@ -3025,7 +3113,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 66,
+      "rank_overall": 68,
       "rank_in_category": 3,
       "kind": "skill",
       "tags": []
@@ -3069,7 +3157,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 67,
+      "rank_overall": 69,
       "rank_in_category": 18,
       "kind": "skill",
       "tags": []
@@ -3113,7 +3201,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 68,
+      "rank_overall": 70,
       "rank_in_category": 7,
       "kind": "prompt",
       "tags": [
@@ -3160,7 +3248,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 69,
+      "rank_overall": 71,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -3207,7 +3295,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 70,
+      "rank_overall": 72,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3254,7 +3342,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 71,
+      "rank_overall": 73,
       "rank_in_category": 8,
       "kind": "prompt",
       "tags": [
@@ -3301,7 +3389,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 72,
+      "rank_overall": 74,
       "rank_in_category": 9,
       "kind": "skill",
       "tags": [
@@ -3347,7 +3435,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 73,
+      "rank_overall": 75,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -3394,7 +3482,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 74,
+      "rank_overall": 76,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -3441,7 +3529,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 75,
+      "rank_overall": 77,
       "rank_in_category": 10,
       "kind": "prompt",
       "tags": [
@@ -3488,7 +3576,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 76,
+      "rank_overall": 78,
       "rank_in_category": 11,
       "kind": "prompt",
       "tags": [
@@ -3535,7 +3623,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 77,
+      "rank_overall": 79,
       "rank_in_category": 18,
       "kind": "prompt",
       "tags": [
@@ -3582,7 +3670,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 78,
+      "rank_overall": 80,
       "rank_in_category": 12,
       "kind": "prompt",
       "tags": [
@@ -3629,7 +3717,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 79,
+      "rank_overall": 81,
       "rank_in_category": 19,
       "kind": "prompt",
       "tags": [
@@ -3676,7 +3764,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 80,
+      "rank_overall": 82,
       "rank_in_category": 20,
       "kind": "prompt",
       "tags": [
@@ -3723,7 +3811,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 81,
+      "rank_overall": 83,
       "rank_in_category": 13,
       "kind": "prompt",
       "tags": [
@@ -3770,7 +3858,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 82,
+      "rank_overall": 84,
       "rank_in_category": 21,
       "kind": "prompt",
       "tags": [
@@ -3817,7 +3905,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 83,
+      "rank_overall": 85,
       "rank_in_category": 22,
       "kind": "prompt",
       "tags": [
@@ -3864,7 +3952,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 84,
+      "rank_overall": 86,
       "rank_in_category": 14,
       "kind": "prompt",
       "tags": [
@@ -3911,7 +3999,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 85,
+      "rank_overall": 87,
       "rank_in_category": 15,
       "kind": "prompt",
       "tags": [
@@ -3958,7 +4046,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 86,
+      "rank_overall": 88,
       "rank_in_category": 16,
       "kind": "prompt",
       "tags": [
@@ -4005,7 +4093,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 87,
+      "rank_overall": 89,
       "rank_in_category": 23,
       "kind": "prompt",
       "tags": [
@@ -4052,7 +4140,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 88,
+      "rank_overall": 90,
       "rank_in_category": 24,
       "kind": "prompt",
       "tags": [
@@ -4099,7 +4187,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 89,
+      "rank_overall": 91,
       "rank_in_category": 25,
       "kind": "prompt",
       "tags": [
@@ -4145,7 +4233,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 90,
+      "rank_overall": 92,
       "rank_in_category": 26,
       "kind": "prompt",
       "tags": [
@@ -4191,7 +4279,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 91,
+      "rank_overall": 93,
       "rank_in_category": 18,
       "kind": "prompt",
       "tags": [
@@ -4237,7 +4325,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 92,
+      "rank_overall": 94,
       "rank_in_category": 27,
       "kind": "prompt",
       "tags": [
@@ -4283,7 +4371,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 93,
+      "rank_overall": 95,
       "rank_in_category": 28,
       "kind": "prompt",
       "tags": [
@@ -4329,7 +4417,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 94,
+      "rank_overall": 96,
       "rank_in_category": 17,
       "kind": "prompt",
       "tags": [
@@ -4375,7 +4463,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 95,
+      "rank_overall": 97,
       "rank_in_category": 4,
       "kind": "skill",
       "tags": []
@@ -4419,7 +4507,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 96,
+      "rank_overall": 98,
       "rank_in_category": 18,
       "kind": "skill",
       "tags": []
@@ -4463,7 +4551,7 @@
         "catalog": 0,
         "readme": 0
       },
-      "rank_overall": 97,
+      "rank_overall": 99,
       "rank_in_category": 19,
       "kind": "skill",
       "tags": []
