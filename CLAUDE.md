@@ -23,6 +23,10 @@ Agent-facing entry points for this library. (See `AGENTS.md` for conventions and
 # delete the project-local npx leftover)
 bash scripts/install-global.sh
 
+# User-global Claude Code install (vendored skills → ~/.claude/skills; set
+# CLAUDE_SKILLS_DIR=.claude/skills for a project-local copy)
+bash scripts/install-claude.sh
+
 # Skills catalog (search / browse / rank) — interactive app + static build
 ./scripts/skills-db.sh serve          # http://127.0.0.1:8765
 ./scripts/skills-db.sh find <query>
